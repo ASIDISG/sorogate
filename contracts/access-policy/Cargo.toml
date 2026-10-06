@@ -15,3 +15,5 @@ soroban-sdk = { workspace = true }
 
 [dev-dependencies]
 soroban-sdk = { workspace = true, features = ["testutils"] }
+# Reads the shared test vectors in spec/vectors (tests/vectors.rs).
+serde_json = "1"

@@ -1,0 +1,1053 @@
+{
+  "schema": 1,
+  "description": "Decisions for stored policies: what evaluate returns for a subject, given the state of the world. See README.md for the format.",
+  "tokens": {
+    "gold": {
+      "kind": "i128",
+      "balances": {
+        "alice": "100",
+        "bob": "99",
+        "carol": "101",
+        "frank": "0"
+      }
+    },
+    "whale": {
+      "kind": "i128",
+      "balances": {
+        "alice": "170141183460469231731687303715884105727"
+      }
+    },
+    "badge": {
+      "kind": "u32",
+      "balances": {
+        "alice": 2,
+        "bob": 1,
+        "carol": 0
+      }
+    },
+    "wide": {
+      "kind": "u64"
+    },
+    "broken": {
+      "kind": "panics"
+    },
+    "nofn": {
+      "kind": "no_balance_function"
+    }
+  },
+  "cases": [
+    {
+      "name": "token balance exactly at the minimum is allowed",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "token balance one below the minimum is denied as below minimum",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "token balance one above the minimum is allowed",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "carol",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "a subject the token has never seen has balance zero and is below minimum",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "erin",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "an explicit zero balance is below minimum",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "frank",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "the largest possible balance meets the largest possible minimum",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "whale",
+            "min": "170141183460469231731687303715884105727"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "a token that raises an error is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "broken",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "a token returning a u64 instead of an i128 is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "wide",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "a token returning a u32 instead of an i128 is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "badge",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "a contract with no balance function is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "nofn",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "nft balance exactly at the minimum is allowed",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 2
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "nft balance one below the minimum is denied",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 2
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "nft balance zero is denied",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 1
+          }
+        ]
+      },
+      "subject": "carol",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "a subject the collection has never seen has balance zero",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 1
+          }
+        ]
+      },
+      "subject": "erin",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "a collection returning a u64 is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "wide",
+            "min": 1
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "a collection returning an i128 is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "gold",
+            "min": 1
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "a collection that raises an error is balance unavailable",
+      "policy": {
+        "conditions": [
+          {
+            "type": "nft_balance",
+            "collection": "broken",
+            "min": 1
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "window: one second before the start is denied",
+      "timestamp": "99",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": "200"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BeforeWindow"
+      }
+    },
+    {
+      "name": "window: the start itself is inside",
+      "timestamp": "100",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": "200"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "window: one second before the end is inside",
+      "timestamp": "199",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": "200"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "window: the end itself is outside",
+      "timestamp": "200",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": "200"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "AfterWindow"
+      }
+    },
+    {
+      "name": "window with only a start: before it is denied",
+      "timestamp": "99",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BeforeWindow"
+      }
+    },
+    {
+      "name": "window with only a start: the start is inside",
+      "timestamp": "100",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "window with only a start: the largest time is inside",
+      "timestamp": "18446744073709551615",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "window with only an end: time zero is inside",
+      "timestamp": "0",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": null,
+            "notAfter": "100"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "window with only an end: one before the end is inside",
+      "timestamp": "99",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": null,
+            "notAfter": "100"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "window with only an end: the end is outside",
+      "timestamp": "100",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": null,
+            "notAfter": "100"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "AfterWindow"
+      }
+    },
+    {
+      "name": "window with only an end: the largest time is outside",
+      "timestamp": "18446744073709551615",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": null,
+            "notAfter": "100"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "AfterWindow"
+      }
+    },
+    {
+      "name": "all three kinds of condition holding is allowed",
+      "timestamp": "500",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          },
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 2
+          },
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": "1000"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "the failed index is the position of the failing condition",
+      "timestamp": "500",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          },
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 2
+          },
+          {
+            "type": "time_window",
+            "notBefore": "100",
+            "notAfter": "1000"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "a failure in the middle reports its own index",
+      "timestamp": "500",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 2
+          },
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 1,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "a failure at the end reports the last index",
+      "timestamp": "500",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          },
+          {
+            "type": "nft_balance",
+            "collection": "badge",
+            "min": 2
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 2,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "the first failing condition wins when several fail (token first)",
+      "timestamp": "0",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          },
+          {
+            "type": "time_window",
+            "notBefore": "1000",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "the first failing condition wins when several fail (window first)",
+      "timestamp": "0",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "1000",
+            "notAfter": null
+          },
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BeforeWindow"
+      }
+    },
+    {
+      "name": "a failing condition stops evaluation, so a later broken token does not matter",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          },
+          {
+            "type": "token_balance",
+            "token": "broken",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "a broken token is reached when everything before it holds",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          },
+          {
+            "type": "token_balance",
+            "token": "broken",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 1,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "an unavailable balance before a failing one is reported first",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "broken",
+            "min": "1"
+          },
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 0,
+        "reason": "BalanceUnavailable"
+      }
+    },
+    {
+      "name": "eight conditions, the largest allowed policy, all holding",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "eight conditions with the last one failing",
+      "policy": {
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          },
+          {
+            "type": "time_window",
+            "notBefore": "1000",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": 7,
+        "reason": "BeforeWindow"
+      }
+    },
+    {
+      "name": "an inactive policy denies everyone, with no failed index",
+      "policy": {
+        "active": false,
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "Inactive"
+      }
+    },
+    {
+      "name": "an inactive policy denies even a subject who would qualify, regardless of conditions",
+      "policy": {
+        "active": false,
+        "conditions": [
+          {
+            "type": "time_window",
+            "notBefore": "0",
+            "notAfter": null
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "Inactive"
+      }
+    },
+    {
+      "name": "the version is 1 for a policy that was never updated",
+      "policy": {
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 1,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "each update increases the version by one",
+      "policy": {
+        "extraUpdates": 2,
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": true,
+        "version": 3,
+        "failedIndex": null,
+        "reason": "None"
+      }
+    },
+    {
+      "name": "a denial carries the current version",
+      "policy": {
+        "extraUpdates": 3,
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "100"
+          }
+        ]
+      },
+      "subject": "bob",
+      "expect": {
+        "allowed": false,
+        "version": 4,
+        "failedIndex": 0,
+        "reason": "BelowMinimum"
+      }
+    },
+    {
+      "name": "an inactive policy still reports its version",
+      "policy": {
+        "active": false,
+        "extraUpdates": 1,
+        "conditions": [
+          {
+            "type": "token_balance",
+            "token": "gold",
+            "min": "1"
+          }
+        ]
+      },
+      "subject": "alice",
+      "expect": {
+        "allowed": false,
+        "version": 2,
+        "failedIndex": null,
+        "reason": "Inactive"
+      }
+    }
+  ]
+}

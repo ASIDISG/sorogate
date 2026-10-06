@@ -1,0 +1,480 @@
+{
+  "schema": 1,
+  "description": "Which lists of conditions are accepted or rejected when a policy is created or updated, and with which error. See README.md for the format.",
+  "tokens": {
+    "gold": {
+      "kind": "i128"
+    },
+    "badge": {
+      "kind": "u32"
+    },
+    "acct": {
+      "kind": "account"
+    },
+    "gone": {
+      "kind": "missing"
+    }
+  },
+  "cases": [
+    {
+      "name": "a single token condition is valid",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "gold",
+          "min": "1"
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "a single nft condition is valid",
+      "conditions": [
+        {
+          "type": "nft_balance",
+          "collection": "badge",
+          "min": 1
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "a single time window is valid",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "eight conditions are valid",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "an empty list is rejected",
+      "conditions": [],
+      "expect": {
+        "ok": false,
+        "error": "NoConditions"
+      }
+    },
+    {
+      "name": "nine conditions are rejected",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "TooManyConditions"
+      }
+    },
+    {
+      "name": "a token minimum of zero is rejected",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "gold",
+          "min": "0"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidMinimum"
+      }
+    },
+    {
+      "name": "a negative token minimum is rejected",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "gold",
+          "min": "-5"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidMinimum"
+      }
+    },
+    {
+      "name": "an nft minimum of zero is rejected",
+      "conditions": [
+        {
+          "type": "nft_balance",
+          "collection": "badge",
+          "min": 0
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidMinimum"
+      }
+    },
+    {
+      "name": "the largest token minimum is valid",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "gold",
+          "min": "170141183460469231731687303715884105727"
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "a window with no bounds is rejected",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": null,
+          "notAfter": null
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidTimeWindow"
+      }
+    },
+    {
+      "name": "a window whose start equals its end is rejected",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "100",
+          "notAfter": "100"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidTimeWindow"
+      }
+    },
+    {
+      "name": "a window that ends before it starts is rejected",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "200",
+          "notAfter": "100"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidTimeWindow"
+      }
+    },
+    {
+      "name": "a window with only a start is valid",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "100",
+          "notAfter": null
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "a window with only an end is valid",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": null,
+          "notAfter": "100"
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "a window one second long is valid",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "100",
+          "notAfter": "101"
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "a window at the very end of time is valid",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": "18446744073709551614",
+          "notAfter": "18446744073709551615"
+        }
+      ],
+      "expect": {
+        "ok": true
+      }
+    },
+    {
+      "name": "an account address as a token is rejected",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "acct",
+          "min": "1"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "NotAContract"
+      }
+    },
+    {
+      "name": "a contract address with nothing deployed as a token is rejected",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "gone",
+          "min": "1"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "NotAContract"
+      }
+    },
+    {
+      "name": "an account address as a collection is rejected",
+      "conditions": [
+        {
+          "type": "nft_balance",
+          "collection": "acct",
+          "min": 1
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "NotAContract"
+      }
+    },
+    {
+      "name": "a contract address with nothing deployed as a collection is rejected",
+      "conditions": [
+        {
+          "type": "nft_balance",
+          "collection": "gone",
+          "min": 1
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "NotAContract"
+      }
+    },
+    {
+      "name": "within one condition the minimum is checked before the address",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "acct",
+          "min": "0"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidMinimum"
+      }
+    },
+    {
+      "name": "the first invalid condition decides the error",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": null,
+          "notAfter": null
+        },
+        {
+          "type": "token_balance",
+          "token": "acct",
+          "min": "1"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "InvalidTimeWindow"
+      }
+    },
+    {
+      "name": "a later invalid condition is still found",
+      "conditions": [
+        {
+          "type": "token_balance",
+          "token": "gold",
+          "min": "1"
+        },
+        {
+          "type": "token_balance",
+          "token": "acct",
+          "min": "1"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "NotAContract"
+      }
+    },
+    {
+      "name": "too many conditions is reported before any condition is inspected",
+      "conditions": [
+        {
+          "type": "time_window",
+          "notBefore": null,
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        },
+        {
+          "type": "time_window",
+          "notBefore": "1",
+          "notAfter": null
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "error": "TooManyConditions"
+      }
+    }
+  ]
+}

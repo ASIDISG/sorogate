@@ -1,9 +1,9 @@
 # Access policy specification (draft 0.1)
 
 This document is the source of truth for what an access policy means. The Soroban contract in
-`contracts/access-policy` implements it. The TypeScript evaluator (planned) must give the same answers.
+`contracts/access-policy` implements it. The TypeScript model in `packages/sdk` must give the same answers.
 Where the code and this document disagree, that is a bug in one of them, and the shared test vectors
-(planned, `spec/vectors/`) decide which.
+(`spec/vectors/`) decide which.
 
 Status: draft. Testnet only. Nothing here has been audited.
 

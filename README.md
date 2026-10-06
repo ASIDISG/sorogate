@@ -4,8 +4,8 @@ Reusable **access policies** for Stellar, stored in a Soroban contract and evalu
 other contracts and from TypeScript.
 
 > **Status: early development. Testnet only. Not audited. Not deployed anywhere yet.**
-> Only the policy contract exists today. The TypeScript SDK, the reference consumer contract and the web
-> playground are planned and listed under "What is planned".
+> The policy contract, a TypeScript model of it and the shared test vectors exist today. The reference consumer
+> contract and the web playground are planned and listed under "What is planned".
 
 An access policy is a short list of conditions about an address: *holds at least N of this token*, *holds at
 least N of this collection*, *the ledger time is inside this window*. All conditions must hold. A contract (or an
@@ -27,31 +27,37 @@ rules live in one place, an owner can change them without redeploying every cont
 ## What exists
 
 - [`contracts/access-policy`](contracts/access-policy): the contract (`create`, `update`, `set_active`, `get`,
-  `evaluate`, `bump`) and its tests (27 so far, including a Stellar asset contract and deliberately broken tokens).
+  `evaluate`, `bump`), with 27 unit tests (including a Stellar asset contract and deliberately broken tokens) and
+  a harness that runs the shared vectors.
+- [`packages/sdk`](packages/sdk): a TypeScript model of the rules (`validateConditions`, `evaluate`, balance
+  decoding). It is not published and not the authoritative answer: the contract is.
+- [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
+  TypeScript model must both give the expected answer for every one.
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show.
 
 ## What is planned
 
-In this order: shared test vectors and a TypeScript evaluator that must agree with the contract; a live
-comparison of the two on a local network; a reference consumer contract; a small Astro site that teaches it; and
-a threat model and integration guide. Nothing is promised beyond that, and nothing is called useful until a
+In this order: a live comparison of the contract and the TypeScript model on a local network, with randomised
+policies; a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
+guide. Nothing is promised beyond that, and nothing is called useful until a
 contract nobody here wrote depends on it.
 
 ## Build and test
 
-You need Rust (with the `wasm32v1-none` target) and the [Stellar CLI](https://github.com/stellar/stellar-cli)
-25.2 or newer. Contracts built with soroban-sdk 28 must be built with `stellar contract build`; a plain
+You need Rust (the version in `rust-toolchain.toml`, with the `wasm32v1-none` target), the
+[Stellar CLI](https://github.com/stellar/stellar-cli) 25.2 or newer, and Node 20.11 or newer for the SDK. Contracts built with soroban-sdk 28 must be built with `stellar contract build`; a plain
 `cargo build` is refused.
 
 ```bash
-cargo test --workspace          # unit tests
+cargo test --workspace          # contract unit tests and the vectors
 stellar contract build          # release WASM
+npm ci && npm test              # the TypeScript model and the vectors
 ```
 
 On Windows, run the Rust tests inside WSL: native Windows linking of soroban-sdk's test utilities fails.
 `scripts/wsl-test.sh` and `scripts/wsl-check.sh` (format, clippy, tests, WASM build) keep build output on the
-Linux filesystem.
+Linux filesystem, and `scripts/wsl-js.sh` does the same for the TypeScript checks.
 
 ## Licence
 

@@ -2,6 +2,7 @@
 **/target
 **/test_snapshots/
 node_modules
+dist
 .env
 *.log
 .DS_Store

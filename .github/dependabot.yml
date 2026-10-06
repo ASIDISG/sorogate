@@ -9,6 +9,15 @@ updates:
       # soroban-sdk is bumped deliberately: a new major can change contract behavior and the build tooling.
       - dependency-name: soroban-sdk
         update-types: ['version-update:semver-major']
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    ignore:
+      # typescript-eslint does not yet accept TypeScript 7.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
