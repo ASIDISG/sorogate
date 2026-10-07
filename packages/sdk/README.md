@@ -54,6 +54,11 @@ Two things to know:
 - A token that exhausts its whole budget makes the contract abort without a decision. `readBalance` reports such
   a token as `unavailable`.
 
+The functions that need no network (`validateConditions`, `evaluate`, `toBaseUnits`, `fromBaseUnits`,
+`describeCondition`, `explainDecision` and the types) are also available from `@sorogate/sdk/model`, which does not
+import the Stellar SDK. Use it in a web page that only works a policy out locally, so the page does not ship a
+library it never calls. It exports the same code as the package root, not a copy.
+
 ## Amounts
 
 A policy's `min` is in a token's **base units**: with 7 decimals, one whole token is 10,000,000. Typing a display amount
