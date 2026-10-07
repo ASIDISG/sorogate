@@ -21,7 +21,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "generate:random": "tsx scripts/generate-random.ts"
+    "generate:random": "tsx scripts/generate-random.ts",
+    "testnet:differential": "tsx scripts/testnet-differential.ts"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^17.2.1"

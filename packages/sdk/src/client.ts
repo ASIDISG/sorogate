@@ -154,33 +154,33 @@ export interface SnapshotResult {
 /**
  * Collects what `evaluate` needs for `subject`: the ledger time and every balance a condition asks about. All
  * readings must come from the same ledger as the time, otherwise the snapshot is read again (up to `attempts`
- * times), because a balance and a time from different ledgers would not describe any moment that existed.
+ * times), because a balance and a time from different ledgers would not describe any moment that existed. The
+ * balances are read in parallel.
  */
 export async function fetchSnapshot(
   context: CallContext,
   options: { conditions: readonly Condition[]; subject: string; attempts?: number },
 ): Promise<SnapshotResult> {
   const attempts = options.attempts ?? 4;
+
+  // Each distinct token or collection is read once, however many conditions name it.
+  const sources = new Map<string, { kind: 'token' | 'nft'; address: string }>();
+  for (const condition of options.conditions) {
+    if (condition.type === 'time_window') continue;
+    sources.set(readingKey(condition), {
+      kind: condition.type === 'token_balance' ? 'token' : 'nft',
+      address: condition.type === 'token_balance' ? condition.token : condition.collection,
+    });
+  }
+
   for (let attempt = 0; attempt < attempts; attempt++) {
     const latest = await context.rpc.getLatestLedger();
-    const readings = new Map<string, Reading>();
-    let consistent = true;
-    for (const condition of options.conditions) {
-      if (condition.type === 'time_window') continue;
-      const key = readingKey(condition);
-      if (readings.has(key)) continue;
-      const { reading, ledgerSequence } = await readBalance(context, {
-        kind: condition.type === 'token_balance' ? 'token' : 'nft',
-        address: condition.type === 'token_balance' ? condition.token : condition.collection,
-        subject: options.subject,
-      });
-      if (ledgerSequence !== latest.sequence) {
-        consistent = false;
-        break;
-      }
-      readings.set(key, reading);
-    }
-    if (consistent) {
+    // In parallel: reading one after another can take longer than a ledger, and then no read is ever consistent.
+    const results = await Promise.all(
+      [...sources].map(async ([key, source]) => ({ key, ...(await readBalance(context, { ...source, subject: options.subject })) })),
+    );
+    if (results.every((r) => r.ledgerSequence === latest.sequence)) {
+      const readings = new Map<string, Reading>(results.map((r) => [r.key, r.reading]));
       return { snapshot: { timestamp: BigInt(latest.closeTime), readings }, ledgerSequence: latest.sequence };
     }
   }

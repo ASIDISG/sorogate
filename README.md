@@ -35,13 +35,15 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
+- [`contracts/mock-token`](contracts/mock-token): a **test fixture**, a fake token whose `balance` behaviour is chosen
+  at deploy time. Anyone can set any balance on it, so it is for tests only.
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
-- [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show.
+- [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show,
+  including one where the deployed contract and the TypeScript model agreed on 120 comparisons.
 
 ## What is planned
 
-In this order: a recorded run on Testnet that compares the deployed contract with the model through that client;
-a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
+In this order: a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
 guide. Nothing is promised beyond that, and nothing is called useful until a
 contract nobody here wrote depends on it.
 

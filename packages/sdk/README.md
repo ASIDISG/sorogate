@@ -54,6 +54,18 @@ Two things to know:
 - A token that exhausts its whole budget makes the contract abort without a decision. `readBalance` reports such
   a token as `unavailable`.
 
+## Compare with the contract on Testnet (manual)
+
+`scripts/testnet-differential.ts` deploys the contract and the test-token fixtures to Testnet with throwaway keys, creates
+random policies, and checks that `evaluateOnChain` and the model agree for every one. It takes a few minutes, talks to a
+public network, and is not part of CI. The result of one run is in
+[`docs/evidence`](../../docs/evidence/testnet-differential-2026-10-07.md).
+
+```bash
+stellar contract build
+npm run testnet:differential -w @sorogate/sdk -- --wasm-dir <the folder with access_policy.wasm and mock_token.wasm> --policies 30 --seed 1
+```
+
 ## Errors
 
 | Error | Meaning |

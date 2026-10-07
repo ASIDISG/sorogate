@@ -35,11 +35,13 @@ type Reply = { retval: xdr.ScVal } | { error: string };
  * by each successive RPC call (getLatestLedger or a simulation); the last value repeats. A test can therefore make
  * the network move on between two reads.
  */
-function fakeRpc(reply: (call: Call) => Reply, options: { ledgers?: number[]; closeTime?: string } = {}) {
+function fakeRpc(reply: (call: Call) => Reply, options: { ledgers?: number[]; closeTime?: string; delayMs?: number } = {}) {
   const ledgers = options.ledgers ?? [100];
   const calls: Call[] = [];
   let step = 0;
   let latestLedgerCalls = 0;
+  let inFlight = 0;
+  let mostInFlight = 0;
   const nextLedger = (): number => ledgers[Math.min(step++, ledgers.length - 1)] as number;
   const server = {
     async getAccount(): Promise<Account> {
@@ -58,13 +60,17 @@ function fakeRpc(reply: (call: Call) => Reply, options: { ledgers?: number[]; cl
         args: invoke.args,
       };
       calls.push(call);
+      inFlight++;
+      mostInFlight = Math.max(mostInFlight, inFlight);
+      if (options.delayMs) await new Promise((r) => setTimeout(r, options.delayMs));
+      inFlight--;
       const latestLedger = nextLedger();
       const answer = reply(call);
       return 'error' in answer ? { latestLedger, error: answer.error } : { latestLedger, result: { retval: answer.retval } };
     },
   };
   const context: CallContext = { rpc: server as unknown as CallContext['rpc'], networkPassphrase: PASSPHRASE, source };
-  return { context, calls, latestLedgerCalls: () => latestLedgerCalls };
+  return { context, calls, latestLedgerCalls: () => latestLedgerCalls, mostInFlight: () => mostInFlight };
 }
 
 const i128 = (n: bigint) => nativeToScVal(n, { type: 'i128' });
@@ -173,6 +179,12 @@ describe('fetchSnapshot', () => {
   it('gives up with LedgerMovedError when the ledger never holds still', async () => {
     const { context } = fakeRpc(balances, { ledgers: Array.from({ length: 50 }, (_, i) => 100 + i) });
     await expect(fetchSnapshot(context, { conditions, subject, attempts: 3 })).rejects.toBeInstanceOf(LedgerMovedError);
+  });
+
+  it('reads the balances at the same time, because one after another can outlast a ledger', async () => {
+    const { context, mostInFlight } = fakeRpc(balances, { delayMs: 20 });
+    await fetchSnapshot(context, { conditions, subject });
+    expect(mostInFlight()).toBeGreaterThanOrEqual(2);
   });
 
   it('reads a token once however many conditions name it', async () => {
