@@ -35,7 +35,7 @@ for 22.22.2, 24.15 or newer; on 22.22.1 npm prints a warning and the tests still
 
 ```bash
 npm ci                              # from the repository root
-npm run dev -w @sorogate/site       # http://localhost:4321
+npm run dev -w @sorogate/site       # http://localhost:4321/sorogate/
 npm test -w @sorogate/site
 npm run build -w @sorogate/site     # static files in packages/site/dist
 ```
@@ -48,5 +48,15 @@ first.
 - **Real browsers.** The page test runs in jsdom. It checks behaviour, labels and that typed text is not turned into HTML,
   but not layout, focus order on a real screen, or what a screen reader says. Do those by hand before a release.
 - **Colour contrast in context.** The palette was checked pair by pair, not by measuring the rendered page.
-- **Deployment.** Nothing publishes the site yet. When it is published, set `site` (and `base` for a project page) in
-  `astro.config.mjs`.
+- **The published page itself.** The workflow tests and builds the site, but nothing checks the live address after a
+  deploy. Open it after the first deploy and after any change to `astro.config.mjs`.
+
+## Publishing
+
+`.github/workflows/pages.yml` publishes the site to GitHub Pages at `https://sorogate.github.io/sorogate/`. It runs on a
+push to `main` that changes the site, the SDK source, `spec/vectors/evaluate.json`, the lockfile or the workflow itself, and
+by hand from the Actions tab. It runs this package's tests first, so a build whose examples no longer match the vectors is
+not published. The one-time switch is in the repository settings: Pages, with the source set to "GitHub Actions".
+
+The page sits under `/sorogate` because it is a project page. `site` and `base` in `astro.config.mjs` say so; change
+both if the page moves.
