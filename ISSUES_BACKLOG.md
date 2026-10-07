@@ -15,6 +15,7 @@ target size: an entry that stops being true is removed.
 
 ### 1. Record why a claim signed by someone else fails, and run the pinned consumer's payment for real
 **Size:** Trivial
+**Posted on GitHub:** #5
 
 **Description**
 The recorded run of the reference consumer on Testnet
@@ -46,6 +47,7 @@ Changing the contract. This is about what the run records.
 
 ### 2. Make the Testnet comparison exercise the allowed path
 **Size:** Trivial
+**Posted on GitHub:** #6
 
 **Description**
 In the recorded comparison of the contract with the TypeScript model, only a few decisions were "allowed", so that run
@@ -99,6 +101,7 @@ Add at least two contract-address subjects: one holding a balance on the test to
 
 ### 4. Measure a large real token and write `docs/COSTS.md`
 **Size:** Medium
+**Posted on GitHub:** #2
 
 **Description**
 The cost figures in the repository come from a 1.4 KB test token and from Stellar asset contracts. A production token is
@@ -130,6 +133,7 @@ Changing the contract in this issue.
 
 ### 5. Test `NftBalance` against a real SEP-50 collection
 **Size:** Medium
+**Posted on GitHub:** #3
 
 **Description**
 `NftBalance` reads `balance(owner)` as a `u32`, which is what OpenZeppelin's SEP-50 implementation returns. SEP-50 is a
@@ -154,6 +158,7 @@ Record the run.
 
 ### 6. Add dependency advisory scans to CI and pin GitHub Actions by commit
 **Size:** Medium
+**Posted on GitHub:** #4
 
 **Description**
 Dependabot proposes updates, but nothing fails the build when a dependency has a published advisory, and the workflow
