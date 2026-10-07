@@ -7,8 +7,8 @@ Thank you for looking. Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) first
 
 - **Rust**, through [rustup](https://rustup.rs). The repository pins the version in `rust-toolchain.toml`, and rustup
   installs it (with the `wasm32v1-none` target) the first time you run `cargo` here.
-- The **[Stellar CLI](https://github.com/stellar/stellar-cli)**, 25.2 or newer (tested with 27.1.0). Contracts built
-  with soroban-sdk 28 must be built with `stellar contract build`; a plain `cargo build` is refused.
+- The **[Stellar CLI](https://github.com/stellar/stellar-cli)**, 25.2 or newer. CI uses 28.1.0; the runs recorded in `docs/evidence` used 27.1.0.
+  Contracts built with soroban-sdk 28 must be built with `stellar contract build`; a plain `cargo build` is refused.
 - **Node** 20.11 or newer for the contract and SDK; the web page in `packages/site` needs 22.12 or newer to build
   (Astro) and 22.22.2, 24.15 or newer to run its tests (jsdom). CI uses the latest 22.
 - **No Docker and no wallet.** Everything in the daily loop runs without them.
