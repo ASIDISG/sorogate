@@ -135,6 +135,11 @@ pinned consumer refusing it, and a claim signed by someone else. With `--policy-
 already deployed (the public one in [`docs/DEPLOYMENT.md`](../../docs/DEPLOYMENT.md)) after checking its code against the
 local build. One run is recorded in [`docs/evidence`](../../docs/evidence/testnet-gated-claim-2026-10-07.md).
 
+`npm run testnet:sep50 -w @sorogate/sdk -- --wasm-dir <the folder with the WASM files> --nft-wasm <a SEP-50 collection's WASM> --nft-source <where it came from> --policy-contract <C...>`
+checks the `NftBalance` condition against a real collection (OpenZeppelin's example, built from its own repository), comparing the
+contract with the model and running the consumer. One run is recorded in
+[`docs/evidence`](../../docs/evidence/testnet-sep50-2026-10-07.md).
+
 ## Errors
 
 | Error | Meaning |

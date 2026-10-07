@@ -60,7 +60,9 @@ rules live in one place, an owner can change them without redeploying every cont
   including one where the deployed contract and the TypeScript model agreed on 120 comparisons, and one that walks the
   reference consumer through its scenarios on the public Testnet deployment (26 steps, all as expected, including
   refusals that were applied and failed as real transactions, and a claim signed by someone else that failed with an
-  authorization error).
+  authorization error), and one that checks the `NftBalance` condition against a real OpenZeppelin SEP-50 collection
+  (29 steps, contract and model agreeing on every comparison). Both used collections or tokens we deployed, not ones
+  somebody else operates.
 
 ## What is planned
 

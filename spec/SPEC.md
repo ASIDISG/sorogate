@@ -92,6 +92,12 @@ Only the single function `balance(Address)` of SEP-41 (`-> i128`) and SEP-50 (`-
 Drafts. Allowances, events, metadata, `owner_of`, `token_uri` and transfers are not used. If either standard
 changes `balance`, this specification gets a new version.
 
+Informative: SEP-50 (Draft 0.1.0) describes the return type only as "an unsigned integer", usually the same type as
+the token id; it does not say `u32`. The one real collection tried, OpenZeppelin's `nft-sequential-minting` example at
+v0.7.2, returns a `u32`
+([recorded run](../docs/evidence/testnet-sep50-2026-10-07.md)). A collection that returns a wider type is read as
+unavailable, and the condition fails closed.
+
 ## 5. Encodings
 
 `DenyReason` is an integer.

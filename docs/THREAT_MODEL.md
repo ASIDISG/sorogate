@@ -101,7 +101,7 @@ closed, or recorded as equivalent; the test-token fixture was not checked this w
 contract, the comparison with the model, and the consumer.
 
 Not checked: any external security review; formal verification; fuzzing beyond the random comparison; contract accounts
-(`C...`) as subjects on a live network; third-party tokens such as OpenZeppelin's; the cost of a large token; behaviour
+(`C...`) as subjects on a live network; a collection or token that someone else deployed and operates (OpenZeppelin's SEP-50 example was deployed and checked by us, [evidence](evidence/testnet-sep50-2026-10-07.md)); the cost of a large token; behaviour
 when a policy or claim record is actually archived; behaviour under sustained load.
 
 ## Reporting a problem

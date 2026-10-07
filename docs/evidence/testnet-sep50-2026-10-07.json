@@ -1,0 +1,249 @@
+{
+  "label": "Recorded",
+  "stepKinds": {
+    "transaction": "sent to the network and applied (a failed transaction was applied, and failed)",
+    "simulation": "asked of the network without applying anything",
+    "reading": "a value read from the network"
+  },
+  "network": "Stellar Testnet (protocol 29)",
+  "ranAt": "2026-10-07T14:21:13.922Z",
+  "steps": 29,
+  "unexpected": 0,
+  "collection": {
+    "contract": "CBG3I4MRFF5NM5NVQGCDJTGEMHJA5H2FODPETSIW65YKFU5ZZ2JFGSZN",
+    "source": "OpenZeppelin/stellar-contracts v0.7.2 (commit a9c42169000638da937577f592ebf61a7a3c94ca), examples/nft-sequential-minting, built with stellar-cli 27.1.0, rustc 1.99.0, soroban-sdk 26.1.0",
+    "wasmBytes": 15749,
+    "wasmSha256": "ccc926046a89b588283e8b5583186f2402dc329c3ff3e7f8eecac374497f00d7",
+    "balanceReturnType": "scvU32"
+  },
+  "policyContract": "CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW",
+  "policies": {
+    "atLeastOne": "6",
+    "atLeastTwo": "7",
+    "nftConditionOverFungibleToken": "8"
+  },
+  "contracts": {
+    "consumer": "CCISKBVOIYH4ZUC6GNNNGZWOPQRWE7BBEIDRHAFPTTTRCRRSGGIKA6OA",
+    "consumerWasmSha256": "143a6b5ceba3e807b91ef619a6522048073cd8e0ca9d505dc2fe83a7c3095334",
+    "rewardAssetContract": "CAO7VEV4UAM7UMPHAEKLUMOK5ZYX5DWEL4MKL5AYXSTFN4YKMWA3VWG5"
+  },
+  "accounts": {
+    "collectionOwnerAndPolicyOwner": "GCEHX7HRKBZTXER4MHJNUPT4UATPWURYIHDHVFEQJGVSGZN3EQUEDIXL",
+    "alice": "GDBYA6S5L7E2ZA52CAM3LNSUO3TXLDUPKKCITLENZN7OIBDNZNWNXVNA",
+    "bob": "GDZ5EVBO344CDKYYR5EIVJHVJMVIDO26CEUHZPUGYV5JUUVUARH3FPGP",
+    "carol": "GBDJAPDCMGZKFZQMMB7ZM3J4TWOJ5SDTAFYG4GADP4A3NQNMGNNOHLIS",
+    "dave": "GDGIV4BR773I6IXCPCDOTTDM3J5QAVWBY36JOFF2RCIADHN3LCFJ2MLO",
+    "nonexistentAccount": "GCFJLVKCO4AKKOXICFASUMX3KIPYORO73YCVMBRNKPBMJEE6QSBI75SS"
+  },
+  "results": [
+    {
+      "step": "the policy contract is the public deployment, holding this repository's build",
+      "kind": "reading",
+      "expected": "identical",
+      "actual": "identical",
+      "ok": true
+    },
+    {
+      "step": "the collection on the network is the WASM that was built",
+      "kind": "reading",
+      "expected": "identical",
+      "actual": "identical",
+      "ok": true
+    },
+    {
+      "step": "balance(owner) of a collection, before anything is minted: the XDR type",
+      "kind": "simulation",
+      "expected": "scvU32",
+      "actual": "scvU32",
+      "ok": true
+    },
+    {
+      "step": "and its value",
+      "kind": "simulation",
+      "expected": "0",
+      "actual": "0",
+      "ok": true
+    },
+    {
+      "step": "three tokens are minted: two to alice, one to bob (token ids)",
+      "kind": "transaction",
+      "expected": "0,1,2",
+      "actual": "0,1,2",
+      "ok": true,
+      "txHash": "71d95f4adc9c5f81425287e0c9248eb43fc1fdcb7800ac9fba15a03e0289b5df 1de2c525f37dc2f5080d7d054b1cb5ae531ffc784fc79cf27dd2a712c98820f2 5ada4066c9a2255aad5dbf8210e14548804b9de88b0c058ea18c582e9745714a"
+    },
+    {
+      "step": "owner_of(0) is alice",
+      "kind": "simulation",
+      "expected": "GDBYA6S5L7E2ZA52CAM3LNSUO3TXLDUPKKCITLENZN7OIBDNZNWNXVNA",
+      "actual": "GDBYA6S5L7E2ZA52CAM3LNSUO3TXLDUPKKCITLENZN7OIBDNZNWNXVNA",
+      "ok": true
+    },
+    {
+      "step": "balance(alice)",
+      "kind": "simulation",
+      "expected": "scvU32 2",
+      "actual": "scvU32 2",
+      "ok": true
+    },
+    {
+      "step": "balance(bob)",
+      "kind": "simulation",
+      "expected": "scvU32 1",
+      "actual": "scvU32 1",
+      "ok": true
+    },
+    {
+      "step": "balance(carol), who owns none",
+      "kind": "simulation",
+      "expected": "scvU32 0",
+      "actual": "scvU32 0",
+      "ok": true
+    },
+    {
+      "step": "balance of an account that does not exist on the network",
+      "kind": "simulation",
+      "expected": "scvU32 0",
+      "actual": "scvU32 0",
+      "ok": true
+    },
+    {
+      "step": "at least 1, alice (2): the contract says allowed, and the model agrees",
+      "kind": "simulation",
+      "expected": "allowed; model agrees",
+      "actual": "allowed; model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 1, bob (1): the contract says allowed, and the model agrees",
+      "kind": "simulation",
+      "expected": "allowed; model agrees",
+      "actual": "allowed; model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 1, carol (0): the contract says denied (BelowMinimum), and the model agrees",
+      "kind": "simulation",
+      "expected": "denied (BelowMinimum); model agrees",
+      "actual": "denied (BelowMinimum); model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 1, an account that does not exist: the contract says denied (BelowMinimum), and the model agrees",
+      "kind": "simulation",
+      "expected": "denied (BelowMinimum); model agrees",
+      "actual": "denied (BelowMinimum); model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 2, alice (2): the contract says allowed, and the model agrees",
+      "kind": "simulation",
+      "expected": "allowed; model agrees",
+      "actual": "allowed; model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 2, bob (1): the contract says denied (BelowMinimum), and the model agrees",
+      "kind": "simulation",
+      "expected": "denied (BelowMinimum); model agrees",
+      "actual": "denied (BelowMinimum); model agrees",
+      "ok": true
+    },
+    {
+      "step": "alice transfers token 0 to carol",
+      "kind": "transaction",
+      "expected": "done",
+      "actual": "done",
+      "ok": true,
+      "txHash": "e52df5e780ed4c2a6b609ee65012c48a6feb7c9b653d9d0ef24d012c05f83e7c"
+    },
+    {
+      "step": "at least 1, carol (now 1): the contract says allowed, and the model agrees",
+      "kind": "simulation",
+      "expected": "allowed; model agrees",
+      "actual": "allowed; model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 2, alice (now 1): the contract says denied (BelowMinimum), and the model agrees",
+      "kind": "simulation",
+      "expected": "denied (BelowMinimum); model agrees",
+      "actual": "denied (BelowMinimum); model agrees",
+      "ok": true
+    },
+    {
+      "step": "at least 1, alice (now 1): the contract says allowed, and the model agrees",
+      "kind": "simulation",
+      "expected": "allowed; model agrees",
+      "actual": "allowed; model agrees",
+      "ok": true
+    },
+    {
+      "step": "the fungible token answers balance with an i128, not a u32",
+      "kind": "simulation",
+      "expected": "scvI128",
+      "actual": "scvI128",
+      "ok": true
+    },
+    {
+      "step": "an NftBalance condition over that fungible token, alice: the contract says denied (BalanceUnavailable), and the model agrees",
+      "kind": "simulation",
+      "expected": "denied (BalanceUnavailable); model agrees",
+      "actual": "denied (BalanceUnavailable); model agrees",
+      "ok": true
+    },
+    {
+      "step": "carol, who holds one token, claims on the consumer",
+      "kind": "transaction",
+      "expected": "paid",
+      "actual": "paid",
+      "ok": true,
+      "txHash": "f4ef1064545dba8630898b5e03b40373dbc2e32c3dc1734ee3272157022d711c"
+    },
+    {
+      "step": "carol now holds the reward",
+      "kind": "reading",
+      "expected": "10 SGN",
+      "actual": "10 SGN",
+      "ok": true
+    },
+    {
+      "step": "bob transfers token 2 to dave",
+      "kind": "transaction",
+      "expected": "done",
+      "actual": "done",
+      "ok": true,
+      "txHash": "a71fd44ca719c152f023dfe43ecd25cd0acfa3fe5cdc4511ff12ebb34795b706"
+    },
+    {
+      "step": "bob's claim, signed while he owned the token, is sent after he no longer does",
+      "kind": "transaction",
+      "expected": "FAILED: BelowMinimum (contract error 11)",
+      "actual": "FAILED: BelowMinimum (contract error 11)",
+      "ok": true,
+      "txHash": "2b872139d0e104c325f16815de84ca25a3283b368fd5bebc96846006ea6ad960"
+    },
+    {
+      "step": "bob was not paid",
+      "kind": "reading",
+      "expected": "0 SGN",
+      "actual": "0 SGN",
+      "ok": true
+    },
+    {
+      "step": "dave, who now holds the token, claims",
+      "kind": "transaction",
+      "expected": "paid",
+      "actual": "paid",
+      "ok": true,
+      "txHash": "fec1c57d435491ccefc644f2ddb0241816d1918942a7fdda4c95a8a0b4bbc7e3"
+    },
+    {
+      "step": "the consumer paid two claims",
+      "kind": "reading",
+      "expected": "80 SGN",
+      "actual": "80 SGN",
+      "ok": true
+    }
+  ]
+}
