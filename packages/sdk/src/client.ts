@@ -97,7 +97,7 @@ async function simulate(context: CallContext, contractId: string, method: string
 }
 
 /** The first line of a failure message, which is the part worth showing. */
-const firstLine = (text: string): string => text.split('\n')[0] ?? text;
+export const firstLine = (text: string): string => text.split('\n')[0] ?? text;
 
 /** Throws the contract's own error when there is one, a `SimulationError` otherwise. */
 function unwrap(result: Simulated, method: string): xdr.ScVal {

@@ -28,3 +28,20 @@ export {
   type RpcLike,
   type SnapshotResult,
 } from './client.js';
+export {
+  InvalidPolicyError,
+  prepareCreatePolicy,
+  prepareSetActive,
+  prepareUpdatePolicy,
+  submitSigned,
+  SubmissionError,
+  TransactionFailedError,
+  TransactionTimeoutError,
+  type PrepareOptions,
+  type PreparedTransaction,
+  type SubmitOptions,
+  type SubmittedTransaction,
+  type WriteContext,
+  type WriteRpc,
+} from './transactions.js';
+export type { CredentialSource } from './credentials.js';

@@ -83,6 +83,31 @@ explainDecision(decision, policy.conditions, { decimals: { [tokenAddress]: 7 } }
 `describeCondition` describes one condition. Neither decides anything; they only describe what the contract or the model
 decided.
 
+## Changing a policy
+
+A page that lets the owner change a policy builds the transaction **unsigned**, asks a wallet to sign it, and sends the
+result. Nothing in the SDK holds a key.
+
+```ts
+import { prepareCreatePolicy, submitSigned } from '@sorogate/sdk';
+
+const writes = { rpc, networkPassphrase: 'Test SDF Network ; September 2015' };
+const prepared = await prepareCreatePolicy(writes, { contractId, owner: ownerAddress, conditions });
+const signedXdr = await wallet.sign(prepared.xdr);                   // your wallet code
+const { returnValue, hash } = await submitSigned(writes, signedXdr); // returnValue is the new policy id
+```
+
+`prepareUpdatePolicy` and `prepareSetActive` work the same way. The owner must be the transaction's source account, which is
+how one signature satisfies the contract's authorization check. A policy the SDK can already see is invalid is refused
+before anything is sent (`InvalidPolicyError`); one the contract refuses is reported as `ContractCallError`. The fee
+bid is the network minimum and the transaction is valid for five minutes, so a person has time to sign; both can be
+changed.
+
+## Credentials
+
+Credentials are not a condition of a policy, and nothing here checks one. `CredentialSource` is only a type that an app or
+consumer can implement to plug a verifier in. [`docs/CREDENTIALS.md`](../../docs/CREDENTIALS.md) explains why.
+
 ## Compare with the contract on Testnet (manual)
 
 `scripts/testnet-differential.ts` deploys the contract and the test-token fixtures to Testnet with throwaway keys, creates
@@ -94,6 +119,10 @@ public network, and is not part of CI. The result of one run is in
 stellar contract build
 npm run testnet:differential -w @sorogate/sdk -- --wasm-dir <the folder with access_policy.wasm and mock_token.wasm> --policies 30 --seed 1
 ```
+
+`npm run testnet:sdk-writes -w @sorogate/sdk -- --wasm-dir <the folder with the WASM files>` uses the builders the way a wallet
+flow would, including the refusals (one run is in
+[`docs/evidence`](../../docs/evidence/testnet-sdk-writes-2026-10-07.md)).
 
 The same plumbing runs the reference consumer end to end (`npm run testnet:gated-claim -w @sorogate/sdk -- --wasm-dir <the folder
 with the three WASM files>`): a claim, a refused double claim, the owner changing the rule, and a pinned consumer refusing it.

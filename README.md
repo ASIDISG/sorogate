@@ -31,7 +31,8 @@ rules live in one place, an owner can change them without redeploying every cont
   a harness that runs the shared vectors.
 - [`packages/sdk`](packages/sdk): a TypeScript model of the rules (`validateConditions`, `evaluate`, balance
   decoding), helpers for amounts and for explaining a decision in plain language, and a read-only client that asks a
-  deployed contract through an RPC server (`evaluateOnChain`, `getPolicy`, `fetchSnapshot`). It is not published, and the contract, not the model, is the authoritative answer.
+  deployed contract through an RPC server (`evaluateOnChain`, `getPolicy`, `fetchSnapshot`), and builders for the
+  unsigned transactions that create, update and deactivate a policy, for a wallet to sign. It is not published, and the contract, not the model, is the authoritative answer.
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
@@ -44,7 +45,7 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) and
   [`docs/INTEGRATING.md`](docs/INTEGRATING.md): how the pieces fit, what is and is not protected, and how to use a policy
-  from your own contract.
+  from your own contract. [`docs/CREDENTIALS.md`](docs/CREDENTIALS.md) records why credentials are not a condition.
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show,
   including one where the deployed contract and the TypeScript model agreed on 120 comparisons, and one that walks the
   reference consumer through its scenarios on a real network (18 steps, all as expected).
