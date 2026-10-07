@@ -42,14 +42,17 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`contracts/mock-token`](contracts/mock-token): a **test fixture**, a fake token whose `balance` behaviour is chosen
   at deploy time. Anyone can set any balance on it, so it is for tests only.
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) and
+  [`docs/INTEGRATING.md`](docs/INTEGRATING.md): how the pieces fit, what is and is not protected, and how to use a policy
+  from your own contract.
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show,
   including one where the deployed contract and the TypeScript model agreed on 120 comparisons, and one that walks the
   reference consumer through its scenarios on a real network (18 steps, all as expected).
 
 ## What is planned
 
-In this order: a small Astro site that teaches the whole thing, and a threat model. Nothing is promised beyond that, and nothing is called useful until a
-contract nobody here wrote depends on it.
+Next: a small Astro site that teaches the whole thing. Nothing is promised beyond that, and nothing is called useful
+until a contract nobody here wrote depends on it.
 
 ## Build and test
 
@@ -69,6 +72,11 @@ To compare the contract with the TypeScript model on random policies, see
 On Windows, run the Rust tests inside WSL: native Windows linking of soroban-sdk's test utilities fails.
 `scripts/wsl-test.sh` and `scripts/wsl-check.sh` (format, clippy, tests, WASM build) keep build output on the
 Linux filesystem, and `scripts/wsl-js.sh` does the same for the TypeScript checks.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Scoped candidates for new contributors are in
+[ISSUES_BACKLOG.md](ISSUES_BACKLOG.md). A security problem goes through [SECURITY.md](SECURITY.md), not a public issue.
 
 ## Licence
 

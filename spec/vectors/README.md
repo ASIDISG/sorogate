@@ -78,8 +78,10 @@ balances at `min`, `min - 1` and `min + 1`, and window edges at the evaluation t
 The same seed always gives the same files.
 
 ```bash
-npm run generate:random -w @sorogate/sdk -- --seed 42 --count 1000 --out spec/vectors/generated
-SOROGATE_RANDOM_VECTORS=spec/vectors/generated cargo test -p access-policy --test vectors random
+# npm runs a workspace script from packages/sdk, so --out is relative to that folder
+npm run generate:random -w @sorogate/sdk -- --seed 42 --count 1000 --out ../../spec/vectors/generated
+# the Rust test runs from contracts/access-policy, so give it an absolute path
+SOROGATE_RANDOM_VECTORS="$PWD/spec/vectors/generated" cargo test -p access-policy --test vectors random
 ```
 
 `spec/vectors/generated/` is not committed. Without `SOROGATE_RANDOM_VECTORS` the random tests are skipped. CI runs

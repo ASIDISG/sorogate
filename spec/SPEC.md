@@ -48,7 +48,8 @@ Rules are checked in the order of the conditions; within one condition, in the o
 An unknown policy id is `PolicyNotFound` (1).
 
 Why the contract check: calling an account address as if it were a contract aborts the whole transaction
-instead of failing softly (measured on Testnet, 2026-10-06), so such an address must never be stored.
+instead of failing softly (measured on Testnet, 2026-10-06, see
+[`docs/evidence/spike-2026-10-06.md`](../docs/evidence/spike-2026-10-06.md)), so such an address must never be stored.
 
 ## 4. Evaluation
 
