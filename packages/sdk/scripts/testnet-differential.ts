@@ -12,22 +12,17 @@
  * This talks to a public network and takes a few minutes, so it is not part of CI. It refuses to run against any
  * network that does not report the Testnet passphrase.
  */
-import { createHash, randomBytes } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 import {
-  Account,
   Address,
   Asset,
-  Contract,
   Keypair,
   nativeToScVal,
   Networks,
   Operation,
-  rpc,
   scValToNative,
-  TransactionBuilder,
   type xdr,
 } from '@stellar/stellar-sdk';
 
@@ -45,9 +40,8 @@ import {
   type PolicyRules,
 } from '../src/index.js';
 import { Rng } from './random-vectors.js';
+import { assertTestnet, deployInstance, deployWasm, fund, invoke, log, server, sleep, submit } from './testnet-lib.js';
 
-const RPC_URL = process.env.SOROGATE_TESTNET_RPC ?? 'https://soroban-testnet.stellar.org';
-const FRIENDBOT = 'https://friendbot.stellar.org';
 
 const arg = (name: string, fallback: string): string => {
   const i = process.argv.indexOf(`--${name}`);
@@ -58,58 +52,6 @@ const SEED = Number(arg('seed', '1'));
 const WASM_DIR = resolve(arg('wasm-dir', '../../target/wasm32v1-none/release'));
 const REPORT = process.argv.includes('--report') ? resolve(arg('report', 'report.json')) : null;
 
-const server = new rpc.Server(RPC_URL);
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const log = (message: string) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${message}`);
-
-// ---------------------------------------------------------------- transactions
-
-async function fund(address: string): Promise<void> {
-  const response = await fetch(`${FRIENDBOT}/?addr=${address}`);
-  if (!response.ok) throw new Error(`friendbot refused ${address}: ${response.status}`);
-}
-
-async function submit(signer: Keypair, operation: xdr.Operation, soroban: boolean): Promise<rpc.Api.GetSuccessfulTransactionResponse> {
-  const account: Account = await server.getAccount(signer.publicKey());
-  let tx = new TransactionBuilder(account, { fee: '1000000', networkPassphrase: Networks.TESTNET }).addOperation(operation).setTimeout(120).build();
-  if (soroban) tx = await server.prepareTransaction(tx);
-  tx.sign(signer);
-  const sent = await server.sendTransaction(tx);
-  if (sent.status === 'ERROR') throw new Error(`transaction rejected: ${JSON.stringify(sent.errorResult)}`);
-  for (let i = 0; i < 60; i++) {
-    const result = await server.getTransaction(sent.hash);
-    if (result.status === 'SUCCESS') return result;
-    if (result.status === 'FAILED') throw new Error(`transaction failed: ${sent.hash}`);
-    await sleep(1500);
-  }
-  throw new Error(`transaction not confirmed in time: ${sent.hash}`);
-}
-
-async function deployWasm(signer: Keypair, wasm: Buffer, constructorArgs: xdr.ScVal[]): Promise<{ contractId: string; wasmSha256: string }> {
-  const wasmHash = createHash('sha256').update(wasm).digest();
-  await submit(signer, Operation.uploadContractWasm({ wasm }), true);
-  const result = await submit(
-    signer,
-    Operation.createCustomContract({ address: new Address(signer.publicKey()), wasmHash, salt: randomBytes(32), constructorArgs }),
-    true,
-  );
-  return { contractId: scValToNative(result.returnValue as xdr.ScVal) as string, wasmSha256: wasmHash.toString('hex') };
-}
-
-/** Deploys another instance of an already uploaded WASM. */
-async function deployInstance(signer: Keypair, wasmSha256: string, constructorArgs: xdr.ScVal[]): Promise<string> {
-  const result = await submit(
-    signer,
-    Operation.createCustomContract({ address: new Address(signer.publicKey()), wasmHash: Buffer.from(wasmSha256, 'hex'), salt: randomBytes(32), constructorArgs }),
-    true,
-  );
-  return scValToNative(result.returnValue as xdr.ScVal) as string;
-}
-
-async function invoke(signer: Keypair, contractId: string, method: string, args: xdr.ScVal[]): Promise<xdr.ScVal | undefined> {
-  const result = await submit(signer, new Contract(contractId).call(method, ...args), true);
-  return result.returnValue;
-}
 
 // ---------------------------------------------------------------- the world
 
@@ -261,8 +203,7 @@ async function compare(world: World, policyId: number, rules: PolicyRules, subje
 
 async function main(): Promise<void> {
   if (!Number.isInteger(POLICIES) || POLICIES < 1 || !Number.isInteger(SEED)) throw new Error('--policies and --seed must be integers');
-  const network = await server.getNetwork();
-  if (network.passphrase !== Networks.TESTNET) throw new Error(`refusing to run: ${RPC_URL} reports "${network.passphrase}", not Testnet`);
+  const network = await assertTestnet();
   log(`Testnet, protocol ${network.protocolVersion}; ${POLICIES} policies, seed ${SEED}`);
 
   const rng = new Rng(SEED);
@@ -278,7 +219,7 @@ async function main(): Promise<void> {
     const valid = validateConditions(conditions, () => true);
     if (!valid.ok) throw new Error(`generated an invalid policy: ${valid.error}`);
 
-    const created = await invoke(world.deployer, world.policyContract, 'create', [new Address(world.deployer.publicKey()).toScVal(), encodeConditions(conditions)]);
+    const { returnValue: created } = await invoke(world.deployer, world.policyContract, 'create', [new Address(world.deployer.publicKey()).toScVal(), encodeConditions(conditions)]);
     const policyId = Number(scValToNative(created as xdr.ScVal) as bigint);
     const updates = rng.chance(0.1) ? 1 + rng.int(2) : 0;
     for (let u = 0; u < updates; u++) await invoke(world.deployer, world.policyContract, 'update', [u64ToScVal(policyId), encodeConditions(conditions)]);

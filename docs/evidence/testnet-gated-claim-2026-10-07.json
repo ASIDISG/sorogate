@@ -1,0 +1,132 @@
+{
+  "label": "Recorded",
+  "network": "Stellar Testnet (protocol 29)",
+  "ranAt": "2026-10-07T07:18:18.652Z",
+  "steps": 18,
+  "unexpected": 0,
+  "contracts": {
+    "accessPolicy": "CBUZ4Y6H7M7JTBGII62GMQIBOMN66B4IDTH6UD6EJBJDV65JC43WGLXC",
+    "accessPolicyWasmSha256": "f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814",
+    "testToken": "CBWZC72GKA4YRBBHCKWQDKJSGOAKF5WC7SEMJLY326UYS4A55NQIMUSE",
+    "testTokenWasmSha256": "89146b0e1d5ae367c9c46499710a966e16cfdc6e58fa663949c6af39840922f3",
+    "rewardAssetContract": "CA3QFBJAOUKWQO23ZL3A6HFCQ3PPPPL64R2EDQB2ZX2J4ZKMFT6Q4PIU",
+    "consumerFollowingThePolicy": "CDM57HLMF7DVNM6VKRRTU53DCIU3CDVH5MG5VVRHQCMOLQDZNXTLVIYR",
+    "consumerPinnedToVersion1": "CBX2I4Y7AG5ICXBJAPFAVZCKCEU7CXR6RO5ZKW7S2IT3G5T5JTR2IDNF",
+    "consumerWasmSha256": "143a6b5ceba3e807b91ef619a6522048073cd8e0ca9d505dc2fe83a7c3095334",
+    "policyId": "1"
+  },
+  "results": [
+    {
+      "step": "alice (150 of the token, minimum 100) claims",
+      "expected": "paid",
+      "actual": "paid",
+      "ok": true,
+      "txHash": "03277105f1ace35c27cfc7322ea52a37edd55deeee492bba108f8d9ab02f631d"
+    },
+    {
+      "step": "alice now holds the reward",
+      "expected": "10 SGR",
+      "actual": "10 SGR",
+      "ok": true
+    },
+    {
+      "step": "the consumer remembers alice claimed",
+      "expected": "true",
+      "actual": "true",
+      "ok": true
+    },
+    {
+      "step": "alice claims a second time",
+      "expected": "AlreadyClaimed",
+      "actual": "AlreadyClaimed",
+      "ok": true
+    },
+    {
+      "step": "carol (50 of the token) claims",
+      "expected": "BelowMinimum",
+      "actual": "BelowMinimum",
+      "ok": true
+    },
+    {
+      "step": "bob claims on the pinned consumer while the policy is still version 1",
+      "expected": "ok",
+      "actual": "ok",
+      "ok": true
+    },
+    {
+      "step": "the owner updates the policy (a normal transaction)",
+      "expected": "done",
+      "actual": "done",
+      "ok": true,
+      "txHash": "748f42c24905dffa6f8c1dbfc61aeba47d1fa30e81364f4c774aac22b751d6c0"
+    },
+    {
+      "step": "bob (150) claims on the consumer that follows the policy",
+      "expected": "BelowMinimum",
+      "actual": "BelowMinimum",
+      "ok": true
+    },
+    {
+      "step": "bob claims on the pinned consumer",
+      "expected": "PolicyChanged",
+      "actual": "PolicyChanged",
+      "ok": true
+    },
+    {
+      "step": "bob (now 600) claims on the consumer that follows the policy",
+      "expected": "paid",
+      "actual": "paid",
+      "ok": true,
+      "txHash": "518781a9adc137d990f604742465eaf85d94bb4443353113b638d2811a0e883b"
+    },
+    {
+      "step": "bob now holds the reward",
+      "expected": "10 SGR",
+      "actual": "10 SGR",
+      "ok": true
+    },
+    {
+      "step": "bob, eligible under version 2, claims on the pinned consumer",
+      "expected": "PolicyChanged",
+      "actual": "PolicyChanged",
+      "ok": true
+    },
+    {
+      "step": "bob signs a claim for dave, who is eligible but did not authorize it",
+      "expected": "rejected",
+      "actual": "rejected",
+      "ok": true
+    },
+    {
+      "step": "dave has not been marked as claimed",
+      "expected": "false",
+      "actual": "false",
+      "ok": true
+    },
+    {
+      "step": "dave has not been paid",
+      "expected": "0 SGR",
+      "actual": "0 SGR",
+      "ok": true
+    },
+    {
+      "step": "dave claims for himself",
+      "expected": "paid",
+      "actual": "paid",
+      "ok": true,
+      "txHash": "0c68e18dfd5a94d63550b2175b8981656556a5c0e557d817f491cc7f80a47817"
+    },
+    {
+      "step": "dave now holds the reward",
+      "expected": "10 SGR",
+      "actual": "10 SGR",
+      "ok": true
+    },
+    {
+      "step": "the open consumer's pool paid out three claims",
+      "expected": "70 SGR",
+      "actual": "70 SGR",
+      "ok": true
+    }
+  ]
+}

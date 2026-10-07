@@ -66,6 +66,10 @@ stellar contract build
 npm run testnet:differential -w @sorogate/sdk -- --wasm-dir <the folder with access_policy.wasm and mock_token.wasm> --policies 30 --seed 1
 ```
 
+The same plumbing runs the reference consumer end to end (`npm run testnet:gated-claim -w @sorogate/sdk -- --wasm-dir <the folder
+with the three WASM files>`): a claim, a refused double claim, the owner changing the rule, and a pinned consumer refusing it.
+One run is recorded in [`docs/evidence`](../../docs/evidence/testnet-gated-claim-2026-10-07.md).
+
 ## Errors
 
 | Error | Meaning |
