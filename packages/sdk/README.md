@@ -1,0 +1,76 @@
+# @sorogate/sdk
+
+TypeScript for working with Sorogate access policies. Not published yet.
+
+It has two halves, and the contract is the authority:
+
+- **A model of the rules** (`validateConditions`, `evaluate`, `decodeTokenBalance`, `decodeNftBalance`). Pure
+  functions with no network. They follow [`spec/SPEC.md`](../../spec/SPEC.md) and are tested against the same
+  [vectors](../../spec/vectors) as the contract.
+- **A read-only client** (`evaluateOnChain`, `getPolicy`, `readBalance`, `fetchSnapshot`). It simulates calls through
+  a Soroban RPC server. Nothing is signed or submitted.
+
+## Ask the contract
+
+```ts
+import { rpc } from '@stellar/stellar-sdk';
+import { evaluateOnChain } from '@sorogate/sdk';
+
+const context = {
+  rpc: new rpc.Server('https://soroban-testnet.stellar.org'),
+  networkPassphrase: 'Test SDF Network ; September 2015',
+  source: 'G...', // any account that exists; it only sources the simulated transaction
+};
+
+const { decision, ledgerSequence } = await evaluateOnChain(context, {
+  contractId: 'C...', // the access-policy contract
+  policyId: 1n,
+  subject: 'G...', // the address to check
+});
+// decision = { allowed, version, failedIndex, reason }
+```
+
+`evaluateOnChain` is the answer that counts. It does **not** prove the caller controls `subject`; see the
+specification, section 8.
+
+## Work it out locally
+
+```ts
+import { evaluate, fetchSnapshot, getPolicy } from '@sorogate/sdk';
+
+const { policy } = await getPolicy(context, { contractId, policyId: 1n });
+const { snapshot } = await fetchSnapshot(context, { conditions: policy.conditions, subject });
+const decision = evaluate(policy, snapshot);
+```
+
+`fetchSnapshot` reads the ledger time and every balance from **one ledger** (it reads again if the network moves
+on), because a balance and a time from different ledgers describe no moment that existed. Use this path to preview
+a policy or explain a denial; use `evaluateOnChain` when the answer matters.
+
+Two things to know:
+
+- A simulation runs against the latest closed ledger, and the transaction it predicts is applied in a later one.
+  Near the edge of a time window, the two can differ.
+- A token that exhausts its whole budget makes the contract abort without a decision. `readBalance` reports such
+  a token as `unavailable`.
+
+## Errors
+
+| Error | Meaning |
+| --- | --- |
+| `ContractCallError` | The contract returned one of its own errors; `errorName` is for example `PolicyNotFound`. |
+| `SimulationError` | The simulation failed for any other reason. |
+| `LedgerMovedError` | `fetchSnapshot` could not get a consistent read in the allowed number of attempts. |
+| `DecodeError` | The contract returned something this package does not recognise. |
+
+## Develop
+
+```bash
+npm ci
+npm test            # unit tests, the shared vectors, and the codec against recorded contract output
+npm run lint && npm run typecheck && npm run build
+```
+
+`test/fixtures/testnet-recordings.json` holds real return values of the deployed contract, recorded from Testnet,
+with their provenance. They are why the codec is tested against the contract's own bytes and not only against
+shapes written by hand.

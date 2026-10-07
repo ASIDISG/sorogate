@@ -30,7 +30,8 @@ rules live in one place, an owner can change them without redeploying every cont
   `evaluate`, `bump`), with 27 unit tests (including a Stellar asset contract and deliberately broken tokens) and
   a harness that runs the shared vectors.
 - [`packages/sdk`](packages/sdk): a TypeScript model of the rules (`validateConditions`, `evaluate`, balance
-  decoding). It is not published and not the authoritative answer: the contract is.
+  decoding) and a read-only client that asks a deployed contract through an RPC server (`evaluateOnChain`,
+  `getPolicy`, `fetchSnapshot`). It is not published, and the contract, not the model, is the authoritative answer.
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
@@ -39,8 +40,8 @@ rules live in one place, an owner can change them without redeploying every cont
 
 ## What is planned
 
-In this order: a TypeScript client that reads balances and asks the deployed contract on Testnet, compared with the
-model as a recorded run; a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
+In this order: a recorded run on Testnet that compares the deployed contract with the model through that client;
+a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
 guide. Nothing is promised beyond that, and nothing is called useful until a
 contract nobody here wrote depends on it.
 
