@@ -60,7 +60,9 @@ What this does and does not show:
   VERSION`. The network identifies code by the hash of the whole file, so a different CLI gives a different code hash even
   for the same program. The "ignoring the CLI version" hash is a convenience for comparing builds, not a security
   property: anyone can write anything in that entry.
-- It was **not** compared across machines or Rust compiler versions.
+- It was compared **across machines**: on 2026-10-07 the CI check ran on GitHub's runner, with the same pinned Rust compiler
+  (1.96.0) and stellar-cli 28.1.0, and reported the build as the deployed code, differing only in the CLI version. It was **not**
+  compared across Rust compiler versions.
 - **CI makes this comparison on every push** (`npm run check:deployed-wasm`, from `.github/workflows/ci.yml`). It passes when
   the build is the deployed code, or when the contract's sources have changed since the deployment commit (the deployment is
   then an older version, and the check says so). It **fails** when the sources have not changed but the code differs,
@@ -69,8 +71,10 @@ What this does and does not show:
 
 ## Keeping it alive
 
-A contract has two ledger entries that expire if nobody extends them: its **instance** and its **code**. When one
-expires it is archived, not erased, and has to be restored before the contract can be used again.
+A contract has two ledger entries that expire if nobody extends them: its **instance** and its **code** (and each policy in it is
+a third). When one expires it is archived, not erased, and has to be restored before the contract can be used again. **A contract
+that has just been deployed lives only about 7 days** (the network's minimum), until a write or a `bump` extends it, so anyone
+deploying their own copy has to do one of them soon.
 
 - At deployment both were extended to the network's practical maximum: ledger 8,071,127, about 173 days later
   (estimated 2027-03-30, at five seconds a ledger). Live, 2026-10-07.
@@ -82,8 +86,12 @@ expires it is archived, not erased, and has to be restored before the contract c
 
   It was run once, about a minute after deployment, and moved the end from ledger 8,071,127 to 8,071,148 (Live, 2026-10-07). That
   shows the command works. It does not show what happens to a contract that is close to expiry or already archived.
-- The policy contract's own `bump(id)` extends a **policy** and the contract **instance**. Whether it also extends the
-  **code** has not been measured.
+- **The policy contract's own `bump(id)` extends the policy, the contract's instance and its code**, each to 90 days from that
+  ledger. Anyone can call it, and it needs a policy id that exists. A write (`create`, `update`, `set_active`) did the same to an
+  entry with 7 days left; the contract's code tops an entry up only when less than 30 days remain, and that no-op case was not
+  observed. A read such as `evaluate` extends nothing. Measured on Testnet, 2026-10-07, on a copy of the contract with its own code
+  hash: [`evidence/testnet-ttl-2026-10-07.md`](evidence/testnet-ttl-2026-10-07.md). That is 90 days from each call, against about 173 from the `extend` command above, so `extend` is the longer
+  way to keep the public deployment alive.
 
 The network's configuration sets `max_entry_ttl` to 3,110,400 ledgers (read on 2026-10-07; see [`COSTS.md`](COSTS.md)). An
 extension to exactly that number was refused as malformed and 3,000,000 was accepted, so the usable maximum is a little below the

@@ -1,7 +1,8 @@
 # @sorogate/site
 
 A static page, built with [Astro](https://astro.build), that works an access policy out in the browser and sets the
-result beside the answer the Soroban contract is recorded as giving for the same input.
+result beside the answer the Soroban contract is recorded as giving for the same input. **Early, Testnet only, not audited**
+(see the [root README](../../README.md)).
 
 It has **no server, no wallet, no keys and makes no network calls**. It uses only the pure part of the SDK
 (`@sorogate/sdk/model`), so the page does not ship the Stellar SDK.

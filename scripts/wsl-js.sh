@@ -13,7 +13,11 @@ rsync -a --delete --exclude node_modules --exclude dist "$SRC/packages/" "$DST/p
 rsync -a --delete "$SRC/spec/" "$DST/spec/"
 mkdir -p "$DST/docs"
 rsync -a --delete "$SRC/docs/" "$DST/docs/"
-cp "$SRC/README.md" "$DST/README.md"   # a site test checks the README against the deployment record
+# The documentation test reads the root pages, the contracts' test files, and the issue templates.
+cp "$SRC"/*.md "$SRC/LICENSE" "$DST/"
+mkdir -p "$DST/contracts" "$DST/.github"
+rsync -a --delete --exclude target --exclude test_snapshots "$SRC/contracts/" "$DST/contracts/"
+rsync -a --delete "$SRC/.github/" "$DST/.github/"
 cd "$DST"
 if [ "${1:-}" = "--update-lock" ]; then npm install; else npm ci; fi
 npm run lint

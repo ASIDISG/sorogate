@@ -1,5 +1,7 @@
 # Architecture
 
+Status: **early, Testnet only, not audited.** See [`README.md`](../README.md) and [`THREAT_MODEL.md`](THREAT_MODEL.md).
+
 Sorogate lets an owner store an **access policy** on Stellar (a short list of conditions about an address) and lets any
 contract or app ask whether an address satisfies it. This page is the map. The rules are in
 [`spec/SPEC.md`](../spec/SPEC.md); what can go wrong is in [`THREAT_MODEL.md`](THREAT_MODEL.md).

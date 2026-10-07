@@ -1,6 +1,7 @@
 # @sorogate/sdk
 
-TypeScript for working with Sorogate access policies. Not published yet.
+TypeScript for working with Sorogate access policies. Not published yet. **Early, Testnet only, not audited** (see the
+[root README](../../README.md)): do not use it with real value.
 
 It has two halves, and the contract is the authority:
 

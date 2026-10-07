@@ -1,6 +1,7 @@
 # Costs
 
-**Label: Recorded.** Measured on Stellar Testnet (protocol 29), ledger 5,072,495, on 2026-10-07, by
+**Label: Recorded, and every figure is Simulated** (see [`EVIDENCE.md`](EVIDENCE.md): the network was asked what each call would
+cost, and nothing was applied). Measured on Stellar Testnet (protocol 29), ledger 5,072,495, on 2026-10-07, by
 `packages/sdk/scripts/testnet-costs.ts`. Raw data: [`evidence/testnet-costs-2026-10-07.json`](evidence/testnet-costs-2026-10-07.json).
 Testnet's fees and limits are its own; this page says nothing about Mainnet.
 

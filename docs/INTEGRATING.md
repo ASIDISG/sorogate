@@ -1,7 +1,10 @@
 # Using an access policy from your contract
 
-A working example with tests is [`contracts/gated-claim`](../contracts/gated-claim). This page explains the pattern
-and what can go wrong. The rules are in [`spec/SPEC.md`](../spec/SPEC.md).
+Status: **early, Testnet only, not audited.** See [`README.md`](../README.md) and [`THREAT_MODEL.md`](THREAT_MODEL.md).
+
+A working example with tests is [`contracts/gated-claim`](../contracts/gated-claim); a smaller one, in a repository of its
+own that uses nothing from this one but the published interface, is [`Sorogate/example-consumer`](https://github.com/Sorogate/example-consumer). This page explains the
+pattern and what can go wrong. The rules are in [`spec/SPEC.md`](../spec/SPEC.md).
 
 ## The pattern
 
@@ -73,8 +76,10 @@ nothing can catch it. Only use policies whose owner you trust, and keep the numb
 raise an error, which the policy reports as `BalanceUnavailable`. It usually means "does not hold this asset".
 
 **Lifetime.** A policy that nobody touches is archived after its time to live runs out. A transaction that uses it
-must restore it first; the RPC simulation adds that for you. Anyone can call `bump(id)` to extend it. Nothing is
-lost, but a consumer that depends on a policy may want to bump it now and then.
+must restore it first; the RPC simulation adds that for you. Anyone can call `bump(id)` to extend the policy, and with it the
+contract's instance and its code, to 90 days ([measured](evidence/testnet-ttl-2026-10-07.md)). A read such as `evaluate` extends nothing. Nothing is
+lost, but a consumer that depends on a policy may want to bump it now and then. If you deploy your own copy of the policy contract,
+it lives only about 7 days until a write or a `bump`.
 
 ## Combining policies
 
@@ -82,8 +87,28 @@ An access policy is a list of conditions that must all hold. Wanting "this OR th
 say. A consumer could ask two policies and accept either answer. That is a suggestion, not something this
 repository implements or tests.
 
+## Trying a policy by hand
+
+The Stellar CLI is enough to create a policy on the public Testnet deployment ([`DEPLOYMENT.md`](DEPLOYMENT.md)) and to try it.
+
+- `stellar contract invoke --id <policy contract> --network testnet -- create --help` prints what `create` accepts, taken from
+  the contract's own interface, with a ready-to-copy example. An enum case that holds a struct is written
+  `{"TokenBalance":{"min":"1","token":"C..."}}`: the struct's fields go directly inside the case's name, not in a list, and
+  amounts are strings in the token's smallest unit.
+- `stellar contract fetch --id <policy contract> --network testnet --out-file access_policy.wasm` downloads the code the network
+  holds, which you can hash and compare with `deployments/testnet.json`.
+- **The CLI signs for any account whose key it holds.** To try "someone signs for someone else", remove the other account's key
+  from the CLI's configuration first (`stellar keys rm <name> --force`). Otherwise the CLI signs that account's authorization
+  itself, the call is authorized, and it succeeds. That is not a bypass, but it makes the test say nothing.
+
+The example repository's `scripts/testnet-demo.sh` does all of this end to end.
+
 ## Testing your integration
 
 Run your contract against the real policy contract in your tests, as `gated-claim` does: register it, create a
 policy, and change the policy with `update` to check that your contract follows. Test the failures, not only the
 pass: a denied address, an inactive policy, an unknown id, a missing authorization, an empty pool.
+
+If your contract declares Sorogate's interface by hand, as the examples do, import the real contract's interface into your
+tests as well (`soroban_sdk::contractimport!` on the policy contract's WASM, which the example repository fetches from the public
+deployment and checks against its hash). A declaration that has drifted from the real contract then fails your tests.

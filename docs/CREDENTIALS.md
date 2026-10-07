@@ -1,6 +1,6 @@
 # Credentials
 
-Status: **a finding and a seam, not a feature.** Nothing in this repository checks a credential. This page records why
+Status: **a finding and a seam, not a feature**, in a project that is early, Testnet only and not audited. Nothing in this repository checks a credential. This page records why
 credentials are not a condition of a policy, and what plugging one in would look like.
 
 ## The question

@@ -5,7 +5,7 @@ This document is the source of truth for what an access policy means. The Soroba
 Where the code and this document disagree, that is a bug in one of them, and the shared test vectors
 (`spec/vectors/`) decide which.
 
-Status: draft. Testnet only. Nothing here has been audited.
+Status: draft. Testnet only. Not audited.
 
 ## 1. What a policy is
 
@@ -123,7 +123,7 @@ and when `reason == Inactive`; otherwise it is `Some(i)` with `i < conditions.le
 | `set_active(id, active)` | stored owner | Changes `active`. Does **not** change `version`. |
 | `get(id) -> Policy` | anyone | Read-only. |
 | `evaluate(id, subject) -> Decision` | anyone | Read-only. |
-| `bump(id)` | anyone | Extends the policy's lifetime. |
+| `bump(id)` | anyone | Extends the lifetime of the policy and of the contract (its instance and its code). |
 
 There is no ownership transfer, no deletion and no administrator. An abandoned policy is deactivated.
 `version` lets a consumer notice that the rules behind an id changed; a consumer that wants fixed rules
@@ -135,7 +135,9 @@ Events (topics `["access_policy", name]`, indexed topic `id`): `created` (data `
 ## 7. Lifetime
 
 Policies are stored in persistent storage and are never evicted for good: an expired entry is archived and can
-be restored. Writes and `bump` top the entry up to 90 days (writes top up when it has less than 30 days left).
+be restored. Writes and `bump` top the entry up to 90 days (writes top up when it has less than 30 days left), and with it the contract's
+instance and code, which live only about 7 days after deployment until one of them happens
+([recorded run](../docs/evidence/testnet-ttl-2026-10-07.md)).
 A transaction that touches an archived policy must include it in its restore list; the RPC simulation adds that
 automatically. Restoring costs a fee but does not change any decision.
 

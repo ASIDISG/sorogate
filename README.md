@@ -47,6 +47,10 @@ rules live in one place, an owner can change them without redeploying every cont
   that satisfies a policy, shows the order of checks a consumer should follow, and can pin the policy version. It is
   a demonstration with no withdrawal and no administrator: fund it only with a test asset.
   [`docs/INTEGRATING.md`](docs/INTEGRATING.md) explains the pattern and what goes wrong.
+- [`Sorogate/example-consumer`](https://github.com/Sorogate/example-consumer): a separate, tiny repository with a "gate" contract that depends on a Sorogate
+  policy using only its published interface. Its tests run against the real policy contract's code, fetched from the public
+  deployment, and a recorded Testnet run used only the Stellar CLI. It is an example, not a product, and so far nobody else
+  has used it.
 - [`contracts/mock-token`](contracts/mock-token): a **test fixture**, a fake token whose `balance` behaviour is chosen
   at deploy time. Anyone can set any balance on it, so it is for tests only.
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
@@ -56,6 +60,8 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md): the public Testnet development deployment of the policy contract (address,
   WASM hash, transactions, date, who controls it: nobody), how to check that it is the code in this repository, and how
   to keep it alive.
+- [`docs/README.md`](docs/README.md): an index of the documentation by question, and [`docs/EVIDENCE.md`](docs/EVIDENCE.md): what the
+  words used for evidence (Unit-tested, Recorded, Live, Simulated, Example) mean.
 - [`docs/COSTS.md`](docs/COSTS.md): what `evaluate`, `create` and a consumer's `claim` cost on Testnet, by condition type, over
   real tokens (instructions, fees, footprint, and the network's limits), why the fee differs so much between a fresh and a
   settled token, and what the numbers say about the limit of 8 conditions (they give no reason to change it).
