@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   ContractCallError,
+  DecodeError,
   evaluate,
   evaluateOnChain,
   fetchSnapshot,
@@ -10,6 +11,7 @@ import {
   LedgerMovedError,
   parseContractError,
   readBalance,
+  readDecimals,
   SimulationError,
   type CallContext,
   type Condition,
@@ -147,6 +149,26 @@ describe('readBalance', () => {
     const wide = fakeRpc(() => ({ retval: nativeToScVal(5n, { type: 'u64' }) }));
     expect((await readBalance(wide.context, { kind: 'token', address: tokenA, subject })).reading).toEqual({ status: 'unavailable' });
     expect((await readBalance(wide.context, { kind: 'nft', address: collectionB, subject })).reading).toEqual({ status: 'unavailable' });
+  });
+});
+
+describe('readDecimals', () => {
+  it('reads decimals() of a token as a u32', async () => {
+    const { context, calls } = fakeRpc(() => ({ retval: u32(7) }));
+    expect(await readDecimals(context, tokenA)).toBe(7);
+    expect(calls[0]).toMatchObject({ contract: tokenA, method: 'decimals', args: [] });
+  });
+
+  it("throws SimulationError when the call fails, and does not mistake a token's error code for the policy contract's", async () => {
+    const { context } = fakeRpc(() => failure('HostError: Error(Contract, #1)\n"some token error"'));
+    const error = await readDecimals(context, tokenA).catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(SimulationError);
+    expect(error).not.toBeInstanceOf(ContractCallError);
+  });
+
+  it('throws DecodeError when decimals() is not a u32', async () => {
+    const { context } = fakeRpc(() => ({ retval: i128(7n) }));
+    await expect(readDecimals(context, tokenA)).rejects.toBeInstanceOf(DecodeError);
   });
 });
 

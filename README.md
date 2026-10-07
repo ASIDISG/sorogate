@@ -30,8 +30,8 @@ rules live in one place, an owner can change them without redeploying every cont
   `evaluate`, `bump`), with 27 unit tests (including a Stellar asset contract and deliberately broken tokens) and
   a harness that runs the shared vectors.
 - [`packages/sdk`](packages/sdk): a TypeScript model of the rules (`validateConditions`, `evaluate`, balance
-  decoding) and a read-only client that asks a deployed contract through an RPC server (`evaluateOnChain`,
-  `getPolicy`, `fetchSnapshot`). It is not published, and the contract, not the model, is the authoritative answer.
+  decoding), helpers for amounts and for explaining a decision in plain language, and a read-only client that asks a
+  deployed contract through an RPC server (`evaluateOnChain`, `getPolicy`, `fetchSnapshot`). It is not published, and the contract, not the model, is the authoritative answer.
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.

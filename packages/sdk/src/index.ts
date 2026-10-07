@@ -2,6 +2,8 @@ export * from './types.js';
 export { validateConditions, type ValidationResult } from './validate.js';
 export { evaluate, MissingReadingError } from './evaluate.js';
 export { decodeTokenBalance, decodeNftBalance } from './decode.js';
+export { AmountError, fromBaseUnits, toBaseUnits } from './amounts.js';
+export { describeCondition, explainDecision, formatUnixSeconds, shortAddress, type DescribeOptions } from './explain.js';
 export {
   addressToScVal,
   decodeDecision,
@@ -19,6 +21,7 @@ export {
   LedgerMovedError,
   parseContractError,
   readBalance,
+  readDecimals,
   SimulationError,
   type CallContext,
   type OnChainDecision,

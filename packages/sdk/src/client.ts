@@ -7,10 +7,10 @@
  *  - `fetchSnapshot` plus `evaluate` asks the tokens for balances and works the answer out locally. It is a
  *    model, useful for previews and explanations, and it is tested against the contract.
  */
-import { Account, Contract, TransactionBuilder, rpc, xdr } from '@stellar/stellar-sdk';
+import { Account, Contract, TransactionBuilder, rpc, scValToNative, xdr } from '@stellar/stellar-sdk';
 
 import { decodeNftBalance, decodeTokenBalance } from './decode.js';
-import { addressToScVal, decodeDecision, decodePolicy, u64ToScVal } from './scval.js';
+import { addressToScVal, DecodeError, decodeDecision, decodePolicy, u64ToScVal } from './scval.js';
 import {
   CONTRACT_ERROR_CODES,
   readingKey,
@@ -96,11 +96,14 @@ async function simulate(context: CallContext, contractId: string, method: string
   return { returnValue, error: null, ledgerSequence: response.latestLedger };
 }
 
+/** The first line of a failure message, which is the part worth showing. */
+const firstLine = (text: string): string => text.split('\n')[0] ?? text;
+
 /** Throws the contract's own error when there is one, a `SimulationError` otherwise. */
 function unwrap(result: Simulated, method: string): xdr.ScVal {
   if (result.returnValue !== null) return result.returnValue;
   const text = result.error ?? 'unknown error';
-  throw parseContractError(text) ?? new SimulationError(`${method} failed: ${text.split('\n')[0]}`);
+  throw parseContractError(text) ?? new SimulationError(`${method} failed: ${firstLine(text)}`);
 }
 
 export interface OnChainDecision {
@@ -143,6 +146,16 @@ export async function readBalance(
   const result = await simulate(context, options.address, 'balance', [addressToScVal(options.subject)]);
   const reading = options.kind === 'token' ? decodeTokenBalance(result.returnValue) : decodeNftBalance(result.returnValue);
   return { reading, ledgerSequence: result.ledgerSequence };
+}
+
+/** Reads `decimals()` of a token (SEP-41: a `u32`), the number needed to turn a display amount into base units. */
+export async function readDecimals(context: CallContext, tokenAddress: string): Promise<number> {
+  const result = await simulate(context, tokenAddress, 'decimals', []);
+  if (result.returnValue === null) {
+    throw new SimulationError(`decimals() failed: ${firstLine(result.error ?? 'unknown error')}`);
+  }
+  if (result.returnValue.type !== 'scvU32') throw new DecodeError('decimals() did not return a u32');
+  return scValToNative(result.returnValue) as number;
 }
 
 export interface SnapshotResult {

@@ -54,6 +54,35 @@ Two things to know:
 - A token that exhausts its whole budget makes the contract abort without a decision. `readBalance` reports such
   a token as `unavailable`.
 
+## Amounts
+
+A policy's `min` is in a token's **base units**: with 7 decimals, one whole token is 10,000,000. Typing a display amount
+where base units are expected gives a minimum that is wrong by a factor of ten to the number of decimals. Convert with
+these, which use exact text and never floating point:
+
+```ts
+import { fromBaseUnits, readDecimals, toBaseUnits } from '@sorogate/sdk';
+
+const decimals = await readDecimals(context, tokenAddress); // calls the token's decimals()
+const min = toBaseUnits('12.5', decimals);                  // 125000000n for 7 decimals
+fromBaseUnits(min, decimals);                               // '12.5'
+```
+
+`toBaseUnits` refuses an amount with more decimal places than the token has, instead of rounding it, and refuses
+anything that is not plain digits with an optional decimal part.
+
+## Showing a decision to a person
+
+```ts
+import { explainDecision } from '@sorogate/sdk';
+
+explainDecision(decision, policy.conditions, { decimals: { [tokenAddress]: 7 } });
+// "Denied: condition 2 of 2 is not met: holds at least 150 of token CBUXA…GEFX. The balance is lower (policy version 1)."
+```
+
+`describeCondition` describes one condition. Neither decides anything; they only describe what the contract or the model
+decided.
+
 ## Compare with the contract on Testnet (manual)
 
 `scripts/testnet-differential.ts` deploys the contract and the test-token fixtures to Testnet with throwaway keys, creates
