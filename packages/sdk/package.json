@@ -32,7 +32,8 @@
     "testnet:deployment": "tsx scripts/testnet-deployment.ts",
     "testnet:sep50": "tsx scripts/testnet-sep50.ts",
     "testnet:costs": "tsx scripts/testnet-costs.ts",
-    "check:deployed-wasm": "tsx scripts/check-deployed-wasm.ts"
+    "check:deployed-wasm": "tsx scripts/check-deployed-wasm.ts",
+    "testnet:ttl": "tsx scripts/testnet-ttl.ts"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^17.2.1"

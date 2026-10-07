@@ -1,0 +1,112 @@
+{
+  "label": "Recorded",
+  "network": "Stellar Testnet (protocol 29)",
+  "ranAt": "2026-10-07T22:20:58.466Z",
+  "contract": "CDCA5WXZHKLCFXCEKXB72BSK3P4X4GSYRZQJWEQLDKTVNLCNYGCBUEX6",
+  "policyId": "1",
+  "wasmSha256OfRepositoryBuild": "f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814",
+  "wasmSha256Deployed": "b7fca8db51aaac7142853d49cf0e3ba6f87cac17eba73073d0af329312aabe6b",
+  "note": "The code deployed is the repository build with an empty custom section appended, so that its code entry is its own and not shared with the public deployment.",
+  "constants": {
+    "daysPerLedgersAtFiveSeconds": 17280,
+    "policyTopUpToDays": 90,
+    "policyTopUpThresholdDays": 30
+  },
+  "snapshots": [
+    {
+      "step": "just deployed",
+      "ledger": 5077599,
+      "remaining": {
+        "instance": 120959,
+        "code": 120958,
+        "policy": null
+      },
+      "until": {
+        "instance": 5198558,
+        "code": 5198557,
+        "policy": null
+      },
+      "days": {
+        "instance": 7,
+        "code": 7,
+        "policy": null
+      }
+    },
+    {
+      "step": "after create (a write by the owner)",
+      "ledger": 5077600,
+      "remaining": {
+        "instance": 1555200,
+        "code": 1555200,
+        "policy": 1555200
+      },
+      "until": {
+        "instance": 6632800,
+        "code": 6632800,
+        "policy": 6632800
+      },
+      "days": {
+        "instance": 90,
+        "code": 90,
+        "policy": 90
+      }
+    },
+    {
+      "step": "thirty seconds later, nothing has touched it",
+      "ledger": 5077606,
+      "remaining": {
+        "instance": 1555194,
+        "code": 1555194,
+        "policy": 1555194
+      },
+      "until": {
+        "instance": 6632800,
+        "code": 6632800,
+        "policy": 6632800
+      },
+      "days": {
+        "instance": 90,
+        "code": 90,
+        "policy": 90
+      }
+    },
+    {
+      "step": "after bump, called by a different account",
+      "ledger": 5077607,
+      "remaining": {
+        "instance": 1555200,
+        "code": 1555200,
+        "policy": 1555200
+      },
+      "until": {
+        "instance": 6632807,
+        "code": 6632807,
+        "policy": 6632807
+      },
+      "days": {
+        "instance": 90,
+        "code": 90,
+        "policy": 90
+      }
+    },
+    {
+      "step": "after evaluate sent as a real transaction",
+      "ledger": 5077614,
+      "remaining": {
+        "instance": 1555193,
+        "code": 1555193,
+        "policy": 1555193
+      },
+      "until": {
+        "instance": 6632807,
+        "code": 6632807,
+        "policy": 6632807
+      },
+      "days": {
+        "instance": 90,
+        "code": 90,
+        "policy": 90
+      }
+    }
+  ]
+}

@@ -96,3 +96,21 @@ export async function invoke(signer: Keypair, contractId: string, method: string
   const result = await submit(signer, new Contract(contractId).call(method, ...args), true);
   return { returnValue: result.returnValue, hash: result.hash };
 }
+
+function leb128(n: number): number[] {
+  const out: number[] = [];
+  let value = n;
+  do {
+    let byte = value & 0x7f;
+    value >>>= 7;
+    if (value !== 0) byte |= 0x80;
+    out.push(byte);
+  } while (value !== 0);
+  return out;
+}
+/** The same contract with an empty custom section appended, so it has a different hash and is loaded on its own. */
+export function variantOf(wasm: Buffer, tag: string): Buffer {
+  const name = Buffer.from('sorogate-cost-variant');
+  const payload = Buffer.concat([Buffer.from(leb128(name.length)), name, Buffer.from(tag)]);
+  return Buffer.concat([wasm, Buffer.from([0x00]), Buffer.from(leb128(payload.length)), payload]);
+}

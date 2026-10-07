@@ -30,7 +30,7 @@ import { resolve } from 'node:path';
 import { Address, Asset, Contract, Keypair, nativeToScVal, Networks, Operation, rpc, scValToNative, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 
 import { encodeConditions, u64ToScVal, type Condition } from '../src/index.js';
-import { assertTestnet, deployInstance, deployWasm, fund, invoke, log, server, sleep, submit } from './testnet-lib.js';
+import { assertTestnet, deployInstance, deployWasm, fund, invoke, log, server, sleep, submit, variantOf } from './testnet-lib.js';
 
 const arg = (name: string): string => {
   const i = process.argv.indexOf(`--${name}`);
@@ -51,23 +51,6 @@ const str = (s: string) => nativeToScVal(s, { type: 'string' });
 const jsonOf = (value: unknown): string => JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? v.toString() : v instanceof Uint8Array ? Buffer.from(v).toString('hex') : v));
 const sha256 = (b: Uint8Array): string => createHash('sha256').update(b).digest('hex');
 
-function leb128(n: number): number[] {
-  const out: number[] = [];
-  let value = n;
-  do {
-    let byte = value & 0x7f;
-    value >>>= 7;
-    if (value !== 0) byte |= 0x80;
-    out.push(byte);
-  } while (value !== 0);
-  return out;
-}
-/** The same contract with an empty custom section appended, so it has a different hash and is loaded on its own. */
-function variantOf(wasm: Buffer, tag: string): Buffer {
-  const name = Buffer.from('sorogate-cost-variant');
-  const payload = Buffer.concat([Buffer.from(leb128(name.length)), name, Buffer.from(tag)]);
-  return Buffer.concat([wasm, Buffer.from([0x00]), Buffer.from(leb128(payload.length)), payload]);
-}
 
 // ---------------------------------------------------------------- measuring
 
