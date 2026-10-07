@@ -1,0 +1,20 @@
+[package]
+name = "gated-claim"
+description = "Reference consumer: pays a fixed amount once to each address that satisfies an access policy."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
+# The real policy contract and the token fixture, to test against.
+access-policy = { path = "../access-policy" }
+mock-token = { path = "../mock-token" }

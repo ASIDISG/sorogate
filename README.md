@@ -35,6 +35,10 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
+- [`contracts/gated-claim`](contracts/gated-claim): a reference **consumer**. It pays a fixed amount once to each address
+  that satisfies a policy, shows the order of checks a consumer should follow, and can pin the policy version. It is
+  a demonstration with no withdrawal and no administrator: fund it only with a test asset.
+  [`docs/INTEGRATING.md`](docs/INTEGRATING.md) explains the pattern and what goes wrong.
 - [`contracts/mock-token`](contracts/mock-token): a **test fixture**, a fake token whose `balance` behaviour is chosen
   at deploy time. Anyone can set any balance on it, so it is for tests only.
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
@@ -43,8 +47,8 @@ rules live in one place, an owner can change them without redeploying every cont
 
 ## What is planned
 
-In this order: a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
-guide. Nothing is promised beyond that, and nothing is called useful until a
+In this order: a recorded end-to-end run of the consumer on Testnet; a small Astro site that teaches the whole thing;
+and a threat model. Nothing is promised beyond that, and nothing is called useful until a
 contract nobody here wrote depends on it.
 
 ## Build and test
