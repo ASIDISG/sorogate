@@ -32,14 +32,15 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`packages/sdk`](packages/sdk): a TypeScript model of the rules (`validateConditions`, `evaluate`, balance
   decoding). It is not published and not the authoritative answer: the contract is.
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
-  TypeScript model must both give the expected answer for every one.
+  TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
+  cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
 - [`spec/SPEC.md`](spec/SPEC.md): the rules, including the failure cases that were measured on Testnet.
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show.
 
 ## What is planned
 
-In this order: a live comparison of the contract and the TypeScript model on a local network, with randomised
-policies; a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
+In this order: a TypeScript client that reads balances and asks the deployed contract on Testnet, compared with the
+model as a recorded run; a reference consumer contract; a small Astro site that teaches it; and a threat model and integration
 guide. Nothing is promised beyond that, and nothing is called useful until a
 contract nobody here wrote depends on it.
 
@@ -54,6 +55,9 @@ cargo test --workspace          # contract unit tests and the vectors
 stellar contract build          # release WASM
 npm ci && npm test              # the TypeScript model and the vectors
 ```
+
+To compare the contract with the TypeScript model on random policies, see
+[spec/vectors/README.md](spec/vectors/README.md).
 
 On Windows, run the Rust tests inside WSL: native Windows linking of soroban-sdk's test utilities fails.
 `scripts/wsl-test.sh` and `scripts/wsl-check.sh` (format, clippy, tests, WASM build) keep build output on the

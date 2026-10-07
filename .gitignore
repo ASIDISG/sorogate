@@ -1,6 +1,7 @@
 /target
 **/target
 **/test_snapshots/
+spec/vectors/generated/
 node_modules
 dist
 .env

@@ -23,6 +23,23 @@ jobs:
       - run: cargo test --workspace
       - run: stellar contract build
 
+      # Random differential test: the TypeScript model generates policies and the answers it expects, and the
+      # real contract must agree on every one. A failing seed is printed, so it can be reproduced with
+      # `npm run generate:random -w @sorogate/sdk -- --seed <seed> --count 1000 --out <dir>`.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Contract against TypeScript model, random policies
+        run: |
+          for seed in 1 2 3 "${{ github.run_number }}"; do
+            echo "::group::seed $seed"
+            npm run generate:random -w @sorogate/sdk -- --seed "$seed" --count 1000 --out "$RUNNER_TEMP/random-$seed"
+            SOROGATE_RANDOM_VECTORS="$RUNNER_TEMP/random-$seed" cargo test -p access-policy --test vectors random
+            echo "::endgroup::"
+          done
+
   sdk:
     runs-on: ubuntu-latest
     steps:

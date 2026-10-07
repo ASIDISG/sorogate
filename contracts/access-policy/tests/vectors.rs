@@ -1,7 +1,11 @@
 //! Runs the shared test vectors in `spec/vectors` against the real contract. The TypeScript model in
 //! `packages/sdk` runs the same files; if the two disagree on a case, one of them has a bug.
 //! The format is described in `spec/vectors/README.md`.
-use std::{collections::BTreeMap, fs};
+use std::{
+    collections::BTreeMap,
+    fs,
+    path::{Path, PathBuf},
+};
 
 use access_policy::{
     AccessPolicy, AccessPolicyClient, Condition, Decision, DenyReason, Error, NftBalanceCond,
@@ -64,13 +68,23 @@ impl MockPanics {
 
 // ------------------------------------------------------------------ reading the vector files
 
-fn load(file: &str) -> Value {
-    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../spec/vectors/");
-    let text = fs::read_to_string(format!("{path}{file}"))
-        .unwrap_or_else(|e| panic!("cannot read {file}: {e}"));
+/// The committed vectors.
+fn vectors_dir() -> PathBuf {
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/vectors")
+}
+
+/// Randomly generated vectors (see packages/sdk/scripts/generate-random.ts), when `SOROGATE_RANDOM_VECTORS` points at
+/// a directory holding `evaluate.json` and `validate.json`. Unset means the random tests are skipped.
+fn random_dir() -> Option<PathBuf> {
+    std::env::var_os("SOROGATE_RANDOM_VECTORS").map(PathBuf::from)
+}
+
+fn load(path: &Path) -> Value {
+    let shown = path.display();
+    let text = fs::read_to_string(path).unwrap_or_else(|e| panic!("cannot read {shown}: {e}"));
     let value: Value =
-        serde_json::from_str(&text).unwrap_or_else(|e| panic!("{file} is not valid JSON: {e}"));
-    assert_eq!(value["schema"], 1, "{file}: unknown schema version");
+        serde_json::from_str(&text).unwrap_or_else(|e| panic!("{shown} is not valid JSON: {e}"));
+    assert_eq!(value["schema"], 1, "{shown}: unknown schema version");
     value
 }
 
@@ -220,12 +234,11 @@ fn conditions(env: &Env, world: &World, list: &Value) -> Vec<Condition> {
     Vec::from_slice(env, &items)
 }
 
-/// One environment per test, one new policy contract (ids start at 1) and new mock tokens per case; cases share the
-/// environment but not contracts.
+/// A new environment for every case, so a case cannot see another one and cost does not grow with the number of cases.
 ///
-/// The snapshot written when an environment is dropped is switched off: with 70 cases of contracts in one ledger it
-/// takes minutes to write, and nothing reads it.
-fn shared_env() -> Env {
+/// The snapshot written when an environment is dropped is switched off: it takes far longer than the case itself, and
+/// nothing reads it.
+fn fresh_env() -> Env {
     let env = Env::new_with_config(EnvTestConfig {
         capture_snapshot_at_drop: false,
     });
@@ -235,16 +248,15 @@ fn shared_env() -> Env {
 
 // ------------------------------------------------------------------ the tests
 
-#[test]
-fn evaluate_vectors() {
-    let file = load("evaluate.json");
-    let env = shared_env();
+fn run_evaluate_file(path: &Path) {
+    let file = load(path);
     let cases = file["cases"].as_array().expect("cases");
     assert!(!cases.is_empty());
     let mut failures = std::vec::Vec::new();
 
     for case in cases {
         let name = text(&case["name"]);
+        let env = fresh_env();
         let contract = env.register(AccessPolicy, ());
         let client = AccessPolicyClient::new(&env, &contract);
         let subject_name = text(&case["subject"]);
@@ -291,16 +303,15 @@ fn evaluate_vectors() {
     );
 }
 
-#[test]
-fn validate_vectors() {
-    let file = load("validate.json");
-    let env = shared_env();
+fn run_validate_file(path: &Path) {
+    let file = load(path);
     let cases = file["cases"].as_array().expect("cases");
     assert!(!cases.is_empty());
     let mut failures = std::vec::Vec::new();
 
     for case in cases {
         let name = text(&case["name"]);
+        let env = fresh_env();
         let contract = env.register(AccessPolicy, ());
         let client = AccessPolicyClient::new(&env, &contract);
         let world = build_world(&env, &client.address, &file["tokens"], &[]);
@@ -328,4 +339,30 @@ fn validate_vectors() {
         cases.len(),
         failures.join("\n  ")
     );
+}
+
+#[test]
+fn evaluate_vectors() {
+    run_evaluate_file(&vectors_dir().join("evaluate.json"));
+}
+
+#[test]
+fn validate_vectors() {
+    run_validate_file(&vectors_dir().join("validate.json"));
+}
+
+#[test]
+fn random_evaluate_vectors() {
+    match random_dir() {
+        Some(dir) => run_evaluate_file(&dir.join("evaluate.json")),
+        None => eprintln!("skipped: SOROGATE_RANDOM_VECTORS is not set"),
+    }
+}
+
+#[test]
+fn random_validate_vectors() {
+    match random_dir() {
+        Some(dir) => run_validate_file(&dir.join("validate.json")),
+        None => eprintln!("skipped: SOROGATE_RANDOM_VECTORS is not set"),
+    }
 }

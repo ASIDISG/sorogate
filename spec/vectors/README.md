@@ -69,3 +69,20 @@ rules are checked.
 { "type": "nft_balance", "collection": "badge", "min": 1 }
 { "type": "time_window", "notBefore": "100", "notAfter": null }
 ```
+
+## Random differential testing
+
+The committed vectors are written by hand. To look for cases nobody thought of, `packages/sdk/scripts` can generate
+random vector files in the same format, with the expected answer taken from the TypeScript model. The generator aims
+balances at `min`, `min - 1` and `min + 1`, and window edges at the evaluation time, because that is where bugs live.
+The same seed always gives the same files.
+
+```bash
+npm run generate:random -w @sorogate/sdk -- --seed 42 --count 1000 --out spec/vectors/generated
+SOROGATE_RANDOM_VECTORS=spec/vectors/generated cargo test -p access-policy --test vectors random
+```
+
+`spec/vectors/generated/` is not committed. Without `SOROGATE_RANDOM_VECTORS` the random tests are skipped. CI runs
+four seeds of 1,000 cases for each file on every push. If one fails, the log shows the seed and the cases that
+disagree; reproduce it with the command above and decide whether the contract, the TypeScript model, or the
+specification is wrong.
