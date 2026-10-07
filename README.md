@@ -3,9 +3,10 @@
 Reusable **access policies** for Stellar, stored in a Soroban contract and evaluated the same way from
 other contracts and from TypeScript.
 
-> **Status: early development. Testnet only. Not audited. Not deployed anywhere yet.**
+> **Status: early development. Testnet only. Not audited. No contract is deployed for anyone to use.**
 > The policy contract, a TypeScript model of it, the shared test vectors, a reference consumer and a static
-> playground page exist today. Nothing is deployed anywhere yet.
+> playground page exist today. The playground is live at https://sorogate.github.io/sorogate/. The Testnet runs in
+> `docs/evidence` used throwaway deployments.
 
 An access policy is a short list of conditions about an address: *holds at least N of this token*, *holds at
 least N of this collection*, *the ledger time is inside this window*. All conditions must hold. A contract (or an
@@ -35,7 +36,8 @@ rules live in one place, an owner can change them without redeploying every cont
   unsigned transactions that create, update and deactivate a policy, for a wallet to sign. It is not published, and the contract, not the model, is the authoritative answer.
 - [`packages/site`](packages/site): a static [Astro](https://astro.build) page that works a policy out in the browser with
   the TypeScript model and sets the result beside the answer the contract is recorded as giving. Its examples are the
-  shared vectors, and it makes no network calls and holds no keys. It is not published anywhere yet.
+  shared vectors, and it makes no network calls and holds no keys. It is published at
+  <https://sorogate.github.io/sorogate/> by `.github/workflows/pages.yml`.
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
