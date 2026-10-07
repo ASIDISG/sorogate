@@ -56,6 +56,9 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md): the public Testnet development deployment of the policy contract (address,
   WASM hash, transactions, date, who controls it: nobody), how to check that it is the code in this repository, and how
   to keep it alive.
+- [`docs/COSTS.md`](docs/COSTS.md): what `evaluate`, `create` and a consumer's `claim` cost on Testnet, by condition type, over
+  real tokens (instructions, fees, footprint, and the network's limits), why the fee differs so much between a fresh and a
+  settled token, and what the numbers say about the limit of 8 conditions (they give no reason to change it).
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show,
   including one where the deployed contract and the TypeScript model agreed on 120 comparisons, and one that walks the
   reference consumer through its scenarios on the public Testnet deployment (26 steps, all as expected, including

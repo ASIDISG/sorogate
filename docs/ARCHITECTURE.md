@@ -66,7 +66,7 @@ If they ever disagree, the contract wins and the model is the bug.
 | **Fail closed** | A token that errors, returns the wrong type or does not exist gives a denial, not a pass |
 | Addresses are checked when a policy is **written** | Calling an account address as a contract aborts the whole transaction instead of failing softly. Measured: [`evidence/spike-2026-10-06.md`](evidence/spike-2026-10-06.md) |
 | **No owner transfer, no deletion, no administrator, no upgrade path** | There is no key that can take over other people's policies. The price is that a bug fix is a new deployment |
-| At most **8 conditions** | Each is a call into code the policy owner chose. Measured costs would allow more; the limit keeps a policy reviewable |
+| At most **8 conditions** | Each is a call into code the policy owner chose. Measured costs ([`COSTS.md`](COSTS.md)) would allow far more; the limit keeps a policy reviewable |
 | The denial reason is a plain integer field with a `None` value | The SDK cannot convert an optional custom enum inside a stored struct |
 | The model is **advisory**, the contract **authoritative** | One answer has to win, and it is the one that runs on the network |
 

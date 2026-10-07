@@ -140,6 +140,10 @@ checks the `NftBalance` condition against a real collection (OpenZeppelin's exam
 contract with the model and running the consumer. One run is recorded in
 [`docs/evidence`](../../docs/evidence/testnet-sep50-2026-10-07.md).
 
+`npm run testnet:costs -w @sorogate/sdk -- --wasm-dir <the folder with the WASM files> --ft-wasm <a fungible token's WASM> --nft-wasm <an NFT collection's WASM> --sources <where they came from> --report costs.json`
+measures what `evaluate`, `create` and a consumer's `claim` cost on Testnet over real contracts; the results and how to read them
+are in [`docs/COSTS.md`](../../docs/COSTS.md).
+
 ## Errors
 
 | Error | Meaning |

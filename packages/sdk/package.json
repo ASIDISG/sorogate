@@ -30,7 +30,8 @@
     "testnet:gated-claim": "tsx scripts/testnet-gated-claim.ts",
     "testnet:sdk-writes": "tsx scripts/testnet-sdk-writes.ts",
     "testnet:deployment": "tsx scripts/testnet-deployment.ts",
-    "testnet:sep50": "tsx scripts/testnet-sep50.ts"
+    "testnet:sep50": "tsx scripts/testnet-sep50.ts",
+    "testnet:costs": "tsx scripts/testnet-costs.ts"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^17.2.1"

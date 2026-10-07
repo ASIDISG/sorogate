@@ -73,7 +73,9 @@ expires it is archived, not erased, and has to be restored before the contract c
 - The policy contract's own `bump(id)` extends a **policy** and the contract **instance**. Whether it also extends the
   **code** has not been measured.
 
-The network refused an extension of 3,110,400 ledgers and accepted 3,000,000, so its limit lies between the two.
+The network's configuration sets `max_entry_ttl` to 3,110,400 ledgers (read on 2026-10-07; see [`COSTS.md`](COSTS.md)). An
+extension to exactly that number was refused as malformed and 3,000,000 was accepted, so the usable maximum is a little below the
+configured one.
 
 ## Not this one
 

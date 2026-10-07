@@ -1,0 +1,1973 @@
+{
+  "label": "Recorded",
+  "network": "Stellar Testnet (protocol 29)",
+  "ranAt": "2026-10-07T15:14:26.469Z",
+  "ledger": 5072495,
+  "repeatsPerMeasurement": 3,
+  "limits": {
+    "compute": {
+      "ledger_max_instructions": "580000000",
+      "tx_max_instructions": "400000000",
+      "fee_rate_per_instructions_increment": "7",
+      "tx_memory_limit": 41943040
+    },
+    "ledgerCost": {
+      "ledger_max_disk_read_entries": 1000,
+      "ledger_max_disk_read_bytes": 400000,
+      "ledger_max_write_ledger_entries": 1000,
+      "ledger_max_write_bytes": 286720,
+      "tx_max_disk_read_entries": 200,
+      "tx_max_disk_read_bytes": 200000,
+      "tx_max_write_ledger_entries": 200,
+      "tx_max_write_bytes": 132096,
+      "fee_disk_read_ledger_entry": "1563",
+      "fee_write_ledger_entry": "2500",
+      "fee_disk_read1_kb": "447",
+      "soroban_state_target_size_bytes": "4000000000",
+      "rent_fee1_kb_soroban_state_size_low": "-17000",
+      "rent_fee1_kb_soroban_state_size_high": "10000",
+      "soroban_state_rent_fee_growth_factor": 5000
+    },
+    "footprint": {
+      "tx_max_footprint_entries": 400,
+      "fee_write1_kb": "875"
+    },
+    "maxContractSizeBytes": 131072,
+    "stateArchival": {
+      "max_entry_ttl": 3110400,
+      "min_temporary_ttl": 720,
+      "min_persistent_ttl": 120960,
+      "persistent_rent_rate_denominator": "1215",
+      "temp_rent_rate_denominator": "2430",
+      "max_entries_to_archive": 1000,
+      "live_soroban_state_size_window_sample_size": 30,
+      "live_soroban_state_size_window_sample_period": 64,
+      "eviction_scan_size": 500000,
+      "starting_eviction_scan_level": 7
+    }
+  },
+  "contracts": {
+    "policyContract": "CALFPD3R7QY563YGZ7O4XUWLHXTI55BK7YMCUAWNHIZO67BPHRESG46Z",
+    "policyWasmSha256": "f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814",
+    "fungibleToken": {
+      "wasmBytes": 10615,
+      "wasmSha256": "e324a23b02bf5b7dfb1d2ce108ef91da001406d93a3e7e21a042b3f522655552",
+      "instancesWithDistinctCode": [
+        "CBWRR4APP76GFGLCBFUYPAR36RNKEOHLPUR45OZLP4R275FVZ6PIIHHK",
+        "CCIKNCNWGVIKK4JMQXK2SXGW4N7THOHO67SK6OTK2OHBHCTLPI7S2G4A",
+        "CDBSCPQM3FZHFIJFGQOXZQXPQIXMNPLN7OAFNXROEZT4JTQ3AKRSSEFO",
+        "CBEJ5DU3HAYPEXZ5CXT4BODIOH6CBBGXPVUT47S3LOROYOVJUGJ6LHUK",
+        "CCQZBLIOF4ST5N5ORXZT7G5GBOP2WCN4NBNAF2GQF5IEZG7KVYHKXZAF",
+        "CCCMQJDZ56J4ZFL5NND2MAGBRINZHAVFOAA4NNZBNCX5H74VXWWTZPR4",
+        "CDN446SGPKUMXR7JPDHNISWSOCZGQKZJLZDO4RHLUBIXYP46MPZ4UQMD",
+        "CDT3IWD2J3CLN5LXXNRNQ35QINGNRRK5JZW3CLLPFDOILW63LU4ZUSX5"
+      ],
+      "instancesSharingOneCode": [
+        "CC2IE7TTOPCZ6E4NSNP3FHSG4WJ5IJQOBWMHVIB6QUPCDR3FKQXNCUCI",
+        "CCETYTMZQNGOZ6WJ3RVOBLY5TR3NCMS5NJHJ2OHCT6LMNRWOVJ6QBDO4",
+        "CAYB4RJS44MHPBAMUOZMCJSWSDUY4TQUUDPI4FGBDZ6YOSEJPJ5YPKUY",
+        "CCNE44ORBJAHIFHK3A4P4SG3GAXFOVTFV3MFPFWD27AWXAQBA6F7J6NO",
+        "CCEMFUO45KFUUY6TUT5RBST26AHARKLE5PMMKSY5BRIBO2N3BQPYGYFE",
+        "CBJTFD47JKYDSHC3O4TDJ4NDVAA2KV5P3BKZJLMAAEK4OVTPZPIRI2QX",
+        "CDAVTPOANSXFMFBAZXK5IR6HUJVCRA5GQMXY55MJYHKOKI5M5AJLYFKS",
+        "CBGAX4MYGO3CMR5NEXJJB3OA4KF2ONBCJOEN6OA7W72CWOM3YZXLODHR"
+      ]
+    },
+    "nftCollection": {
+      "wasmBytes": 15749,
+      "wasmSha256": "ccc926046a89b588283e8b5583186f2402dc329c3ff3e7f8eecac374497f00d7",
+      "instancesWithDistinctCode": [
+        "CDXYVJ6IPCLPW5HR7APHOHD2QILLOXLTENELNT2CAEMNVHKSV7F2KKU5",
+        "CD4VV5TOADWUNI4BDXNJCEWAL6V2KXSCNDT6TKG5WPLGS7DQVACGEUWX",
+        "CCOQXARAWFDV7CTNC6Q3LV3R642JCKSMLQ57ORVSWS2XMNETEZWELKP5",
+        "CC7KVUYFAX2PHLCENEWIBOTYOMZ2Q33YOQYSLMWBHDRYS4WGSOVMYGLT",
+        "CAAGCX6U2E56XU4UWTHXK23VYDJWC5K4WOEYHDLFWAUPJVHRCVU2V2EZ",
+        "CBBXX3BI34SKVY2RH5DKA3S535AUU3IY2UQLXJVZDZEEHI2GIVB6EIMA",
+        "CB7RRCNH22ZFNBKFY7WCLSOQDOTVACLK3FNBKNGKGR4ZPSXKWMOFIG7E",
+        "CD75RMIUUFQAN33T6JGQLV4SPBUT5RGSJUM7BPXBT7VMXGXHDBVSZ4TR"
+      ]
+    },
+    "assetContracts": [
+      "CBRNAQFEU6FP4L4CE57PBHSBCSGTRF624252XHWVZQB47KZVCFFYAIEN",
+      "CDKTRKZ4D3GI6Z2VPGO4SWTNOX47FSNO3KORU2CW3K7KJ64RP347YZX7",
+      "CBWVKJT2PWLULUMJXSYOGJMWIJJUQAD6FCLGCW5UXSWFE3L5PCN55QOP",
+      "CDO643SM3LBP75GWBK7GJTWPDQ4PPBU35ZT5CXU76MWVE56HDY3OLRQW",
+      "CCHNOIGUTMPNNKME4WJGJBSSZRYLNVZIIZXJ7RM2O4W2NRBUP2G6I7J3",
+      "CCPNPMSGAF633V5DSGSSMZILPXRJTIDHUJTRLVY4FMYCTGYVH7B3BARV",
+      "CDZU7NN5OMR6GUEKREFS6XIOTC7IQI3INJP3NM2RTV33TIRUH2T23MZ7",
+      "CBHYBILX4X7XOQLCDG5PF3SEJUBLXU23XU6VEVF4JWOTE6H7SAYOTFNH"
+    ],
+    "rewardAssetContract": "CBBFXT6PEYQNBBHKLC6UOTADZSGFG6XHLLFIIHVFSSC235A4R72IMTGN",
+    "sources": "OpenZeppelin/stellar-contracts v0.7.2 (commit a9c42169000638da937577f592ebf61a7a3c94ca): examples/fungible-pausable and examples/nft-sequential-minting, built with stellar-cli 27.1.0, rustc 1.99.0, soroban-sdk 26.1.0"
+  },
+  "cases": [
+    {
+      "name": "1 time window",
+      "kind": "time",
+      "conditions": 1,
+      "distinctContracts": 0,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "1",
+      "fresh": {
+        "instructions": {
+          "min": 583197,
+          "max": 583197
+        },
+        "minResourceFeeStroops": {
+          "min": 13927,
+          "max": 13927
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 583197,
+          "max": 583197
+        },
+        "minResourceFeeStroops": {
+          "min": 13927,
+          "max": 13927
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "2 time windows",
+      "kind": "time",
+      "conditions": 2,
+      "distinctContracts": 0,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "2",
+      "fresh": {
+        "instructions": {
+          "min": 608523,
+          "max": 608523
+        },
+        "minResourceFeeStroops": {
+          "min": 13944,
+          "max": 13944
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 608523,
+          "max": 608523
+        },
+        "minResourceFeeStroops": {
+          "min": 13944,
+          "max": 13944
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "3 time windows",
+      "kind": "time",
+      "conditions": 3,
+      "distinctContracts": 0,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "3",
+      "fresh": {
+        "instructions": {
+          "min": 633847,
+          "max": 633847
+        },
+        "minResourceFeeStroops": {
+          "min": 13962,
+          "max": 13962
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 633847,
+          "max": 633847
+        },
+        "minResourceFeeStroops": {
+          "min": 13962,
+          "max": 13962
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 time windows",
+      "kind": "time",
+      "conditions": 8,
+      "distinctContracts": 0,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "4",
+      "fresh": {
+        "instructions": {
+          "min": 760475,
+          "max": 760475
+        },
+        "minResourceFeeStroops": {
+          "min": 14051,
+          "max": 14051
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 760475,
+          "max": 760475
+        },
+        "minResourceFeeStroops": {
+          "min": 14051,
+          "max": 14051
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "1 asset contract (TokenBalance)",
+      "kind": "sac",
+      "conditions": 1,
+      "distinctContracts": 1,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "5",
+      "fresh": {
+        "instructions": {
+          "min": 679383,
+          "max": 679383
+        },
+        "minResourceFeeStroops": {
+          "min": 16184,
+          "max": 16184
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 5,
+          "readWrite": 0,
+          "contractData": 3,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 679383,
+          "max": 679383
+        },
+        "minResourceFeeStroops": {
+          "min": 16184,
+          "max": 16184
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 5,
+          "readWrite": 0,
+          "contractData": 3,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "2 asset contracts (TokenBalance)",
+      "kind": "sac",
+      "conditions": 2,
+      "distinctContracts": 2,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "6",
+      "fresh": {
+        "instructions": {
+          "min": 803578,
+          "max": 803578
+        },
+        "minResourceFeeStroops": {
+          "min": 18460,
+          "max": 18460
+        },
+        "diskReadBytes": {
+          "min": 232,
+          "max": 232
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 7,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 803578,
+          "max": 803578
+        },
+        "minResourceFeeStroops": {
+          "min": 18460,
+          "max": 18460
+        },
+        "diskReadBytes": {
+          "min": 232,
+          "max": 232
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 7,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "3 asset contracts (TokenBalance)",
+      "kind": "sac",
+      "conditions": 3,
+      "distinctContracts": 3,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "7",
+      "fresh": {
+        "instructions": {
+          "min": 930135,
+          "max": 930135
+        },
+        "minResourceFeeStroops": {
+          "min": 20737,
+          "max": 20737
+        },
+        "diskReadBytes": {
+          "min": 348,
+          "max": 348
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 0,
+          "contractData": 5,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 930135,
+          "max": 930135
+        },
+        "minResourceFeeStroops": {
+          "min": 20737,
+          "max": 20737
+        },
+        "diskReadBytes": {
+          "min": 348,
+          "max": 348
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 0,
+          "contractData": 5,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 asset contracts (TokenBalance)",
+      "kind": "sac",
+      "conditions": 8,
+      "distinctContracts": 8,
+      "distinctCodes": 0,
+      "allowed": true,
+      "policyId": "8",
+      "fresh": {
+        "instructions": {
+          "min": 1593408,
+          "max": 1593408
+        },
+        "minResourceFeeStroops": {
+          "min": 32148,
+          "max": 32148
+        },
+        "diskReadBytes": {
+          "min": 928,
+          "max": 928
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 19,
+          "readWrite": 0,
+          "contractData": 10,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1593408,
+          "max": 1593408
+        },
+        "minResourceFeeStroops": {
+          "min": 32148,
+          "max": 32148
+        },
+        "diskReadBytes": {
+          "min": 928,
+          "max": 928
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 19,
+          "readWrite": 0,
+          "contractData": 10,
+          "contractCode": 1
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "1 fungible token, each its own code (TokenBalance)",
+      "kind": "ft",
+      "conditions": 1,
+      "distinctContracts": 1,
+      "distinctCodes": 1,
+      "allowed": true,
+      "policyId": "9",
+      "fresh": {
+        "instructions": {
+          "min": 1083150,
+          "max": 1083150
+        },
+        "minResourceFeeStroops": {
+          "min": 306265,
+          "max": 306265
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1081756,
+          "max": 1081756
+        },
+        "minResourceFeeStroops": {
+          "min": 15148,
+          "max": 15148
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "2 fungible tokens, each its own code (TokenBalance)",
+      "kind": "ft",
+      "conditions": 2,
+      "distinctContracts": 2,
+      "distinctCodes": 2,
+      "allowed": true,
+      "policyId": "10",
+      "fresh": {
+        "instructions": {
+          "min": 1622366,
+          "max": 1622366
+        },
+        "minResourceFeeStroops": {
+          "min": 598630,
+          "max": 598630
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 0,
+          "contractData": 6,
+          "contractCode": 3
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1619330,
+          "max": 1619330
+        },
+        "minResourceFeeStroops": {
+          "min": 16396,
+          "max": 16396
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 0,
+          "contractData": 6,
+          "contractCode": 3
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "3 fungible tokens, each its own code (TokenBalance)",
+      "kind": "ft",
+      "conditions": 3,
+      "distinctContracts": 3,
+      "distinctCodes": 3,
+      "allowed": true,
+      "policyId": "11",
+      "fresh": {
+        "instructions": {
+          "min": 2172912,
+          "max": 2172912
+        },
+        "minResourceFeeStroops": {
+          "min": 891000,
+          "max": 891000
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 12,
+          "readWrite": 0,
+          "contractData": 8,
+          "contractCode": 4
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 2168055,
+          "max": 2168055
+        },
+        "minResourceFeeStroops": {
+          "min": 17652,
+          "max": 17652
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 12,
+          "readWrite": 0,
+          "contractData": 8,
+          "contractCode": 4
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 fungible tokens, each its own code (TokenBalance)",
+      "kind": "ft",
+      "conditions": 8,
+      "distinctContracts": 8,
+      "distinctCodes": 8,
+      "allowed": true,
+      "policyId": "12",
+      "fresh": {
+        "instructions": {
+          "min": 4979218,
+          "max": 4979218
+        },
+        "minResourceFeeStroops": {
+          "min": 2352863,
+          "max": 2352863
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 27,
+          "readWrite": 0,
+          "contractData": 18,
+          "contractCode": 9
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 4960941,
+          "max": 4960941
+        },
+        "minResourceFeeStroops": {
+          "min": 23968,
+          "max": 23968
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 27,
+          "readWrite": 0,
+          "contractData": 18,
+          "contractCode": 9
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "1 NFT collection, each its own code (NftBalance)",
+      "kind": "nft",
+      "conditions": 1,
+      "distinctContracts": 1,
+      "distinctCodes": 1,
+      "allowed": true,
+      "policyId": "13",
+      "fresh": {
+        "instructions": {
+          "min": 1059796,
+          "max": 1059796
+        },
+        "minResourceFeeStroops": {
+          "min": 282885,
+          "max": 282885
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1058402,
+          "max": 1058402
+        },
+        "minResourceFeeStroops": {
+          "min": 15131,
+          "max": 15131
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "2 NFT collections, each its own code (NftBalance)",
+      "kind": "nft",
+      "conditions": 2,
+      "distinctContracts": 2,
+      "distinctCodes": 2,
+      "allowed": true,
+      "policyId": "14",
+      "fresh": {
+        "instructions": {
+          "min": 1573789,
+          "max": 1573789
+        },
+        "minResourceFeeStroops": {
+          "min": 551868,
+          "max": 551868
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 0,
+          "contractData": 6,
+          "contractCode": 3
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1570753,
+          "max": 1570753
+        },
+        "minResourceFeeStroops": {
+          "min": 16362,
+          "max": 16362
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 0,
+          "contractData": 6,
+          "contractCode": 3
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "3 NFT collections, each its own code (NftBalance)",
+      "kind": "nft",
+      "conditions": 3,
+      "distinctContracts": 3,
+      "distinctCodes": 3,
+      "allowed": true,
+      "policyId": "15",
+      "fresh": {
+        "instructions": {
+          "min": 2102804,
+          "max": 2102804
+        },
+        "minResourceFeeStroops": {
+          "min": 820860,
+          "max": 820860
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 12,
+          "readWrite": 0,
+          "contractData": 8,
+          "contractCode": 4
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 2097791,
+          "max": 2097791
+        },
+        "minResourceFeeStroops": {
+          "min": 17603,
+          "max": 17603
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 12,
+          "readWrite": 0,
+          "contractData": 8,
+          "contractCode": 4
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 NFT collections, each its own code (NftBalance)",
+      "kind": "nft",
+      "conditions": 8,
+      "distinctContracts": 8,
+      "distinctCodes": 8,
+      "allowed": true,
+      "policyId": "16",
+      "fresh": {
+        "instructions": {
+          "min": 4788916,
+          "max": 4788916
+        },
+        "minResourceFeeStroops": {
+          "min": 2165824,
+          "max": 2165824
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 27,
+          "readWrite": 0,
+          "contractData": 18,
+          "contractCode": 9
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 4770535,
+          "max": 4770535
+        },
+        "minResourceFeeStroops": {
+          "min": 23835,
+          "max": 23835
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 27,
+          "readWrite": 0,
+          "contractData": 18,
+          "contractCode": 9
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 fungible tokens that share one code (TokenBalance)",
+      "kind": "ftSameCode",
+      "conditions": 8,
+      "distinctContracts": 8,
+      "distinctCodes": 1,
+      "allowed": true,
+      "policyId": "17",
+      "fresh": {
+        "instructions": {
+          "min": 4839580,
+          "max": 4839580
+        },
+        "minResourceFeeStroops": {
+          "min": 2351706,
+          "max": 2351706
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 20,
+          "readWrite": 0,
+          "contractData": 18,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 4823707,
+          "max": 4823707
+        },
+        "minResourceFeeStroops": {
+          "min": 22773,
+          "max": 22773
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 20,
+          "readWrite": 0,
+          "contractData": 18,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 conditions naming the same fungible token",
+      "kind": "ftRepeated",
+      "conditions": 8,
+      "distinctContracts": 1,
+      "distinctCodes": 1,
+      "allowed": true,
+      "policyId": "18",
+      "fresh": {
+        "instructions": {
+          "min": 4335280,
+          "max": 4335280
+        },
+        "minResourceFeeStroops": {
+          "min": 308550,
+          "max": 308550
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 4333830,
+          "max": 4333830
+        },
+        "minResourceFeeStroops": {
+          "min": 17424,
+          "max": 17424
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "3 mixed: window, asset contract, NFT collection",
+      "kind": "mixed",
+      "conditions": 3,
+      "distinctContracts": 2,
+      "distinctCodes": 1,
+      "allowed": true,
+      "policyId": "19",
+      "fresh": {
+        "instructions": {
+          "min": 1206737,
+          "max": 1206737
+        },
+        "minResourceFeeStroops": {
+          "min": 285183,
+          "max": 285183
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 8,
+          "readWrite": 0,
+          "contractData": 5,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1205334,
+          "max": 1205334
+        },
+        "minResourceFeeStroops": {
+          "min": 17424,
+          "max": 17424
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 8,
+          "readWrite": 0,
+          "contractData": 5,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 mixed: 2 windows, 2 asset contracts, 2 fungible tokens, 2 NFT collections",
+      "kind": "mixed",
+      "conditions": 8,
+      "distinctContracts": 6,
+      "distinctCodes": 4,
+      "allowed": true,
+      "policyId": "20",
+      "fresh": {
+        "instructions": {
+          "min": 3001999,
+          "max": 3001999
+        },
+        "minResourceFeeStroops": {
+          "min": 1141248,
+          "max": 1141248
+        },
+        "diskReadBytes": {
+          "min": 232,
+          "max": 232
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 19,
+          "readWrite": 0,
+          "contractData": 12,
+          "contractCode": 5
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 2993897,
+          "max": 2993897
+        },
+        "minResourceFeeStroops": {
+          "min": 23481,
+          "max": 23481
+        },
+        "diskReadBytes": {
+          "min": 232,
+          "max": 232
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 19,
+          "readWrite": 0,
+          "contractData": 12,
+          "contractCode": 5
+        },
+        "result": {
+          "allowed": true,
+          "failed_index": null,
+          "reason": 0,
+          "version": 1
+        }
+      }
+    },
+    {
+      "name": "8 fungible tokens, the first condition fails (stops there)",
+      "kind": "ft",
+      "conditions": 8,
+      "distinctContracts": 8,
+      "distinctCodes": 8,
+      "allowed": false,
+      "policyId": "21",
+      "fresh": {
+        "instructions": {
+          "min": 1131706,
+          "max": 1131706
+        },
+        "minResourceFeeStroops": {
+          "min": 306332,
+          "max": 306332
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": false,
+          "failed_index": 0,
+          "reason": 2,
+          "version": 1
+        }
+      },
+      "settled": {
+        "instructions": {
+          "min": 1130312,
+          "max": 1130312
+        },
+        "minResourceFeeStroops": {
+          "min": 15204,
+          "max": 15204
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 6,
+          "readWrite": 0,
+          "contractData": 4,
+          "contractCode": 2
+        },
+        "result": {
+          "allowed": false,
+          "failed_index": 0,
+          "reason": 2,
+          "version": 1
+        }
+      }
+    }
+  ],
+  "directCalls": [
+    {
+      "name": "OpenZeppelin fungible token, balance(holder)",
+      "contract": "CBWRR4APP76GFGLCBFUYPAR36RNKEOHLPUR45OZLP4R275FVZ6PIIHHK",
+      "fresh": {
+        "instructions": {
+          "min": 565643,
+          "max": 565643
+        },
+        "minResourceFeeStroops": {
+          "min": 304633,
+          "max": 304633
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": "1000000000000000000"
+      },
+      "settled": {
+        "instructions": {
+          "min": 564534,
+          "max": 564534
+        },
+        "minResourceFeeStroops": {
+          "min": 13506,
+          "max": 13506
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": "1000000000000000000"
+      }
+    },
+    {
+      "name": "OpenZeppelin NFT collection, balance(holder)",
+      "contract": "CDXYVJ6IPCLPW5HR7APHOHD2QILLOXLTENELNT2CAEMNVHKSV7F2KKU5",
+      "fresh": {
+        "instructions": {
+          "min": 543732,
+          "max": 543732
+        },
+        "minResourceFeeStroops": {
+          "min": 281184,
+          "max": 281185
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": 1
+      },
+      "settled": {
+        "instructions": {
+          "min": 542623,
+          "max": 542623
+        },
+        "minResourceFeeStroops": {
+          "min": 13424,
+          "max": 13424
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": 1
+      }
+    },
+    {
+      "name": "asset contract, balance(holder)",
+      "contract": "CBRNAQFEU6FP4L4CE57PBHSBCSGTRF624252XHWVZQB47KZVCFFYAIEN",
+      "fresh": {
+        "instructions": {
+          "min": 165193,
+          "max": 165193
+        },
+        "minResourceFeeStroops": {
+          "min": 14543,
+          "max": 14543
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 2,
+          "readWrite": 0,
+          "contractData": 1,
+          "contractCode": 0
+        },
+        "result": "1000000000"
+      },
+      "settled": {
+        "instructions": {
+          "min": 165193,
+          "max": 165193
+        },
+        "minResourceFeeStroops": {
+          "min": 14543,
+          "max": 14543
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 2,
+          "readWrite": 0,
+          "contractData": 1,
+          "contractCode": 0
+        },
+        "result": "1000000000"
+      }
+    },
+    {
+      "name": "OpenZeppelin fungible token, balance(an account with no entry)",
+      "contract": "CBWRR4APP76GFGLCBFUYPAR36RNKEOHLPUR45OZLP4R275FVZ6PIIHHK",
+      "fresh": {
+        "instructions": {
+          "min": 535137,
+          "max": 535137
+        },
+        "minResourceFeeStroops": {
+          "min": 13485,
+          "max": 13485
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": "0"
+      },
+      "settled": {
+        "instructions": {
+          "min": 535137,
+          "max": 535137
+        },
+        "minResourceFeeStroops": {
+          "min": 13485,
+          "max": 13485
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "footprint": {
+          "readOnly": 3,
+          "readWrite": 0,
+          "contractData": 2,
+          "contractCode": 1
+        },
+        "result": "0"
+      }
+    }
+  ],
+  "creates": [
+    {
+      "name": "create, 1 fungible token condition",
+      "conditions": 1,
+      "measured": {
+        "instructions": {
+          "min": 717438,
+          "max": 717438
+        },
+        "minResourceFeeStroops": {
+          "min": 2919992,
+          "max": 2919992
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 528,
+          "max": 528
+        },
+        "footprint": {
+          "readOnly": 2,
+          "readWrite": 2,
+          "contractData": 3,
+          "contractCode": 1
+        },
+        "result": "22"
+      }
+    },
+    {
+      "name": "create, 3 fungible token conditions",
+      "conditions": 3,
+      "measured": {
+        "instructions": {
+          "min": 889932,
+          "max": 889932
+        },
+        "minResourceFeeStroops": {
+          "min": 4934408,
+          "max": 4934408
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 792,
+          "max": 792
+        },
+        "footprint": {
+          "readOnly": 4,
+          "readWrite": 2,
+          "contractData": 5,
+          "contractCode": 1
+        },
+        "result": "22"
+      }
+    },
+    {
+      "name": "create, 8 fungible token conditions",
+      "conditions": 8,
+      "measured": {
+        "instructions": {
+          "min": 1331814,
+          "max": 1331814
+        },
+        "minResourceFeeStroops": {
+          "min": 9970462,
+          "max": 9970462
+        },
+        "diskReadBytes": {
+          "min": 0,
+          "max": 0
+        },
+        "writeBytes": {
+          "min": 1452,
+          "max": 1452
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 2,
+          "contractData": 10,
+          "contractCode": 1
+        },
+        "result": "22"
+      }
+    }
+  ],
+  "claims": [
+    {
+      "name": "claim, policy of 1 fungible token condition",
+      "conditions": 1,
+      "consumer": "CBRHQHL7HEB4R2A3YF3O5GOINTXSQ563LFONWO2MU62KOPCLE2WXR5QS",
+      "fresh": {
+        "instructions": {
+          "min": 1868179,
+          "max": 1868179
+        },
+        "minResourceFeeStroops": {
+          "min": 3948293,
+          "max": 3948293
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 476,
+          "max": 476
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 3,
+          "contractData": 8,
+          "contractCode": 3
+        },
+        "result": null
+      },
+      "settled": {
+        "instructions": {
+          "min": 1866593,
+          "max": 1866593
+        },
+        "minResourceFeeStroops": {
+          "min": 3657190,
+          "max": 3657190
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 476,
+          "max": 476
+        },
+        "footprint": {
+          "readOnly": 9,
+          "readWrite": 3,
+          "contractData": 8,
+          "contractCode": 3
+        },
+        "result": null
+      }
+    },
+    {
+      "name": "claim, policy of 8 fungible token conditions",
+      "conditions": 8,
+      "consumer": "CABK6I5QJAQQHWBQU7HTBG2WDXLFHFURYE3QOKJTFIGSQSY5C4MU6RFM",
+      "fresh": {
+        "instructions": {
+          "min": 5830304,
+          "max": 5830304
+        },
+        "minResourceFeeStroops": {
+          "min": 5995043,
+          "max": 5995043
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 476,
+          "max": 476
+        },
+        "footprint": {
+          "readOnly": 30,
+          "readWrite": 3,
+          "contractData": 22,
+          "contractCode": 10
+        },
+        "result": null
+      },
+      "settled": {
+        "instructions": {
+          "min": 5810402,
+          "max": 5810402
+        },
+        "minResourceFeeStroops": {
+          "min": 3666048,
+          "max": 3666048
+        },
+        "diskReadBytes": {
+          "min": 116,
+          "max": 116
+        },
+        "writeBytes": {
+          "min": 476,
+          "max": 476
+        },
+        "footprint": {
+          "readOnly": 30,
+          "readWrite": 3,
+          "contractData": 22,
+          "contractCode": 10
+        },
+        "result": null
+      }
+    }
+  ]
+}
