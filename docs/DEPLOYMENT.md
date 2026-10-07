@@ -13,6 +13,7 @@ Label: **Live** means the fact was read from the network on the date shown. It w
 | Contract address | `CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW` ([explorer](https://stellar.expert/explorer/testnet/contract/CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW)) |
 | Contract | `contracts/access-policy`, workspace version `0.0.0` (pre-release; the contract has no on-chain version function, so the WASM hash below is its identity) |
 | WASM hash | `f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814`, 11,457 bytes. The code was fetched back from the network after deployment and compared with the local build byte for byte |
+| WASM hash, ignoring the CLI version | `10170e707598f15fe8edf5bdf0817e1733a697496c5aa277931e23049ba1fce8`. The same file with the value of one metadata entry, `cliver`, blanked: see [below](#check-that-it-is-this-code) |
 | Built from | commit `1e94264549a220a80d97347386042810f48e47ba`, `stellar contract build` with stellar-cli 27.1.0, rustc 1.96.0, soroban-sdk 28.0.0 |
 | Deployment transactions | upload `e75b58c3bc2cb569c15dcd0a0acde7b1a22c40e9a38b9f1a377659fd17147c85`; create `ce7ca6247655cb0457cd44aa3c6b9a308a0793bd368a3929a070fd87d3971fba` (ledger 5,071,126) |
 | Deployment date | 2026-10-07, 13:20:17 UTC (close time of the creation transaction) |
@@ -45,15 +46,26 @@ npm run testnet:deployment -w @sorogate/sdk -- verify \
   --wasm ../../target/wasm32v1-none/release/access_policy.wasm
 ```
 
-It prints the size and hash of the code the network holds and of your build, and says `IDENTICAL` or `DIFFERENT`.
+It prints the size and hash of the code the network holds and of your build, and says `IDENTICAL`, `IDENTICAL EXCEPT THE CLI VERSION` or
+`DIFFERENT`.
 
 What this does and does not show:
 
 - The build was **reproducible** in the one case it was tried: rebuilding at the deployment commit on the same machine
   with the same tools, on a different day, gave the same hash as every earlier recorded run (`f702e9d2…`).
-- It was **not** compared across machines or tool versions. CI builds with stellar-cli 28.1.0; the deployment used 27.1.0.
-  Whether the two give identical bytes has not been checked, so a different hash from a different toolchain does not by
-  itself mean the code differs.
+- It was compared **across stellar-cli versions**, on one machine, with the same Rust compiler. The same sources built with
+  28.1.0 (what CI uses) differ from the deployed bytes (built with 27.1.0) in **38 of 11,457 bytes**, all inside one
+  contract-metadata entry, `cliver`, where the CLI records its own version and commit (`27.1.0#8e402ea…` against
+  `28.1.0#c0f4d0d…`). Every other byte, code and metadata, is identical, and `verify` reports that as `IDENTICAL EXCEPT THE CLI
+  VERSION`. The network identifies code by the hash of the whole file, so a different CLI gives a different code hash even
+  for the same program. The "ignoring the CLI version" hash is a convenience for comparing builds, not a security
+  property: anyone can write anything in that entry.
+- It was **not** compared across machines or Rust compiler versions.
+- **CI makes this comparison on every push** (`npm run check:deployed-wasm`, from `.github/workflows/ci.yml`). It passes when
+  the build is the deployed code, or when the contract's sources have changed since the deployment commit (the deployment is
+  then an older version, and the check says so). It **fails** when the sources have not changed but the code differs,
+  which would mean the same source no longer builds to the same code. A change to the contract therefore passes CI, and
+  is a reason to redeploy and update `deployments/testnet.json` when the change matters.
 
 ## Keeping it alive
 

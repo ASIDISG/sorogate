@@ -1,0 +1,50 @@
+name: Audit
+
+# Looks up the repository's locked dependencies in the published security advisories, for Rust (RustSec) and npm.
+#
+# It runs on a push to main, once a week, by hand, and on a pull request only when a dependency file changes. A pull
+# request that does not touch dependencies is not held up by an advisory published since it was opened.
+#
+# What a finding does:
+#  - A vulnerability fails the job (Rust: any; npm: high or critical). The job is not a required check on its own: it is a
+#    signal to look at, and a fix is a dependency update, usually Dependabot's.
+#  - An "unmaintained" or "yanked" warning on a Rust crate is printed and does not fail the job. Known ones, and why they
+#    are accepted, are listed in docs/THREAT_MODEL.md.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'Cargo.lock'
+      - '**/Cargo.toml'
+      - 'package-lock.json'
+      - '**/package.json'
+      - '.github/workflows/audit.yml'
+  schedule:
+    - cron: '23 6 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Installed from outside the repository so that rustup does not first fetch the repository's pinned toolchain, and the
+      # binary is run directly for the same reason. The version is pinned; the advisory database it reads is always current.
+      - name: Install cargo-audit
+        working-directory: ${{ runner.temp }}
+        run: cargo install cargo-audit --locked --version 0.22.2
+      - run: cargo-audit audit
+
+  npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      # Reads package-lock.json, which covers every workspace, development dependencies included.
+      - run: npm audit --audit-level=high

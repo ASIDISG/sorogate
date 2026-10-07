@@ -14,6 +14,7 @@
   },
   "wasm": {
     "sha256": "f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814",
+    "sha256WithoutCliVersion": "10170e707598f15fe8edf5bdf0817e1733a697496c5aa277931e23049ba1fce8",
     "bytes": 11457,
     "fetchedFromNetworkAndCompared": true
   },

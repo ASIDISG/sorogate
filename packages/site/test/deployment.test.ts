@@ -27,6 +27,7 @@ describe('the recorded Testnet deployment', () => {
     for (const fact of [
       deployment.contract.id,
       deployment.wasm.sha256,
+      deployment.wasm.sha256WithoutCliVersion,
       deployment.transactions.upload,
       deployment.transactions.create,
       deployment.source.commit,

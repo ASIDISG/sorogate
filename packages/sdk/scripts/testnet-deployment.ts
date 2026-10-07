@@ -32,6 +32,7 @@ import {
 
 import { ContractCallError, getPolicy, type CallContext } from '../src/client.js';
 import { assertTestnet, deployWasm, fund, log, RPC_URL, server, sleep } from './testnet-lib.js';
+import { compareBuilds, hashes } from './wasm-identity.js';
 
 const SECONDS_PER_LEDGER = 5;
 
@@ -160,7 +161,12 @@ async function deploy(): Promise<void> {
     purpose: 'Public development deployment on Stellar Testnet. Not a production deployment.',
     network: { name: 'Stellar Testnet', passphrase: Networks.TESTNET, protocolVersion: network.protocolVersion, rpc: RPC_URL },
     contract: { id: contractId, name: 'access-policy', sourcePath: 'contracts/access-policy' },
-    wasm: { sha256: localHash, bytes: wasm.length, fetchedFromNetworkAndCompared: true },
+    wasm: {
+      sha256: localHash,
+      sha256WithoutCliVersion: hashes(wasm).sha256WithoutCliVersion,
+      bytes: wasm.length,
+      fetchedFromNetworkAndCompared: true,
+    },
     source: { commit, builtWith, note: 'The commit the WASM was built from, as stated by whoever ran the deployment. `verify` compares the network with a local build.' },
     runStartedAt,
     uploadedAt,
@@ -185,11 +191,16 @@ async function verify(): Promise<void> {
   const wasm = readFileSync(resolve(required('wasm')));
   await assertTestnet();
   const onChain = await wasmOnChain(contractId);
-  const same = onChain.equals(wasm);
-  console.log(`on the network: ${onChain.length} bytes, sha256 ${sha256(onChain)}`);
-  console.log(`local file:     ${wasm.length} bytes, sha256 ${sha256(wasm)}`);
-  console.log(same ? 'IDENTICAL: the deployed contract is this build.' : 'DIFFERENT: the deployed contract is not this build.');
-  if (!same) process.exitCode = 1;
+  const [theirs, mine] = [hashes(onChain), hashes(wasm)];
+  console.log(`on the network: ${onChain.length} bytes, sha256 ${theirs.sha256}`);
+  console.log(`local file:     ${wasm.length} bytes, sha256 ${mine.sha256}`);
+  console.log(`ignoring the CLI version in the metadata: ${theirs.sha256WithoutCliVersion} and ${mine.sha256WithoutCliVersion}`);
+  const outcome = compareBuilds(onChain, wasm);
+  if (outcome === 'identical') console.log('IDENTICAL: the deployed contract is this build.');
+  else if (outcome === 'identical-except-cli-version') {
+    console.log('IDENTICAL EXCEPT THE CLI VERSION: the same code, built with a different stellar-cli. See docs/DEPLOYMENT.md.');
+  } else console.log('DIFFERENT: the deployed contract is not this build.');
+  if (outcome === 'different') process.exitCode = 1;
 }
 
 async function extend(): Promise<void> {
