@@ -88,7 +88,7 @@ replayed (SEP-53 defines neither), message signing works for classic accounts on
 | Threat | What stops it | What remains |
 | --- | --- | --- |
 | A compromised dependency | Lockfiles for Rust and npm, a pinned Rust toolchain, weekly Dependabot updates | No automatic advisory scan in CI (`cargo audit`, `npm audit`). GitHub Actions are pinned by version tag, not by commit |
-| The deployed contract is not the code in this repository | `stellar contract build` is the only supported build, and recorded runs list the WASM hash | CI builds the same WASM sizes as a local build, but no check compares the hashes. Whoever deploys should verify the hash themselves |
+| The deployed contract is not the code in this repository | `stellar contract build` is the only supported build, recorded runs list the WASM hash, and `testnet-deployment.ts verify` compares the code the network holds for a contract with a local build ([`DEPLOYMENT.md`](DEPLOYMENT.md)) | CI builds the same WASM sizes as a local build, but no CI check compares hashes. A rebuild reproduced the recorded hash once, on one machine; it has not been compared across machines or toolchain versions |
 | A bug found after deployment | There is no upgrade path and no administrator, on purpose. A fix is a new deployment with new policy ids that consumers must move to | Consumers are tied to a particular deployment |
 | Keys | Testnet runs use throwaway keys created in memory and never printed or saved. Nothing in the repository holds a key | There is no Mainnet key management because there is no Mainnet use |
 

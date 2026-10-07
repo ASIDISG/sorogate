@@ -59,16 +59,26 @@ export async function submit(
   throw new Error(`transaction not confirmed in time: ${sent.hash}`);
 }
 
-/** Uploads a WASM and deploys one instance of it. */
-export async function deployWasm(signer: Keypair, wasm: Buffer, constructorArgs: xdr.ScVal[]): Promise<{ contractId: string; wasmSha256: string }> {
+/** Uploads a WASM and deploys one instance of it. Also returns the two transactions, so a run can record them. */
+export async function deployWasm(
+  signer: Keypair,
+  wasm: Buffer,
+  constructorArgs: xdr.ScVal[],
+): Promise<{ contractId: string; wasmSha256: string; uploadTxHash: string; createTxHash: string; createLedger: number }> {
   const wasmHash = createHash('sha256').update(wasm).digest();
-  await submit(signer, Operation.uploadContractWasm({ wasm }), true);
+  const upload = await submit(signer, Operation.uploadContractWasm({ wasm }), true);
   const result = await submit(
     signer,
     Operation.createCustomContract({ address: new Address(signer.publicKey()), wasmHash, salt: randomBytes(32), constructorArgs }),
     true,
   );
-  return { contractId: scValToNative(result.returnValue as xdr.ScVal) as string, wasmSha256: wasmHash.toString('hex') };
+  return {
+    contractId: scValToNative(result.returnValue as xdr.ScVal) as string,
+    wasmSha256: wasmHash.toString('hex'),
+    uploadTxHash: upload.hash,
+    createTxHash: result.hash,
+    createLedger: result.ledger,
+  };
 }
 
 /** Deploys another instance of an already uploaded WASM. */

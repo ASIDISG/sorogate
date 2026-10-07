@@ -3,10 +3,12 @@
 Reusable **access policies** for Stellar, stored in a Soroban contract and evaluated the same way from
 other contracts and from TypeScript.
 
-> **Status: early development. Testnet only. Not audited. No contract is deployed for anyone to use.**
+> **Status: early development. Testnet only. Not audited. Not production.**
 > The policy contract, a TypeScript model of it, the shared test vectors, a reference consumer and a static
-> playground page exist today. The playground is live at https://sorogate.github.io/sorogate/. The Testnet runs in
-> `docs/evidence` used throwaway deployments.
+> playground page exist today. The playground is live at https://sorogate.github.io/sorogate/. There is one public
+> **development deployment on Stellar Testnet**, described in [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md). It is not a
+> production deployment, and Testnet is reset from time to time. The other Testnet runs in `docs/evidence` used
+> throwaway deployments.
 
 An access policy is a short list of conditions about an address: *holds at least N of this token*, *holds at
 least N of this collection*, *the ledger time is inside this window*. All conditions must hold. A contract (or an
@@ -51,6 +53,9 @@ rules live in one place, an owner can change them without redeploying every cont
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) and
   [`docs/INTEGRATING.md`](docs/INTEGRATING.md): how the pieces fit, what is and is not protected, and how to use a policy
   from your own contract. [`docs/CREDENTIALS.md`](docs/CREDENTIALS.md) records why credentials are not a condition.
+- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md): the public Testnet development deployment of the policy contract (address,
+  WASM hash, transactions, date, who controls it: nobody), how to check that it is the code in this repository, and how
+  to keep it alive.
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show,
   including one where the deployed contract and the TypeScript model agreed on 120 comparisons, and one that walks the
   reference consumer through its scenarios on a real network (18 steps, all as expected).

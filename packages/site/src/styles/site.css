@@ -203,6 +203,10 @@ dt {
   font-weight: 600;
 }
 
+code {
+  overflow-wrap: anywhere;
+}
+
 dd {
   margin: 0;
 }

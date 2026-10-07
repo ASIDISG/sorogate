@@ -9,6 +9,7 @@ on:
       - 'packages/site/**'
       - 'packages/sdk/src/**'
       - 'spec/vectors/evaluate.json'
+      - 'docs/deployments/**'
       - 'package-lock.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch: {}

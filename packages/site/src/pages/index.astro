@@ -1,5 +1,6 @@
 ---
 import '../styles/site.css';
+import deployment from '../../../../docs/deployments/testnet.json';
 
 const repo = 'https://github.com/Sorogate/sorogate';
 ---
@@ -34,6 +35,26 @@ const repo = 'https://github.com/Sorogate/sorogate';
       <div id="app">
         <noscript><p class="notice">This page needs JavaScript to work a policy out.</p></noscript>
       </div>
+
+      <section aria-labelledby="deployment-heading">
+        <h2 id="deployment-heading">The public Testnet deployment</h2>
+        <p>
+          <strong>This is a development deployment on Stellar Testnet, not a production deployment.</strong> Testnet is
+          reset from time to time, the contract has not been audited, and it has no administrator or upgrade path.
+        </p>
+        <dl class="facts">
+          <dt>Contract</dt>
+          <dd><a href={deployment.explorer}><code>{deployment.contract.id}</code></a></dd>
+          <dt>WASM hash</dt>
+          <dd><code>{deployment.wasm.sha256}</code></dd>
+          <dt>Deployed</dt>
+          <dd>{deployment.deployedAt.slice(0, 10)}</dd>
+        </dl>
+        <p>
+          How to check that it is the code in this repository, and how it is kept alive:
+          <a href={`${repo}/blob/main/docs/DEPLOYMENT.md`}>deployment notes</a>.
+        </p>
+      </section>
 
       <section aria-labelledby="limits-heading">
         <h2 id="limits-heading">What this page cannot tell you</h2>

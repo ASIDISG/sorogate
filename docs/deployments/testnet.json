@@ -1,0 +1,47 @@
+{
+  "label": "Live",
+  "purpose": "Public development deployment on Stellar Testnet. Not a production deployment.",
+  "network": {
+    "name": "Stellar Testnet",
+    "passphrase": "Test SDF Network ; September 2015",
+    "protocolVersion": 29,
+    "rpc": "https://soroban-testnet.stellar.org"
+  },
+  "contract": {
+    "id": "CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW",
+    "name": "access-policy",
+    "sourcePath": "contracts/access-policy"
+  },
+  "wasm": {
+    "sha256": "f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814",
+    "bytes": 11457,
+    "fetchedFromNetworkAndCompared": true
+  },
+  "source": {
+    "commit": "1e94264549a220a80d97347386042810f48e47ba",
+    "builtWith": "stellar-cli 27.1.0, rustc 1.96.0, soroban-sdk 28.0.0 (stellar contract build)",
+    "note": "The commit the WASM was built from, as stated by whoever ran the deployment. `verify` compares the network with a local build."
+  },
+  "runStartedAt": "2026-10-07T13:20:08.428Z",
+  "uploadedAt": "2026-10-07T13:20:12.000Z",
+  "deployedAt": "2026-10-07T13:20:17.000Z",
+  "timesNote": "uploadedAt and deployedAt are the close times of the upload and creation transactions, as reported by the network. runStartedAt is when the script began.",
+  "deployer": {
+    "publicKey": "GBZEURYLVXFGQ5HOF6UFAP64SXN3Y74GPCONROASPJNSWQFH5PCZ6GAY",
+    "note": "A throwaway Testnet account. Its secret key was never printed or saved and has been discarded. The contract has no administrator, owner or upgrade path, so nothing depends on this account."
+  },
+  "transactions": {
+    "upload": "e75b58c3bc2cb569c15dcd0a0acde7b1a22c40e9a38b9f1a377659fd17147c85",
+    "create": "ce7ca6247655cb0457cd44aa3c6b9a308a0793bd368a3929a070fd87d3971fba",
+    "createLedger": 5071126
+  },
+  "explorer": "https://stellar.expert/explorer/testnet/contract/CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW",
+  "lifetime": {
+    "latestLedger": 5071127,
+    "instanceLiveUntilLedger": 8071127,
+    "codeLiveUntilLedger": 8071127,
+    "approximateDaysRemaining": 173.6,
+    "estimatedArchivalDate": "2027-03-30"
+  },
+  "check": "get(1) returned PolicyNotFound, as expected for a contract with no policies"
+}

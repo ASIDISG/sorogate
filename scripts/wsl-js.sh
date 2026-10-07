@@ -11,6 +11,9 @@ rsync -a --delete --exclude node_modules --exclude dist \
 mkdir -p "$DST/packages" "$DST/spec"
 rsync -a --delete --exclude node_modules --exclude dist "$SRC/packages/" "$DST/packages/"
 rsync -a --delete "$SRC/spec/" "$DST/spec/"
+mkdir -p "$DST/docs"
+rsync -a --delete "$SRC/docs/" "$DST/docs/"
+cp "$SRC/README.md" "$DST/README.md"   # a site test checks the README against the deployment record
 cd "$DST"
 if [ "${1:-}" = "--update-lock" ]; then npm install; else npm ci; fi
 npm run lint
