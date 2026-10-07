@@ -4,8 +4,8 @@ Reusable **access policies** for Stellar, stored in a Soroban contract and evalu
 other contracts and from TypeScript.
 
 > **Status: early development. Testnet only. Not audited. Not deployed anywhere yet.**
-> The policy contract, a TypeScript model of it and the shared test vectors exist today. The reference consumer
-> contract and the web playground are planned and listed under "What is planned".
+> The policy contract, a TypeScript model of it, the shared test vectors, a reference consumer and a static
+> playground page exist today. Nothing is deployed anywhere yet.
 
 An access policy is a short list of conditions about an address: *holds at least N of this token*, *holds at
 least N of this collection*, *the ledger time is inside this window*. All conditions must hold. A contract (or an
@@ -33,6 +33,9 @@ rules live in one place, an owner can change them without redeploying every cont
   decoding), helpers for amounts and for explaining a decision in plain language, and a read-only client that asks a
   deployed contract through an RPC server (`evaluateOnChain`, `getPolicy`, `fetchSnapshot`), and builders for the
   unsigned transactions that create, update and deactivate a policy, for a wallet to sign. It is not published, and the contract, not the model, is the authoritative answer.
+- [`packages/site`](packages/site): a static [Astro](https://astro.build) page that works a policy out in the browser with
+  the TypeScript model and sets the result beside the answer the contract is recorded as giving. Its examples are the
+  shared vectors, and it makes no network calls and holds no keys. It is not published anywhere yet.
 - [`spec/vectors`](spec/vectors): 70 shared test cases (45 decisions, 25 validity checks). The contract and the
   TypeScript model must both give the expected answer for every one. A seeded generator adds thousands of random
   cases (CI runs four seeds of 1,000 per file) and the contract must agree with the TypeScript model on all of them.
@@ -52,13 +55,12 @@ rules live in one place, an owner can change them without redeploying every cont
 
 ## What is planned
 
-Next: a small Astro site that teaches the whole thing. Nothing is promised beyond that, and nothing is called useful
-until a contract nobody here wrote depends on it.
+Nothing is promised. Nothing here is called useful until a contract nobody here wrote depends on it.
 
 ## Build and test
 
 You need Rust (the version in `rust-toolchain.toml`, with the `wasm32v1-none` target), the
-[Stellar CLI](https://github.com/stellar/stellar-cli) 25.2 or newer, and Node 20.11 or newer for the SDK. Contracts built with soroban-sdk 28 must be built with `stellar contract build`; a plain
+[Stellar CLI](https://github.com/stellar/stellar-cli) 25.2 or newer, and Node 20.11 or newer for the SDK (22.12 or newer for the web page). Contracts built with soroban-sdk 28 must be built with `stellar contract build`; a plain
 `cargo build` is refused.
 
 ```bash

@@ -1,0 +1,76 @@
+---
+import '../styles/site.css';
+
+const repo = 'https://github.com/Sorogate/sorogate';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Sorogate policy playground</title>
+    <meta
+      name="description"
+      content="Work out an access policy for Stellar in your browser and compare it with the answers the Soroban contract is recorded as giving."
+    />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header>
+      <p class="status">
+        Early development. Testnet only. Not audited. This page makes no network calls and holds no keys.
+      </p>
+      <h1>Sorogate policy playground</h1>
+      <p>
+        An access policy is a short list of conditions about an address: it holds at least some of a token, it holds
+        at least some items of a collection, the ledger time is inside a window. All of them must hold. This page works
+        a policy out in your browser with the project’s TypeScript model and sets the result beside the answer the
+        Soroban contract is recorded as giving for the same input.
+      </p>
+    </header>
+
+    <main>
+      <div id="app">
+        <noscript><p class="notice">This page needs JavaScript to work a policy out.</p></noscript>
+      </div>
+
+      <section aria-labelledby="limits-heading">
+        <h2 id="limits-heading">What this page cannot tell you</h2>
+        <ul>
+          <li>
+            <strong>The contract decides, not this page.</strong> The model here is a preview and an explanation. It is
+            held to the contract by shared test vectors, but only the contract’s own answer counts on the network.
+          </li>
+          <li>
+            <strong>Recorded answers are for the listed examples only.</strong> Change a value and the page says there
+            is nothing recorded for that input.
+          </li>
+          <li>
+            <strong>A policy does not prove who is asking.</strong> The same balance passes for whoever holds it, so a
+            contract that acts on a decision must also check that the caller really is that address.
+          </li>
+        </ul>
+        <p>
+          Read the <a href={`${repo}/blob/main/spec/SPEC.md`}>specification</a>, the
+          <a href={`${repo}/blob/main/docs/THREAT_MODEL.md`}>threat model</a>, or the <a href={repo}>source</a>.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Apache-2.0. Not affiliated with or endorsed by the Stellar Development Foundation; “Stellar” and “Soroban” are
+        their trademarks.
+      </p>
+    </footer>
+
+    <script>
+      import { examples } from '../playground/examples';
+      import { mount } from '../playground/view';
+
+      const app = document.getElementById('app');
+      if (app !== null) mount(app, examples);
+    </script>
+  </body>
+</html>
