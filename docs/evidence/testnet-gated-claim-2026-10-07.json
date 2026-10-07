@@ -1,131 +1,249 @@
 {
   "label": "Recorded",
+  "stepKinds": {
+    "transaction": "sent to the network and applied (a failed transaction was applied, and failed)",
+    "simulation": "asked of the network without applying anything",
+    "reading": "a value read from the network"
+  },
   "network": "Stellar Testnet (protocol 29)",
-  "ranAt": "2026-10-07T07:18:18.652Z",
-  "steps": 18,
+  "ranAt": "2026-10-07T13:53:58.378Z",
+  "steps": 26,
   "unexpected": 0,
+  "publicPolicyContractUsed": true,
   "contracts": {
-    "accessPolicy": "CBUZ4Y6H7M7JTBGII62GMQIBOMN66B4IDTH6UD6EJBJDV65JC43WGLXC",
+    "accessPolicy": "CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW",
     "accessPolicyWasmSha256": "f702e9d267262ab3f9548fa62021b4c31bb5b5f4f3652ff713906dcd48906814",
-    "testToken": "CBWZC72GKA4YRBBHCKWQDKJSGOAKF5WC7SEMJLY326UYS4A55NQIMUSE",
+    "testToken": "CCKMPAYBO4M2UMWHUZEBFWKYUJBP3QRAW3L43SUULRS4RKA4WPJY6XY7",
     "testTokenWasmSha256": "89146b0e1d5ae367c9c46499710a966e16cfdc6e58fa663949c6af39840922f3",
-    "rewardAssetContract": "CA3QFBJAOUKWQO23ZL3A6HFCQ3PPPPL64R2EDQB2ZX2J4ZKMFT6Q4PIU",
-    "consumerFollowingThePolicy": "CDM57HLMF7DVNM6VKRRTU53DCIU3CDVH5MG5VVRHQCMOLQDZNXTLVIYR",
-    "consumerPinnedToVersion1": "CBX2I4Y7AG5ICXBJAPFAVZCKCEU7CXR6RO5ZKW7S2IT3G5T5JTR2IDNF",
+    "rewardAssetContract": "CB6HJ2Q4MS2NBMGMKAAHDX4R4WKYFMQDCTOUPV5C3SXWWQ46QDEOU57H",
+    "consumerFollowingThePolicy": "CBJP6MZDUOOG6BCD6FHBOSXX4YMYJDDGS5A3YOGMSAOGTKEC7UAPEQDZ",
+    "consumerPinnedToVersion1": "CC4MU6FDDKZLBQCHSIHXFZ5QE2C5XK3ET6RTMXV5Q6DWCIEAERBUPGVX",
     "consumerWasmSha256": "143a6b5ceba3e807b91ef619a6522048073cd8e0ca9d505dc2fe83a7c3095334",
-    "policyId": "1"
+    "policyId": "2"
+  },
+  "accounts": {
+    "policyOwnerAndDeployer": "GAYLY6BN5QUFFT2XPH2762PBPIV43KJYN3NXX4K2ARR2MAP7EH5K44K3",
+    "alice": "GC4GT5FLMWEVXI6GMSGJVSONAAHQ4FPLMI44EENZTXEAZXEL26MA336S",
+    "bob": "GBU4LB5EWVZC3AIRVGXGXPY7JJF7CKM4QNLO6ISY5YJE467OOED755IM",
+    "carol": "GCUBB3LDABGWIWJNNOPHTQ4OYLHPQVEXZA6J2FFV6KQOA3E6VRTYLZ5L",
+    "dave": "GDY6H6TVSWPKO2C3V6HHK6JRJRSY7TZ25XNHEWZ6P4SW2E2IX746ANFP",
+    "erin": "GB3FCPA5LY7WJP3RMSNJML5BRTVYBE6AGUNHPQ573LMSK6T4H5VQI5IR"
+  },
+  "callPath": "consumer.claim(subject) -> subject.require_auth() -> policy.try_evaluate(policyId, subject) -> pinned-version check -> decision -> record claim -> reward.transfer",
+  "failedTransactions": {
+    "belowMinimum": {
+      "hash": "4e79b765426d12b2aa78a10bd4c3216c24f556a43a174c78257720a6ac0f85ed",
+      "status": "FAILED",
+      "contractCodes": [
+        11
+      ]
+    },
+    "policyChanged": {
+      "hash": "bbef3f282d66aa030fc7290d6688f38c8aa8908fd45ed04806b5df4d9afd8103",
+      "status": "FAILED",
+      "contractCodes": [
+        3
+      ]
+    },
+    "signedBySomeoneElse": {
+      "hash": "79d9973228684fa9feeca608d37abda51eec8f6d3bd3507d4faa40ef850e1028",
+      "status": "FAILED",
+      "authErrors": [
+        "invalid_action"
+      ],
+      "contractCodes": [],
+      "rawResultAndEvents": "{\"result\":{\"fee_charged\":\"22448\",\"result\":{\"tx_failed\":[{\"op_inner\":{\"invoke_host_function\":\"trapped\"}}]},\"ext\":\"v0\"},\"diagnosticEvents\":[{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"fn_call\"},{\"bytes\":\"52ff3323a39c6f0443f14e174af7e619848c669741bc38cc901c69a882fd00f2\"},{\"symbol\":\"claim\"}],\"data\":{\"address\":\"GDY6H6TVSWPKO2C3V6HHK6JRJRSY7TZ25XNHEWZ6P4SW2E2IX746ANFP\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":\"CBJP6MZDUOOG6BCD6FHBOSXX4YMYJDDGS5A3YOGMSAOGTKEC7UAPEQDZ\",\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"error\"},{\"error\":{\"auth\":\"invalid_action\"}}],\"data\":{\"vec\":[{\"string\":\"failed account authentication with error\"},{\"address\":\"GDY6H6TVSWPKO2C3V6HHK6JRJRSY7TZ25XNHEWZ6P4SW2E2IX746ANFP\"},{\"error\":{\"value\":\"unexpected_type\"}}]}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":\"CBJP6MZDUOOG6BCD6FHBOSXX4YMYJDDGS5A3YOGMSAOGTKEC7UAPEQDZ\",\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"error\"},{\"error\":{\"auth\":\"invalid_action\"}}],\"data\":{\"string\":\"escalating error to VM trap from failed host function call: require_auth\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":\"CBJP6MZDUOOG6BCD6FHBOSXX4YMYJDDGS5A3YOGMSAOGTKEC7UAPEQDZ\",\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"log\"}],\"data\":{\"vec\":[{\"string\":\"VM call trapped with HostError\"},{\"symbol\":\"claim\"},{\"error\":{\"auth\":\"invalid_action\"}}]}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"host_fn_failed\"},{\"error\":{\"auth\":\"invalid_action\"}}],\"data\":\"void\"}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"read_entry\"}],\"data\":{\"u64\":\"14\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"write_entry\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"ledger_read_byte\"}],\"data\":{\"u64\":\"260\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"ledger_write_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"read_key_byte\"}],\"data\":{\"u64\":\"124\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"write_key_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"read_data_byte\"}],\"data\":{\"u64\":\"260\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"write_data_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"read_code_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"write_code_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"emit_event\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"emit_event_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"cpu_insn\"}],\"data\":{\"u64\":\"531159\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"mem_byte\"}],\"data\":{\"u64\":\"1268224\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"invoke_time_nsecs\"}],\"data\":{\"u64\":\"183483\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"max_rw_key_byte\"}],\"data\":{\"u64\":\"84\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"max_rw_data_byte\"}],\"data\":{\"u64\":\"144\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"max_rw_code_byte\"}],\"data\":{\"u64\":\"0\"}}}}},{\"in_successful_contract_call\":false,\"event\":{\"ext\":\"v0\",\"contract_id\":null,\"type\":\"diagnostic\",\"body\":{\"v0\":{\"topics\":[{\"symbol\":\"core_metrics\"},{\"symbol\":\"max_emit_event_byte\"}],\"data\":{\"u64\":\"0\"}}}}}]}"
+    }
   },
   "results": [
     {
-      "step": "alice (150 of the token, minimum 100) claims",
+      "step": "the policy contract is the public deployment, and the code the network holds is this repository's build",
+      "kind": "reading",
+      "expected": "identical",
+      "actual": "identical",
+      "ok": true
+    },
+    {
+      "step": "alice (150 of the token, minimum 100) claims on the consumer that follows the policy",
+      "kind": "transaction",
       "expected": "paid",
       "actual": "paid",
       "ok": true,
-      "txHash": "03277105f1ace35c27cfc7322ea52a37edd55deeee492bba108f8d9ab02f631d"
+      "txHash": "a6fab1460aaefb8f152188d4de1db2f692acc0a65fb244e6e66018da0bc59d33"
     },
     {
       "step": "alice now holds the reward",
+      "kind": "reading",
       "expected": "10 SGR",
       "actual": "10 SGR",
       "ok": true
     },
     {
       "step": "the consumer remembers alice claimed",
+      "kind": "reading",
       "expected": "true",
       "actual": "true",
       "ok": true
     },
     {
       "step": "alice claims a second time",
+      "kind": "simulation",
       "expected": "AlreadyClaimed",
       "actual": "AlreadyClaimed",
       "ok": true
     },
     {
       "step": "carol (50 of the token) claims",
+      "kind": "simulation",
       "expected": "BelowMinimum",
       "actual": "BelowMinimum",
       "ok": true
     },
     {
-      "step": "bob claims on the pinned consumer while the policy is still version 1",
-      "expected": "ok",
-      "actual": "ok",
+      "step": "erin (150) claims on the consumer pinned to version 1, while the policy is at version 1",
+      "kind": "transaction",
+      "expected": "paid",
+      "actual": "paid",
+      "ok": true,
+      "txHash": "5ec69364a67ba7f900f951030006dbdb6a8546d503a67a3e5318e72cb7acdcef"
+    },
+    {
+      "step": "erin now holds the reward",
+      "kind": "reading",
+      "expected": "10 SGR",
+      "actual": "10 SGR",
+      "ok": true
+    },
+    {
+      "step": "the pinned consumer remembers erin claimed",
+      "kind": "reading",
+      "expected": "true",
+      "actual": "true",
       "ok": true
     },
     {
       "step": "the owner updates the policy (a normal transaction)",
+      "kind": "transaction",
       "expected": "done",
       "actual": "done",
       "ok": true,
-      "txHash": "748f42c24905dffa6f8c1dbfc61aeba47d1fa30e81364f4c774aac22b751d6c0"
+      "txHash": "f2844121dfdce93a55688525d6f16e9aff699e0d2335a29b14fe62822f603c9d"
     },
     {
-      "step": "bob (150) claims on the consumer that follows the policy",
-      "expected": "BelowMinimum",
-      "actual": "BelowMinimum",
+      "step": "bob's claim, signed under version 1, is sent now to the consumer that follows the policy",
+      "kind": "transaction",
+      "expected": "FAILED: BelowMinimum (contract error 11)",
+      "actual": "FAILED: BelowMinimum (contract error 11)",
+      "ok": true,
+      "txHash": "4e79b765426d12b2aa78a10bd4c3216c24f556a43a174c78257720a6ac0f85ed"
+    },
+    {
+      "step": "bob's claim, signed under version 1, is sent now to the consumer pinned to version 1",
+      "kind": "transaction",
+      "expected": "FAILED: PolicyChanged (contract error 3)",
+      "actual": "FAILED: PolicyChanged (contract error 3)",
+      "ok": true,
+      "txHash": "bbef3f282d66aa030fc7290d6688f38c8aa8908fd45ed04806b5df4d9afd8103"
+    },
+    {
+      "step": "the refusals did not pay bob",
+      "kind": "reading",
+      "expected": "0 SGR",
+      "actual": "0 SGR",
       "ok": true
     },
     {
-      "step": "bob claims on the pinned consumer",
-      "expected": "PolicyChanged",
-      "actual": "PolicyChanged",
+      "step": "nor mark him as claimed on the consumer that follows the policy",
+      "kind": "reading",
+      "expected": "false",
+      "actual": "false",
+      "ok": true
+    },
+    {
+      "step": "nor on the pinned consumer",
+      "kind": "reading",
+      "expected": "false",
+      "actual": "false",
       "ok": true
     },
     {
       "step": "bob (now 600) claims on the consumer that follows the policy",
+      "kind": "transaction",
       "expected": "paid",
       "actual": "paid",
       "ok": true,
-      "txHash": "518781a9adc137d990f604742465eaf85d94bb4443353113b638d2811a0e883b"
+      "txHash": "c4b031121872be1481c592ee7dd086fd47db0cdd3ca9351d0d32aa0fa4528007"
     },
     {
       "step": "bob now holds the reward",
+      "kind": "reading",
       "expected": "10 SGR",
       "actual": "10 SGR",
       "ok": true
     },
     {
       "step": "bob, eligible under version 2, claims on the pinned consumer",
+      "kind": "simulation",
       "expected": "PolicyChanged",
       "actual": "PolicyChanged",
       "ok": true
     },
     {
-      "step": "bob signs a claim for dave, who is eligible but did not authorize it",
-      "expected": "rejected",
-      "actual": "rejected",
+      "step": "dave is eligible: the policy would allow him",
+      "kind": "simulation",
+      "expected": "ok",
+      "actual": "ok",
       "ok": true
     },
     {
+      "step": "bob signs and sends a claim for dave",
+      "kind": "transaction",
+      "expected": "FAILED with an authorization error",
+      "actual": "FAILED with an authorization error",
+      "ok": true,
+      "txHash": "79d9973228684fa9feeca608d37abda51eec8f6d3bd3507d4faa40ef850e1028"
+    },
+    {
       "step": "dave has not been marked as claimed",
+      "kind": "reading",
       "expected": "false",
       "actual": "false",
       "ok": true
     },
     {
       "step": "dave has not been paid",
+      "kind": "reading",
       "expected": "0 SGR",
       "actual": "0 SGR",
       "ok": true
     },
     {
-      "step": "dave claims for himself",
+      "step": "dave claims for himself, in the same state",
+      "kind": "transaction",
       "expected": "paid",
       "actual": "paid",
       "ok": true,
-      "txHash": "0c68e18dfd5a94d63550b2175b8981656556a5c0e557d817f491cc7f80a47817"
+      "txHash": "20710f73d9895d1b425e247c95f07fa006aa26f7e43d65c3b20dc004eefebb7b"
     },
     {
       "step": "dave now holds the reward",
+      "kind": "reading",
       "expected": "10 SGR",
       "actual": "10 SGR",
       "ok": true
     },
     {
-      "step": "the open consumer's pool paid out three claims",
+      "step": "the consumer that follows the policy paid out three claims",
+      "kind": "reading",
       "expected": "70 SGR",
       "actual": "70 SGR",
+      "ok": true
+    },
+    {
+      "step": "the pinned consumer paid out one claim",
+      "kind": "reading",
+      "expected": "90 SGR",
+      "actual": "90 SGR",
       "ok": true
     }
   ]

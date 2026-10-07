@@ -58,7 +58,9 @@ rules live in one place, an owner can change them without redeploying every cont
   to keep it alive.
 - [`docs/evidence/`](docs/evidence): recorded runs against Testnet, each labelled with what it does and does not show,
   including one where the deployed contract and the TypeScript model agreed on 120 comparisons, and one that walks the
-  reference consumer through its scenarios on a real network (18 steps, all as expected).
+  reference consumer through its scenarios on the public Testnet deployment (26 steps, all as expected, including
+  refusals that were applied and failed as real transactions, and a claim signed by someone else that failed with an
+  authorization error).
 
 ## What is planned
 

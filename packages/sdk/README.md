@@ -130,8 +130,10 @@ flow would, including the refusals (one run is in
 [`docs/evidence`](../../docs/evidence/testnet-sdk-writes-2026-10-07.md)).
 
 The same plumbing runs the reference consumer end to end (`npm run testnet:gated-claim -w @sorogate/sdk -- --wasm-dir <the folder
-with the three WASM files>`): a claim, a refused double claim, the owner changing the rule, and a pinned consumer refusing it.
-One run is recorded in [`docs/evidence`](../../docs/evidence/testnet-gated-claim-2026-10-07.md).
+with the three WASM files> [--policy-contract <C...>]`): a claim, a refused double claim, the owner changing the rule, a
+pinned consumer refusing it, and a claim signed by someone else. With `--policy-contract` it uses a policy contract that is
+already deployed (the public one in [`docs/DEPLOYMENT.md`](../../docs/DEPLOYMENT.md)) after checking its code against the
+local build. One run is recorded in [`docs/evidence`](../../docs/evidence/testnet-gated-claim-2026-10-07.md).
 
 ## Errors
 

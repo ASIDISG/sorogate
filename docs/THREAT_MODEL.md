@@ -63,10 +63,10 @@ Read this part first if you are deciding whether to depend on the primitive.
 
 | Threat | What stops it | Evidence | What remains |
 | --- | --- | --- | --- |
-| Claiming on behalf of an address that did not authorize it | The consumer calls `subject.require_auth()` first | **Tested** (including a third party authorizing for someone else); **Measured** ([a claim signed by someone else failed on Testnet](evidence/testnet-gated-claim-2026-10-07.md); the reason code was not recorded) | A consumer that omits this line is open to anyone. The guide says so, but nothing can force a consumer to follow it |
+| Claiming on behalf of an address that did not authorize it | The consumer calls `subject.require_auth()` first | **Tested** (including a third party authorizing for someone else); **Measured** ([a claim signed by someone else, for an address the policy allowed, was applied on Testnet and failed with a host authorization error, `auth: invalid_action`; the same address then claimed for itself and was paid](evidence/testnet-gated-claim-2026-10-07.md)) | A consumer that omits this line is open to anyone. The guide says so, but nothing can force a consumer to follow it |
 | Claiming twice | A per-address record, written before payment, extended for 90 days | **Tested**, **Measured** | A forgotten record is archived, not erased, and a transaction touching an archived key must restore it first (**Documented**), so a record cannot be recreated by a second claim |
 | A failed payment leaving a claim recorded | The record and the payment are in one call, so a failed payment reverts both | **Tested** (an empty pool) | |
-| The policy owner changes the rules under the consumer | An optional pinned version. The pin is checked before the answer | **Tested**, **Measured** | An unpinned consumer follows its owner on purpose |
+| The policy owner changes the rules under the consumer | An optional pinned version. The pin is checked before the answer | **Tested**, **Measured** (claims signed before the change were applied after it and failed with `BelowMinimum` and `PolicyChanged`; [evidence](evidence/testnet-gated-claim-2026-10-07.md)) | An unpinned consumer follows its owner on purpose |
 | The pool is drained by recycling the same tokens across many addresses | Nothing. A balance is not an identity | **Reasoning** | The most a demonstration loses is its pool. Fund it only with a test asset; it has no withdrawal |
 
 ### The SDK and the model
