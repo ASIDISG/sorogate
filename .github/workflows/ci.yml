@@ -19,6 +19,10 @@ jobs:
           fetch-depth: 0
       # Contracts built with soroban-sdk 28 must be built with `stellar contract build`.
       - uses: stellar/stellar-cli@c0f4d0da891bbf214c08b8c5035ae6db80e9a3bd # v28.1.0
+        with:
+          # This action installs the CLI version named by the ref it is called with. A commit hash names no version, so the
+          # version is given here. When Dependabot moves the pin above, move this to the same release.
+          version: 28.1.0
       - name: Install the pinned Rust toolchain
         run: rustup show active-toolchain || rustup toolchain install
       - run: cargo fmt --all -- --check

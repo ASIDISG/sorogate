@@ -120,7 +120,7 @@ Comment on the issue before you start, so two people do not build the same thing
 - There is currently one maintainer. Response times are best effort, with no guaranteed turnaround.
 - A bug is reproduced before a fix is accepted. A feature is discussed in its issue before a pull request.
 - CI must pass before merge. Every GitHub Action in `.github/workflows` is pinned to a commit hash, with its tag in a comment;
-  Dependabot updates them. Pin a new one the same way. A separate `Audit` workflow checks the locked dependencies against published
+  Dependabot updates them. Pin a new one the same way, and check that it still works pinned: the `stellar/stellar-cli` action, for one, takes the CLI version from the ref it is called with, so it needs its `version:` input set once the ref is a hash. A separate `Audit` workflow checks the locked dependencies against published
   advisories (weekly, on pushes to `main`, and on a pull request that changes a dependency file); a finding there is a signal to
   look at, not a merge block, and the known exceptions are listed in `docs/THREAT_MODEL.md`.
 - Changes to what a policy means (the specification, the vectors, the error and reason codes) need maintainer approval.
