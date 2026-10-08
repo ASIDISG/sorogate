@@ -3,6 +3,9 @@ import '../styles/site.css';
 import deployment from '../../../../docs/deployments/testnet.json';
 
 const repo = 'https://github.com/Sorogate/sorogate';
+// Where the page is published (see astro.config.mjs). Astro gives the base without a trailing slash here.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const site = 'https://sorogate.github.io';
 ---
 <!doctype html>
 <html lang="en">
@@ -15,7 +18,16 @@ const repo = 'https://github.com/Sorogate/sorogate';
       name="description"
       content="Work out an access policy for Stellar in your browser and compare it with the answers the Soroban contract’s tests require."
     />
-    <link rel="icon" href="data:," />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sorogate policy playground" />
+    <meta property="og:description" content="Reusable access policies for Stellar, on Soroban. Early, Testnet only, not audited." />
+    <meta property="og:url" content={`${site}${base}/`} />
+    <meta property="og:image" content={`${site}${base}/og.png`} />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="A policy of three conditions worked out in order: it stops at the second and answers Denied with the reason BelowMinimum." />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <header>
