@@ -92,6 +92,31 @@ export function sources(conditions: readonly ConditionDraft[]): Source[] {
   return [...found.values()];
 }
 
+/**
+ * How far a slider for one source's balance should reach, so that the line where the answer flips sits in the middle of it.
+ * `null` when no condition naming the source has a minimum a slider can show: not a plain whole number, or beyond a million
+ * million, where a slider has no useful positions.
+ */
+export function sliderRange(
+  conditions: readonly ConditionDraft[],
+  source: Source,
+): { max: number; step: number; minimum: number } | null {
+  let minimum = 0;
+  let found = false;
+  for (const condition of conditions) {
+    if (condition.type === 'time_window' || keyOf(condition) !== source.key) continue;
+    const text = condition.min.trim();
+    if (!/^\d+$/.test(text)) continue;
+    const value = Number(text);
+    if (!Number.isSafeInteger(value) || value > 1e12) continue;
+    minimum = Math.max(minimum, value);
+    found = true;
+  }
+  if (!found) return null;
+  const max = Math.max(minimum * 2, source.kind === 'collection' ? 4 : 10);
+  return { max, step: Math.max(1, Math.round(max / 200)), minimum };
+}
+
 /** The draft with exactly one reading per source: readings of sources no longer named are dropped, new ones start at 0. */
 export function withReadings(draft: Draft): Draft {
   const readings: Record<string, ReadingDraft> = {};

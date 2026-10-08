@@ -26,4 +26,11 @@ describe('the images the page points at', () => {
     expect(page).toContain('content={`${site}${base}/og.png`}');
     expect(page).toContain('name="twitter:card" content="summary_large_image"');
   });
+
+  it('shows no number in the proof strip that was typed into the page', () => {
+    // The strip reads its numbers from the vectors and the recorded runs when the site is built, so none can go stale.
+    expect(page).not.toMatch(/data-count="\d/);
+    expect(page).toContain('data-count={item.value}');
+    expect(page).toContain('testnet-differential-2026-10-07.json');
+  });
 });

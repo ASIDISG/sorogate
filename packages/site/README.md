@@ -23,9 +23,10 @@ code, gives the required answer for each. If a vector is added or changed, the p
 
 | Path | What it is |
 | --- | --- |
-| `src/pages/index.astro` | The page: introduction, what the page cannot tell you, and the mount point |
+| `src/pages/index.astro` | The page: hero, the playground's mount point, the proof strip, how a contract uses a policy, the deployment, and what the page cannot tell you |
 | `src/playground/draft.ts` | What is typed, how it is read, and how it becomes an outcome. No page code, fully tested |
 | `src/playground/examples.ts` | The vectors as examples |
+| `src/playground/share.ts` | A policy in a link: encodes a draft into the address and decodes one back, distrusting everything it reads |
 | `src/playground/view.ts` | The form and the result, drawn with the DOM; typed text is only ever put on the page as text |
 | `src/styles/site.css` | The design: colour tokens for light and dark, type, layout, components and motion |
 | `public/` | The favicon, the link-preview image, and the licence of the font |
@@ -43,9 +44,21 @@ The look is deliberate, and it is kept simple enough to maintain: one stylesheet
 - **The first screen** is a dark hero with an illustration of a policy being worked out. It is labelled as an illustration, not
   a recorded run, because it is a drawing.
 - **The playground** is two columns on a wide screen, with the result staying in view while you edit, and one column on a
-  phone. The result shows each condition in the order it was checked: holds, fails, or not reached.
-- **Motion** is small and only plays when the outcome changes, not on every keystroke. A person who has asked their system for
-  less motion gets none.
+  phone. The result shows each condition in the order it was checked: holds, fails, or not reached, and the logo's gate
+  beside it lights one bar per condition.
+- **Things to touch.**
+  - The examples are **cards you can swipe** (CSS scroll-snap; buttons for a mouse; the list below is the same choice).
+  - A **slider** moves a balance across the minimum, with a line where the answer flips.
+  - **Copy a link** puts the whole policy in the address, and a link opens it exactly. What comes back from an address is
+    untrusted, so `share.ts` rebuilds the draft field by field, limits every length and count, and ignores anything else.
+- **The proof strip** reads its numbers (70 shared vectors, the contract's unit tests, 120 comparisons, 26 and 29 steps) from
+  the committed vectors, evidence and test file when the site is built, each with the label the evidence glossary gives it.
+  Nothing in the page is typed in by hand, and `test/meta.test.ts` fails if a number is.
+- **Motion** is small and plays only when something changes, not on every keystroke. Where the browser can tie animation to
+  scrolling (Chrome and Edge can; others vary), a line fills as you read, the top bar turns to glass, sections rise into place
+  and the hero's glow drifts; a change of example is a view transition. All of it sits inside `@supports`, the plain state is
+  the finished one, and the page update never depends on a transition running (a timer makes it if one stalls). A person who has asked their system for less motion
+  gets none of it, and the proof numbers simply show their value.
 
 ## Develop
 
@@ -68,8 +81,10 @@ first.
   but not layout, focus order on a real screen, or what a screen reader says. Do those by hand before a release.
 - **Colour contrast in context.** The palette is checked pair by pair by `test/contrast.test.ts`, not by measuring the rendered
   page, so text over the hero's gradient and over translucent surfaces is only covered at the gradient's stops.
-- **The look in a real browser.** The layout, the sticky result and the motion were checked by eye in one browser at a desktop
-  and a phone width, in both themes. Nothing tests them.
+- **The look in a real browser.** The layout, the sticky result and the motion were checked in one browser (Edge, headless) at
+  a desktop width and at 390, 360 and 320 pixels, in both themes, by eye and by measuring that nothing is wider than the
+  screen. Nothing tests them: the scroll-driven effects, the view transition and the carousel's swipe are not exercised by
+  any test, and nothing was tried in Firefox or Safari.
 - **The published page itself.** The workflow tests and builds the site, but nothing checks the live address after a
   deploy. Open it after the first deploy and after any change to `astro.config.mjs`.
 

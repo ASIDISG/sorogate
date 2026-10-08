@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { emptyDraft, newCondition, parseDraft, run, sameDraft, sources, withReadings, type Draft } from '../src/playground/draft';
+import { emptyDraft, newCondition, parseDraft, run, sameDraft, sliderRange, sources, withReadings, type Draft } from '../src/playground/draft';
 
 const draftWith = (overrides: Partial<Draft>): Draft => withReadings({ ...emptyDraft(), ...overrides });
 
@@ -175,5 +175,40 @@ describe('sameDraft', () => {
     expect(sameDraft(a, { ...a, timestamp: '1' })).toBe(false);
     expect(sameDraft(a, { ...a, readings: { 'token_balance:token': { status: 'unavailable' } } })).toBe(false);
     expect(sameDraft(a, { ...a, conditions: [{ type: 'token_balance', token: 'token', min: '101' }] })).toBe(false);
+  });
+});
+
+describe('sliderRange', () => {
+  const gold = (min: string) => ({ conditions: [{ type: 'token_balance', token: 'gold', min }] as Draft['conditions'], source: { key: 'token_balance:gold', kind: 'token' as const, name: 'gold' } });
+
+  it('puts the minimum in the middle of the slider', () => {
+    const { conditions, source } = gold('100');
+    expect(sliderRange(conditions, source)).toEqual({ max: 200, step: 1, minimum: 100 });
+  });
+
+  it('takes the largest minimum when several conditions name the same token', () => {
+    const conditions: Draft['conditions'] = [
+      { type: 'token_balance', token: 'gold', min: '50' },
+      { type: 'token_balance', token: 'gold', min: '400' },
+      { type: 'token_balance', token: 'silver', min: '9000' },
+    ];
+    expect(sliderRange(conditions, { key: 'token_balance:gold', kind: 'token', name: 'gold' })?.minimum).toBe(400);
+  });
+
+  it('coarsens the step for a large minimum, so the slider stays about 200 positions long', () => {
+    const { conditions, source } = gold('1000000');
+    expect(sliderRange(conditions, source)).toEqual({ max: 2000000, step: 10000, minimum: 1000000 });
+  });
+
+  it('gives a collection a few items of room even for a minimum of 1', () => {
+    const conditions: Draft['conditions'] = [{ type: 'nft_balance', collection: 'badge', min: '1' }];
+    expect(sliderRange(conditions, { key: 'nft_balance:badge', kind: 'collection', name: 'badge' })).toEqual({ max: 4, step: 1, minimum: 1 });
+  });
+
+  it('offers nothing when the minimum is not a plain whole number a slider could show', () => {
+    for (const min of ['', '1.5', '-3', 'lots', '1e3', '9999999999999999999999']) {
+      const { conditions, source } = gold(min);
+      expect(sliderRange(conditions, source), min).toBeNull();
+    }
   });
 });

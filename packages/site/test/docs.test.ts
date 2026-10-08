@@ -71,7 +71,9 @@ describe('the links in the documents', () => {
       }
     }
     expect(problems).toEqual([]);
-  });
+    // It reads every document in the repository, which takes seconds on a cold file cache. Give it room: a slow disk is not a
+    // broken link.
+  }, 60_000);
 
   it('are being checked at all: the documents were found', () => {
     const names = MARKDOWN.map((f) => relative(ROOT, f).replaceAll('\\', '/'));

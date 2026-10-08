@@ -1,11 +1,35 @@
 ---
 import '../styles/site.css';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import deployment from '../../../../docs/deployments/testnet.json';
+import evaluateVectors from '../../../../spec/vectors/evaluate.json';
+import validateVectors from '../../../../spec/vectors/validate.json';
+import differential from '../../../../docs/evidence/testnet-differential-2026-10-07.json';
+import gatedClaim from '../../../../docs/evidence/testnet-gated-claim-2026-10-07.json';
+import sep50 from '../../../../docs/evidence/testnet-sep50-2026-10-07.json';
 
 const repo = 'https://github.com/Sorogate/sorogate';
 // Where the page is published (see astro.config.mjs). Astro gives the base without a trailing slash here.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const site = 'https://sorogate.github.io';
+
+// Every number in the proof strip is read from the committed files when the site is built, so none of them can go stale or be
+// typed in by hand. The contract's unit tests are counted in its test file. (`process.cwd()` is this package when Astro runs.)
+const contractTests = (
+  readFileSync(resolve(process.cwd(), '../../contracts/access-policy/src/test.rs'), 'utf8').match(/#\[test\]/g) ?? []
+).length;
+const count = (steps: unknown): number => (Array.isArray(steps) ? steps.length : Number(steps));
+const decisions = evaluateVectors.cases.length;
+const validity = validateVectors.cases.length;
+const proof = [
+  { value: decisions + validity, label: 'shared test vectors', kind: 'Unit-tested', detail: `${decisions} decisions and ${validity} validity checks. The contract and the TypeScript model must both pass every one.` },
+  { value: contractTests, label: 'contract unit tests', kind: 'Unit-tested', detail: 'Including a Stellar asset contract and deliberately broken tokens.' },
+  { value: differential.comparisons, label: 'comparisons on Testnet', kind: 'Recorded', detail: `The deployed contract against the model: ${differential.disagreements} disagreements.` },
+  { value: count(gatedClaim.steps), label: 'steps of a reference consumer', kind: 'Recorded', detail: `Run on the public deployment, including refusals that really failed on the network: ${gatedClaim.unexpected} unexpected.` },
+  { value: count(sep50.steps), label: 'steps on a SEP-50 collection', kind: 'Recorded', detail: `Contract and model agreeing on each. The collection is one we deployed: ${sep50.unexpected} unexpected.` },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -32,19 +56,24 @@ const site = 'https://sorogate.github.io';
   <body>
     <a class="skip-link" href="#app">Skip to the playground</a>
 
-    <header class="hero">
-      <div class="wrap">
-        <nav class="topbar" aria-label="Project">
-          <a class="brand" href={repo}>
-            <img src={`${base}/favicon.svg`} alt="" width="32" height="32" />
-            <span>Sorogate</span>
-          </a>
-          <span class="links">
-            <a href={`${repo}/blob/main/docs/README.md`}>Documentation</a>
-            <a href={repo}>GitHub</a>
-          </span>
-        </nav>
+    <div class="progress" aria-hidden="true"></div>
+    <nav class="topbar" aria-label="Project">
+      <div class="wrap bar">
+        <a class="brand" href={repo}>
+          <img src={`${base}/favicon.svg`} alt="" width="32" height="32" />
+          <span>Sorogate</span>
+        </a>
+        <span class="links">
+          <a href="#how">How to use it</a>
+          <a href={`${repo}/blob/main/docs/README.md`}>Documentation</a>
+          <a href={repo}>GitHub</a>
+        </span>
+      </div>
+    </nav>
 
+    <header class="hero">
+      <div class="orbs" aria-hidden="true"><span class="orb orb-a"></span><span class="orb orb-b"></span></div>
+      <div class="wrap">
         <div class="hero-grid">
           <div>
             <p class="status">
@@ -106,7 +135,71 @@ const site = 'https://sorogate.github.io';
         <noscript><p class="notice">This page needs JavaScript to work a policy out.</p></noscript>
       </div>
 
-      <section aria-labelledby="deployment-heading">
+      <section class="reveal" aria-labelledby="proof-heading">
+        <h2 id="proof-heading">Why the answer can be trusted</h2>
+        <p>
+          The contract is the authority. The numbers below are how its behaviour has been checked, each read from the committed
+          files when this page was built. Each carries the label it has in the project’s{' '}
+          <a href={`${repo}/blob/main/docs/EVIDENCE.md`}>evidence glossary</a>.
+        </p>
+        <ul class="proof">
+          {proof.map((item) => (
+            <li class="stat spot">
+              <span class="num" data-count={item.value}>{item.value}</span>
+              <strong>{item.label}</strong>
+              <span class={`kind ${item.kind === 'Unit-tested' ? 'unit' : 'recorded'}`}>{item.kind}</span>
+              <p>{item.detail}</p>
+            </li>
+          ))}
+        </ul>
+        <p>
+          <a href={`${repo}/tree/main/docs/evidence`}>Read the recorded runs</a>. They say what each one does not show.
+        </p>
+      </section>
+
+      <section id="how" class="reveal" aria-labelledby="how-heading">
+        <h2 id="how-heading">How a contract uses a policy</h2>
+        <p>
+          Three things, in this order. On a phone, swipe sideways to move between them.{' '}
+          <a href="https://github.com/Sorogate/example-consumer">A complete gate</a> that does exactly this runs against the
+          public deployment, with tests.
+        </p>
+        <ol class="steps" aria-label="The three steps, one card each">
+          <li class="spot">
+            <span class="step-n">1</span>
+            <h3>Prove who is asking</h3>
+            <p>A policy answers for any address it is given, so it cannot tell who is calling. Make the subject sign first.</p>
+            <pre><code><span class="c">// the subject must authorize this call</span>
+subject.require_auth();</code></pre>
+          </li>
+          <li class="spot">
+            <span class="step-n">2</span>
+            <h3>Ask the policy</h3>
+            <p>No answer is a no. If the policy cannot be reached, or answers with something that is not a decision, refuse.</p>
+            <pre><code>let decision = match PolicyClient::new(&amp;env, &amp;policy)
+    .try_evaluate(&amp;policy_id, &amp;subject)
+&#123;
+    Ok(Ok(decision)) =&gt; decision,
+    _ =&gt; return Err(Error::PolicyUnavailable),
+&#125;;</code></pre>
+          </li>
+          <li class="spot">
+            <span class="step-n">3</span>
+            <h3>Enforce the answer</h3>
+            <p>Stop on a denial and carry the reason back. Only then do the thing the policy guards.</p>
+            <pre><code>if !decision.allowed &#123;
+    return Err(<span class="c">/* say why, from decision.reason */</span>);
+&#125;
+<span class="c">/* record it, then act */</span></code></pre>
+          </li>
+        </ol>
+        <p>
+          Read the <a href={`${repo}/blob/main/docs/INTEGRATING.md`}>integration guide</a> for what goes wrong when a step is
+          skipped.
+        </p>
+      </section>
+
+      <section class="reveal" aria-labelledby="deployment-heading">
         <h2 id="deployment-heading">The public Testnet deployment</h2>
         <p>
           <strong>This is a development deployment on Stellar Testnet, not a production deployment.</strong> Testnet is
@@ -121,12 +214,12 @@ const site = 'https://sorogate.github.io';
           <dd>{deployment.deployedAt.slice(0, 10)}</dd>
         </dl>
         <p>
-          How to check that it is the code in this repository, and how it is kept alive:
+          How to check that it is the code in this repository, and how it is kept alive:{' '}
           <a href={`${repo}/blob/main/docs/DEPLOYMENT.md`}>deployment notes</a>.
         </p>
       </section>
 
-      <section aria-labelledby="limits-heading">
+      <section class="reveal" aria-labelledby="limits-heading">
         <h2 id="limits-heading">What this page cannot tell you</h2>
         <ul class="cards">
           <li>
@@ -143,7 +236,7 @@ const site = 'https://sorogate.github.io';
           </li>
         </ul>
         <p>
-          Read the <a href={`${repo}/blob/main/spec/SPEC.md`}>specification</a>, the
+          Read the <a href={`${repo}/blob/main/spec/SPEC.md`}>specification</a>, the{' '}
           <a href={`${repo}/blob/main/docs/THREAT_MODEL.md`}>threat model</a>, or the <a href={repo}>source</a>.
         </p>
       </section>
@@ -162,6 +255,45 @@ const site = 'https://sorogate.github.io';
 
       const app = document.getElementById('app');
       if (app !== null) mount(app, examples);
+
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // The proof numbers count up when they scroll into view. The page already says the final number, so without scripting,
+      // or for someone who asked for less motion, nothing changes.
+      function countUp(element: HTMLElement): void {
+        const target = Number(element.dataset['count']);
+        if (!Number.isFinite(target)) return;
+        const started = performance.now();
+        const step = (now: number): void => {
+          const done = Math.min(1, (now - started) / 1100);
+          element.textContent = String(done === 1 ? target : Math.round(target * (1 - (1 - done) ** 3)));
+          if (done < 1) requestAnimationFrame(step);
+        };
+        element.textContent = '0';
+        requestAnimationFrame(step);
+      }
+      if (!calm && 'IntersectionObserver' in window) {
+        const watcher = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              countUp(entry.target as HTMLElement);
+              watcher.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.6 },
+        );
+        document.querySelectorAll<HTMLElement>('[data-count]').forEach((element) => watcher.observe(element));
+      }
+
+      // A soft light under the pointer on cards. It only sets two numbers that the stylesheet reads.
+      document.addEventListener('pointermove', (event) => {
+        const card = (event.target as Element | null)?.closest<HTMLElement>('.spot');
+        if (card === null || card === undefined) return;
+        const box = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${event.clientX - box.left}px`);
+        card.style.setProperty('--my', `${event.clientY - box.top}px`);
+      });
     </script>
   </body>
 </html>
