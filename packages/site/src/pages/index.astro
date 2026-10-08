@@ -30,20 +30,78 @@ const site = 'https://sorogate.github.io';
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <header>
-      <p class="status">
-        Early development. Testnet only. Not audited. This page makes no network calls and holds no keys.
-      </p>
-      <h1>Sorogate policy playground</h1>
-      <p>
-        An access policy is a short list of conditions about an address: it holds at least some of a token, it holds
-        at least some items of a collection, the ledger time is inside a window. All of them must hold. This page works
-        a policy out in your browser with the project’s TypeScript model and sets the result beside the answer the
-        Soroban contract’s tests require for the same input.
-      </p>
+    <a class="skip-link" href="#app">Skip to the playground</a>
+
+    <header class="hero">
+      <div class="wrap">
+        <nav class="topbar" aria-label="Project">
+          <a class="brand" href={repo}>
+            <img src={`${base}/favicon.svg`} alt="" width="32" height="32" />
+            <span>Sorogate</span>
+          </a>
+          <span class="links">
+            <a href={`${repo}/blob/main/docs/README.md`}>Documentation</a>
+            <a href={repo}>GitHub</a>
+          </span>
+        </nav>
+
+        <div class="hero-grid">
+          <div>
+            <p class="status">
+              Early development. Testnet only. Not audited. This page makes no network calls and holds no keys.
+            </p>
+            <h1>Sorogate policy playground</h1>
+            <p class="lead">
+              An access policy is a short list of conditions about an address: it holds at least some of a token, it
+              holds at least some items of a collection, the ledger time is inside a window. All of them must hold.
+            </p>
+            <p class="lead-small">
+              This page works a policy out in your browser with the project’s TypeScript model and sets the result
+              beside the answer the Soroban contract’s tests require for the same input.
+            </p>
+            <p class="cta">
+              <a class="btn primary" href="#app">Try a policy</a>
+              <a class="btn ghost" href={repo}>Read the source</a>
+            </p>
+          </div>
+
+          <figure class="illustration">
+            <div
+              class="ill-card"
+              role="img"
+              aria-label="Illustration: a policy of three conditions is worked out in order. The first holds, the second fails, the third is not reached, and the answer is Denied with the reason BelowMinimum."
+            >
+              <div class="ill-head">evaluate(policy, address)</div>
+              <ol class="ill-rows">
+                <li class="ill-row" style="--i: 0">
+                  <span class="icon ok">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"></path></svg>
+                  </span>
+                  Holds at least 100 of a token
+                </li>
+                <li class="ill-row" style="--i: 1">
+                  <span class="icon no">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"></path></svg>
+                  </span>
+                  Holds at least 1 of a collection
+                </li>
+                <li class="ill-row skipped" style="--i: 2">
+                  <span class="icon na"></span>
+                  <span>
+                    The ledger time is inside a window
+                    <small>Not reached: it stops at the first failure</small>
+                  </span>
+                </li>
+              </ol>
+              <div class="ill-result" style="--i: 3">Denied: BelowMinimum, condition 2</div>
+            </div>
+            <figcaption>An illustration of how a policy is worked out, not a recorded run.</figcaption>
+          </figure>
+        </div>
+      </div>
     </header>
 
-    <main>
+    <main class="wrap">
       <div id="app">
         <noscript><p class="notice">This page needs JavaScript to work a policy out.</p></noscript>
       </div>
@@ -70,7 +128,7 @@ const site = 'https://sorogate.github.io';
 
       <section aria-labelledby="limits-heading">
         <h2 id="limits-heading">What this page cannot tell you</h2>
-        <ul>
+        <ul class="cards">
           <li>
             <strong>The contract decides, not this page.</strong> The model here is a preview and an explanation. It is
             held to the contract by shared test vectors, but only the contract’s own answer counts on the network.
@@ -91,10 +149,10 @@ const site = 'https://sorogate.github.io';
       </section>
     </main>
 
-    <footer>
+    <footer class="wrap">
       <p>
         Apache-2.0. Not affiliated with or endorsed by the Stellar Development Foundation; “Stellar” and “Soroban” are
-        their trademarks.
+        their trademarks. Set in Inter, under the <a href={`${base}/inter-OFL.txt`}>SIL Open Font License 1.1</a>.
       </p>
     </footer>
 

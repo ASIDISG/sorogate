@@ -27,8 +27,25 @@ code, gives the required answer for each. If a vector is added or changed, the p
 | `src/playground/draft.ts` | What is typed, how it is read, and how it becomes an outcome. No page code, fully tested |
 | `src/playground/examples.ts` | The vectors as examples |
 | `src/playground/view.ts` | The form and the result, drawn with the DOM; typed text is only ever put on the page as text |
-| `src/styles/site.css` | Light and dark colours; the contrast of every pair was checked against WCAG AA |
-| `test/` | Logic tests, the examples against the model, and a jsdom test that drives the real page code |
+| `src/styles/site.css` | The design: colour tokens for light and dark, type, layout, components and motion |
+| `public/` | The favicon, the link-preview image, and the licence of the font |
+| `test/` | Logic tests, the examples against the model, a jsdom test that drives the real page code, and the contrast test |
+
+## Design
+
+The look is deliberate, and it is kept simple enough to maintain: one stylesheet, no framework, no images beyond the logo.
+
+- **Colour** comes from the logo's blue. Every colour is a token at the top of `site.css`, in a light and a dark set, and
+  `test/contrast.test.ts` reads those tokens and fails if any text, mark or border falls below WCAG AA (4.5:1 for text,
+  3:1 for marks and borders), in either theme. Change a colour there, not in a rule.
+- **Type** is [Inter](https://rsms.me/inter/), self-hosted from the `@fontsource-variable/inter` package, so the page asks no
+  other site for anything. Inter is under the SIL Open Font License 1.1; its text is `public/inter-OFL.txt`.
+- **The first screen** is a dark hero with an illustration of a policy being worked out. It is labelled as an illustration, not
+  a recorded run, because it is a drawing.
+- **The playground** is two columns on a wide screen, with the result staying in view while you edit, and one column on a
+  phone. The result shows each condition in the order it was checked: holds, fails, or not reached.
+- **Motion** is small and only plays when the outcome changes, not on every keystroke. A person who has asked their system for
+  less motion gets none.
 
 ## Develop
 
@@ -49,7 +66,10 @@ first.
 
 - **Real browsers.** The page test runs in jsdom. It checks behaviour, labels and that typed text is not turned into HTML,
   but not layout, focus order on a real screen, or what a screen reader says. Do those by hand before a release.
-- **Colour contrast in context.** The palette was checked pair by pair, not by measuring the rendered page.
+- **Colour contrast in context.** The palette is checked pair by pair by `test/contrast.test.ts`, not by measuring the rendered
+  page, so text over the hero's gradient and over translucent surfaces is only covered at the gradient's stops.
+- **The look in a real browser.** The layout, the sticky result and the motion were checked by eye in one browser at a desktop
+  and a phone width, in both themes. Nothing tests them.
 - **The published page itself.** The workflow tests and builds the site, but nothing checks the live address after a
   deploy. Open it after the first deploy and after any change to `astro.config.mjs`.
 

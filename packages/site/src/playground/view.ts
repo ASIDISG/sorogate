@@ -33,6 +33,31 @@ function h<K extends keyof HTMLElementTagNameMap>(
   return element;
 }
 
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+/** A small status mark. Built node by node, never from a string, and hidden from assistive technology: the words next to it
+ * say the same thing. */
+function icon(kind: 'ok' | 'no' | 'na'): HTMLElement {
+  const wrap = h('span', { class: `icon ${kind}`, 'aria-hidden': 'true' });
+  if (kind === 'na') return wrap;
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 16 16');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '2.4');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', kind === 'ok' ? 'M3 8.5l3.2 3.2L13 4.8' : 'M4 4l8 8M12 4l-8 8');
+  svg.append(path);
+  wrap.append(svg);
+  return wrap;
+}
+
+function heading(id: string, step: number, text: string): HTMLElement {
+  return h('h2', { id }, h('span', { class: 'step' }, String(step)), text);
+}
+
 const CONDITION_LABELS: Record<ConditionDraft['type'], string> = {
   token_balance: 'Holds at least some of a token',
   nft_balance: 'Holds at least some items of a collection',
@@ -74,12 +99,12 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
 
   root.append(
     h('section', { 'aria-labelledby': 'example-heading' },
-      h('h2', { id: 'example-heading' }, '1. Pick an example'),
+      heading('example-heading', 1, 'Pick an example'),
       h('p', {}, 'Each example is a case from the project’s shared test vectors. The contract’s own tests require it to give the answer shown beside the model’s. You can change anything below afterwards.'),
       h('div', { class: 'field' }, h('label', { for: 'example' }, 'Example'), exampleSelect),
     ),
     h('section', { 'aria-labelledby': 'policy-heading' },
-      h('h2', { id: 'policy-heading' }, '2. The policy'),
+      heading('policy-heading', 2, 'The policy'),
       h('div', { class: 'field check' }, policyActive, h('label', { for: 'policy-active' }, 'The owner has the policy switched on')),
       h('div', { class: 'field' },
         h('label', { for: 'policy-version' }, 'Policy version'),
@@ -95,7 +120,7 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
       ),
     ),
     h('section', { 'aria-labelledby': 'world-heading' },
-      h('h2', { id: 'world-heading' }, '3. The address being checked'),
+      heading('world-heading', 3, 'The address being checked'),
       h('div', { class: 'field' },
         h('label', { for: 'policy-time' }, 'Ledger time (unix seconds)'),
         policyTime,
@@ -104,7 +129,7 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
       sourceList,
     ),
     h('section', { 'aria-labelledby': 'result-heading' },
-      h('h2', { id: 'result-heading' }, '4. What the model says'),
+      heading('result-heading', 4, 'What the model says'),
       announcement,
       result,
     ),
@@ -178,7 +203,7 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
     );
   }
 
-  function renderOutcome(outcome: Outcome): HTMLElement[] {
+  function renderOutcome(outcome: Outcome, play: boolean): HTMLElement[] {
     switch (outcome.kind) {
       case 'invalid-input':
         return [
@@ -190,17 +215,39 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
       case 'decision': {
         const { decision } = outcome;
         const verdict = decision.allowed ? 'Allowed' : 'Denied';
+        // The conditions are worked out in order and the first that fails decides, so the ones after it were never looked at.
+        const trail = outcome.described.map((sentence, index) => {
+          const failedAt = decision.failedIndex;
+          const state =
+            decision.allowed ? 'holds'
+            : decision.reason === 'Inactive' || failedAt === null ? 'skipped'
+            : index < failedAt ? 'holds'
+            : index === failedAt ? 'fails'
+            : 'skipped';
+          const words =
+            state === 'holds' ? 'Holds'
+            : state === 'fails' ? `Fails: ${decision.reason}`
+            : decision.reason === 'Inactive' ? 'Not checked: the policy is switched off'
+            : 'Not reached: it stops at the first failure';
+          return h('li', { class: state === 'skipped' ? 'skipped' : state, style: `--i: ${index}` },
+            icon(state === 'holds' ? 'ok' : state === 'fails' ? 'no' : 'na'),
+            h('span', {}, sentence.charAt(0).toUpperCase() + sentence.slice(1), h('small', { class: 'state' }, words)),
+          );
+        });
         return [
-          h('p', { class: `verdict ${decision.allowed ? 'allowed' : 'denied'}` }, h('strong', {}, verdict)),
-          h('p', {}, outcome.explanation),
-          h('dl', {},
-            h('dt', {}, 'Reason'), h('dd', {}, decision.reason),
-            h('dt', {}, 'Failed condition'), h('dd', {}, decision.failedIndex === null ? 'none' : String(decision.failedIndex + 1)),
-            h('dt', {}, 'Policy version'), h('dd', {}, String(decision.version)),
-            h('dt', {}, 'Ledger time'), h('dd', {}, outcome.ledgerTime),
+          h('div', { class: `verdict-card ${decision.allowed ? 'allowed' : 'denied'}${play ? ' play' : ''}` },
+            icon(decision.allowed ? 'ok' : 'no'),
+            h('div', {}, h('strong', {}, verdict), h('span', { class: 'why' }, decision.allowed ? 'Every condition holds.' : `Reason: ${decision.reason}`)),
           ),
-          h('p', {}, h('strong', {}, 'The policy, in words')),
-          h('ol', {}, ...outcome.described.map((sentence) => h('li', {}, sentence))),
+          h('p', {}, outcome.explanation),
+          h('p', {}, h('strong', {}, 'How it was worked out')),
+          h('ol', { class: `trail${play ? ' play' : ''}` }, ...trail),
+          h('dl', { class: 'stats' },
+            h('div', {}, h('dt', {}, 'Reason'), h('dd', {}, decision.reason)),
+            h('div', {}, h('dt', {}, 'Failed condition'), h('dd', {}, decision.failedIndex === null ? 'none' : String(decision.failedIndex + 1))),
+            h('div', {}, h('dt', {}, 'Policy version'), h('dd', {}, String(decision.version))),
+            h('div', {}, h('dt', {}, 'Ledger time'), h('dd', {}, outcome.ledgerTime)),
+          ),
         ];
       }
     }
@@ -220,7 +267,7 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
       outcome.decision.reason === expected.reason &&
       outcome.decision.failedIndex === expected.failedIndex &&
       outcome.decision.version === expected.version;
-    return h('p', { class: 'expected' },
+    return h('p', { class: same ? 'expected' : 'expected differs' },
       h('strong', {}, 'The contract’s tests require: '), expectedText, '. ',
       same ? 'The model gives the same answer.' : 'The model gives a DIFFERENT answer. That is a bug; please report it.');
   }
@@ -237,9 +284,19 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
     }
   }
 
+  // The result animates in when the outcome changes (a different verdict, a different failing condition), not on every
+  // keystroke that leaves it as it was.
+  let lastShape = '';
+
   function renderResult(): void {
     const outcome = run(draft);
-    result.replaceChildren(...renderOutcome(outcome), renderComparison(outcome));
+    const shape =
+      outcome.kind === 'decision'
+        ? `${outcome.decision.allowed}|${outcome.decision.reason}|${String(outcome.decision.failedIndex)}|${outcome.described.length}`
+        : outcome.kind;
+    const play = shape !== lastShape;
+    lastShape = shape;
+    result.replaceChildren(...renderOutcome(outcome, play), renderComparison(outcome));
     const line = summary(outcome);
     if (announcement.textContent !== line) announcement.textContent = line;
   }
