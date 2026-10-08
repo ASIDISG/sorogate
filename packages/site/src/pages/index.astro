@@ -13,7 +13,7 @@ const repo = 'https://github.com/Sorogate/sorogate';
     <title>Sorogate policy playground</title>
     <meta
       name="description"
-      content="Work out an access policy for Stellar in your browser and compare it with the answers the Soroban contract is recorded as giving."
+      content="Work out an access policy for Stellar in your browser and compare it with the answers the Soroban contract’s tests require."
     />
     <link rel="icon" href="data:," />
   </head>
@@ -27,7 +27,7 @@ const repo = 'https://github.com/Sorogate/sorogate';
         An access policy is a short list of conditions about an address: it holds at least some of a token, it holds
         at least some items of a collection, the ledger time is inside a window. All of them must hold. This page works
         a policy out in your browser with the project’s TypeScript model and sets the result beside the answer the
-        Soroban contract is recorded as giving for the same input.
+        Soroban contract’s tests require for the same input.
       </p>
     </header>
 
@@ -64,8 +64,8 @@ const repo = 'https://github.com/Sorogate/sorogate';
             held to the contract by shared test vectors, but only the contract’s own answer counts on the network.
           </li>
           <li>
-            <strong>Recorded answers are for the listed examples only.</strong> Change a value and the page says there
-            is nothing recorded for that input.
+            <strong>Contract answers are fixed for the listed examples only.</strong> Change a value and the page says there
+            is no contract answer fixed for that input.
           </li>
           <li>
             <strong>A policy does not prove who is asking.</strong> The same balance passes for whoever holds it, so a

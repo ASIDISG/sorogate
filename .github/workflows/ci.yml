@@ -62,3 +62,5 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: The packed SDK installs and imports in an empty project
+        run: bash scripts/check-pack.sh

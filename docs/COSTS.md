@@ -186,6 +186,7 @@ What these measurements do not support:
   Other tokens will differ.
 - **Eight different codes by construction.** The differing copies are the same program with an empty section appended
   (see above). Eight genuinely unrelated tokens could differ more.
+- **Not exact between runs.** A second run on freshly deployed contracts ([note](evidence/testnet-costs-rerun-2026-10-08.md)) gave the same figures for the time-window cases and instruction counts up to 0.29% different for the rest, in both directions, and fees up to 2.2% different. Read an instruction count as good to about a third of a percent, not to the instruction.
 - **Memory and the split of the fee** into its parts were not reported or recorded.
 - The refund of unused rent after a real transaction was not measured.
 

@@ -37,9 +37,9 @@ const spoken = (): string => root.querySelector('[role="status"]')?.textContent 
 const indexOfExample = (fragment: string): string => String(examples.findIndex((e) => e.name.includes(fragment)));
 
 describe('the playground page', () => {
-  it('starts on the first example with the model and the recorded contract answer agreeing', () => {
+  it('starts on the first example with the model and the answer the contract’s tests require agreeing', () => {
     expect(result()).toContain('Allowed');
-    expect(result()).toContain('Recorded contract answer: Allowed (reason None)');
+    expect(result()).toContain('The contract’s tests require: Allowed (reason None)');
     expect(result()).toContain('The model gives the same answer.');
   });
 
@@ -52,13 +52,13 @@ describe('the playground page', () => {
     choose(byLabel<HTMLSelectElement>('Example'), indexOfExample('one below the minimum'));
     expect(result()).toContain('Denied');
     expect(result()).toContain('BelowMinimum');
-    expect(result()).toContain('Recorded contract answer: Denied (reason BelowMinimum)');
+    expect(result()).toContain('The contract’s tests require: Denied (reason BelowMinimum)');
   });
 
-  it('says nothing is recorded as soon as a value is changed', () => {
+  it('says no contract answer is fixed as soon as a value is changed', () => {
     type(byLabel<HTMLInputElement>(/^Minimum balance/), '7');
-    expect(result()).toContain('No recorded contract answer.');
-    expect(result()).not.toContain('Recorded contract answer:');
+    expect(result()).toContain('No contract answer is fixed for this input.');
+    expect(result()).not.toContain('The contract’s tests require:');
   });
 
   it('recomputes the decision when the balance changes', () => {
@@ -98,7 +98,7 @@ describe('the playground page', () => {
   it('starts an empty policy that already works out a decision', () => {
     choose(byLabel<HTMLSelectElement>('Example'), '');
     expect(result()).toContain('Denied');
-    expect(result()).toContain('No recorded contract answer.');
+    expect(result()).toContain('No contract answer is fixed for this input.');
   });
 
   it('puts what is typed on the page as text, never as HTML', () => {

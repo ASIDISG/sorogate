@@ -1,6 +1,6 @@
 /**
  * The playground's examples are the shared test vectors in `spec/vectors/evaluate.json`: the same cases the contract
- * and the TypeScript model are both run against. Each carries the answer the contract is recorded as giving, so the page
+ * and the TypeScript model are both run against. Each carries the answer the contract’s tests require it to give, so the page
  * can set it beside the model's. Nothing here is written for the page.
  */
 import type { Decision } from '@sorogate/sdk/model';
@@ -34,8 +34,8 @@ export interface VectorFile {
 export interface Example {
   name: string;
   draft: Draft;
-  /** What the contract is recorded as answering for exactly this input. */
-  recorded: Decision;
+  /** The answer the contract's tests require for exactly this input. */
+  expected: Decision;
 }
 
 function conditionDraft(condition: VectorCondition): ConditionDraft {
@@ -74,7 +74,7 @@ export function examplesFrom(file: VectorFile): Example[] {
       if (token === undefined) throw new Error(`example "${vector.name}" names an undeclared token "${source.name}"`);
       draft.readings[source.key] = readingFor(token, vector.subject, source.kind === 'token' ? 'i128' : 'u32');
     }
-    return { name: vector.name, draft, recorded: vector.expect };
+    return { name: vector.name, draft, expected: vector.expect };
   });
 }
 

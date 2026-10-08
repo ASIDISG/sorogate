@@ -75,7 +75,7 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
   root.append(
     h('section', { 'aria-labelledby': 'example-heading' },
       h('h2', { id: 'example-heading' }, '1. Pick an example'),
-      h('p', {}, 'Each example is a case from the project’s shared test vectors. The contract has been run on every one of them and its answer recorded. You can change anything below afterwards.'),
+      h('p', {}, 'Each example is a case from the project’s shared test vectors. The contract’s own tests require it to give the answer shown beside the model’s. You can change anything below afterwards.'),
       h('div', { class: 'field' }, h('label', { for: 'example' }, 'Example'), exampleSelect),
     ),
     h('section', { 'aria-labelledby': 'policy-heading' },
@@ -209,19 +209,19 @@ export function mount(root: HTMLElement, examples: readonly Example[]): void {
   function renderComparison(outcome: Outcome): HTMLElement {
     const example = examples[selected];
     if (example === undefined || !sameDraft(draft, example.draft)) {
-      return h('p', { class: 'recorded' }, h('strong', {}, 'No recorded contract answer. '),
-        'Contract answers are recorded for the examples exactly as they are listed; this input is different. For a real policy, the contract’s own answer is the one that counts.');
+      return h('p', { class: 'expected' }, h('strong', {}, 'No contract answer is fixed for this input. '),
+        'The contract’s tests fix its answer only for the examples exactly as they are listed; this input is different. For a real policy, the contract’s own answer is the one that counts.');
     }
-    const { recorded } = example;
-    const recordedText = `${recorded.allowed ? 'Allowed' : 'Denied'} (reason ${recorded.reason})`;
+    const { expected } = example;
+    const expectedText = `${expected.allowed ? 'Allowed' : 'Denied'} (reason ${expected.reason})`;
     const same =
       outcome.kind === 'decision' &&
-      outcome.decision.allowed === recorded.allowed &&
-      outcome.decision.reason === recorded.reason &&
-      outcome.decision.failedIndex === recorded.failedIndex &&
-      outcome.decision.version === recorded.version;
-    return h('p', { class: 'recorded' },
-      h('strong', {}, 'Recorded contract answer: '), recordedText, '. ',
+      outcome.decision.allowed === expected.allowed &&
+      outcome.decision.reason === expected.reason &&
+      outcome.decision.failedIndex === expected.failedIndex &&
+      outcome.decision.version === expected.version;
+    return h('p', { class: 'expected' },
+      h('strong', {}, 'The contract’s tests require: '), expectedText, '. ',
       same ? 'The model gives the same answer.' : 'The model gives a DIFFERENT answer. That is a bug; please report it.');
   }
 

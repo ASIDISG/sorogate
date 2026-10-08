@@ -1,7 +1,7 @@
 # @sorogate/site
 
 A static page, built with [Astro](https://astro.build), that works an access policy out in the browser and sets the
-result beside the answer the Soroban contract is recorded as giving for the same input. **Early, Testnet only, not audited**
+result beside the answer the Soroban contract's tests require for the same input. **Early, Testnet only, not audited**
 (see the [root README](../../README.md)).
 
 It has **no server, no wallet, no keys and makes no network calls**. It uses only the pure part of the SDK
@@ -11,12 +11,13 @@ It has **no server, no wallet, no keys and makes no network calls**. It uses onl
 
 The examples are the cases in [`spec/vectors/evaluate.json`](../../spec/vectors/evaluate.json): the same cases the
 contract (`contracts/access-policy/tests/vectors.rs`) and the SDK (`packages/sdk/test/vectors.test.ts`) are run against.
-Nothing is written for the page. Each example carries the decision the contract is recorded as giving, and the page
-shows it next to the model's only while the input is exactly the example; change a value and the page says that nothing
-is recorded for that input.
+Nothing is written for the page. Each example carries the decision the contract's tests require it to give (**Unit-tested**,
+see [`docs/EVIDENCE.md`](../../docs/EVIDENCE.md); the page does not call the contract), and the page
+shows it next to the model's only while the input is exactly the example; change a value and the page says that no
+contract answer is fixed for that input.
 
 `test/examples.test.ts` checks that every vector appears as an example and that the model, run through the page's own
-code, gives the recorded answer for each. If a vector is added or changed, the page follows it.
+code, gives the required answer for each. If a vector is added or changed, the page follows it.
 
 ## Layout
 

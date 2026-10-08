@@ -11,6 +11,23 @@ It has two halves, and the contract is the authority:
 - **A read-only client** (`evaluateOnChain`, `getPolicy`, `readBalance`, `fetchSnapshot`). It simulates calls through
   a Soroban RPC server. Nothing is signed or submitted.
 
+## Using it today
+
+It is not on npm yet, so use it from this repository. Build it, pack it, and install the tarball in your own project:
+
+```bash
+git clone https://github.com/Sorogate/sorogate.git && cd sorogate
+npm ci
+npm run build -w @sorogate/sdk
+npm pack -w @sorogate/sdk        # writes sorogate-sdk-0.0.0.tgz
+# then, in your project:
+npm install /path/to/sorogate-sdk-0.0.0.tgz
+```
+
+`scripts/check-pack.sh` does exactly this in an empty project on every push and imports the result, so a change that breaks the package
+fails CI. Two entry points are installed: `@sorogate/sdk` (everything) and `@sorogate/sdk/model` (the parts that need no network
+and no Stellar library, for a web page).
+
 ## Ask the contract
 
 ```ts
@@ -20,12 +37,12 @@ import { evaluateOnChain } from '@sorogate/sdk';
 const context = {
   rpc: new rpc.Server('https://soroban-testnet.stellar.org'),
   networkPassphrase: 'Test SDF Network ; September 2015',
-  source: 'G...', // any account that exists; it only sources the simulated transaction
+  source: 'G...', // any account that exists on Testnet (friendbot can make one); it only sources the simulated transaction
 };
 
 const { decision, ledgerSequence } = await evaluateOnChain(context, {
-  contractId: 'C...', // the access-policy contract
-  policyId: 1n,
+  contractId: 'CACR5H46E7VKEDJUWRLKZPJPQVPRHTRTJHZOMQLEIHMTXN4MW7O47YQW', // the public Testnet deployment
+  policyId: 13n, // an example policy on it: hold at least 10,000 XLM
   subject: 'G...', // the address to check
 });
 // decision = { allowed, version, failedIndex, reason }
@@ -33,6 +50,9 @@ const { decision, ledgerSequence } = await evaluateOnChain(context, {
 
 `evaluateOnChain` is the answer that counts. It does **not** prove the caller controls `subject`; see the
 specification, section 8.
+
+The contract and the policy above are on a development deployment ([`docs/DEPLOYMENT.md`](../../docs/DEPLOYMENT.md)) and last only
+until Testnet is next reset. Policy 13 is one the example repository's demo created, owned by a discarded key, so it never changes.
 
 ## Work it out locally
 
