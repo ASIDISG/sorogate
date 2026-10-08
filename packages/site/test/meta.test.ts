@@ -33,4 +33,20 @@ describe('the images the page points at', () => {
     expect(page).toContain('data-count={item.value}');
     expect(page).toContain('testnet-differential-2026-10-07.json');
   });
+
+  it('shows the Testnet contract from the deployment record, and no address typed into the page', () => {
+    // A Stellar contract address is a C followed by 55 more letters and digits. None may be written into the page: the
+    // code samples and the deployment facts read it from docs/deployments/testnet.json, so they cannot drift from it.
+    expect(page).not.toMatch(/\bC[A-Z2-7]{55}\b/);
+    expect(page).toContain('deployment.contract.id');
+    expect(page).toContain('const policyContract = deployment.contract.id');
+    expect(page).toContain("contractId: '${policyContract}'");
+  });
+
+  it('puts the call, then the deployment, before the proof, in the order of a first visit', () => {
+    const at = (id: string): number => page.indexOf(`id="${id}"`);
+    expect(at('call')).toBeGreaterThan(-1);
+    expect(at('call')).toBeLessThan(at('deployment'));
+    expect(at('deployment')).toBeLessThan(page.indexOf('aria-labelledby="proof-heading"'));
+  });
 });

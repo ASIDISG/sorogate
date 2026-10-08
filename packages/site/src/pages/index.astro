@@ -20,6 +20,51 @@ const site = 'https://sorogate.github.io';
 const contractTests = (
   readFileSync(resolve(process.cwd(), '../../contracts/access-policy/src/test.rs'), 'utf8').match(/#\[test\]/g) ?? []
 ).length;
+// What a contract writes to ask a policy, shown beside the playground. The address is read from the deployment record, so
+// it is the real one and cannot drift. The Rust is trimmed from the example gate, which runs against this deployment.
+const policyContract = deployment.contract.id;
+const shortContract = `${policyContract.slice(0, 6)}…${policyContract.slice(-5)}`;
+const rustInterface = `// The one function you call, declared in your own crate. Nothing of Sorogate's source is needed.
+#[contractclient(name = "PolicyClient")]
+pub trait PolicyInterface {
+    fn evaluate(env: Env, id: u64, subject: Address) -> Decision;
+}`;
+const rustCall = `pub fn enter(env: Env, subject: Address) -> Result<(), Error> {
+    // 1. Prove who is asking. \`evaluate\` does not.
+    subject.require_auth();
+
+    // 2. Ask the policy. A failure to get an answer is a refusal.
+    let decision = match PolicyClient::new(&env, &policy_contract)
+        .try_evaluate(&policy_id, &subject)
+    {
+        Ok(Ok(decision)) => decision,
+        _ => return Err(Error::PolicyUnavailable),
+    };
+
+    // 3. Enforce the answer, and say why.
+    if !decision.allowed {
+        return Err(/* your own error, chosen from decision.reason */);
+    }
+
+    /* record it, then act */
+    Ok(())
+}`;
+const typescriptCall = `import { rpc } from '@stellar/stellar-sdk';
+import { evaluateOnChain } from '@sorogate/sdk';
+
+const context = {
+  rpc: new rpc.Server('https://soroban-testnet.stellar.org'),
+  networkPassphrase: 'Test SDF Network ; September 2015',
+  source: fundedTestnetAddress, // a simulation needs an account to run as
+};
+
+const { decision } = await evaluateOnChain(context, {
+  contractId: '${policyContract}',
+  policyId: 13n, // a real policy on this contract: hold at least 10,000 XLM
+  subject: addressToCheck,
+});
+
+// decision: { allowed, version, failedIndex, reason }`;
 const count = (steps: unknown): number => (Array.isArray(steps) ? steps.length : Number(steps));
 const decisions = evaluateVectors.cases.length;
 const validity = validateVectors.cases.length;
@@ -64,7 +109,8 @@ const proof = [
           <span>Sorogate</span>
         </a>
         <span class="links">
-          <a href="#how">How to use it</a>
+          <a href="#call">Call it from a contract</a>
+          <a href="#deployment">Testnet contract</a>
           <a href={`${repo}/blob/main/docs/README.md`}>Documentation</a>
           <a href={repo}>GitHub</a>
         </span>
@@ -81,16 +127,23 @@ const proof = [
             </p>
             <h1>Sorogate policy playground</h1>
             <p class="lead">
-              An access policy is a short list of conditions about an address: it holds at least some of a token, it
-              holds at least some items of a collection, the ledger time is inside a window. All of them must hold.
+              Write an access rule once, keep it in one Soroban contract, and let any contract ask whether an address
+              passes it.
             </p>
             <p class="lead-small">
+              An access policy is a short list of conditions about an address: it holds at least some of a token, it
+              holds at least some items of a collection, the ledger time is inside a window. All of them must hold.
               This page works a policy out in your browser with the project’s TypeScript model and sets the result
               beside the answer the Soroban contract’s tests require for the same input.
             </p>
             <p class="cta">
               <a class="btn primary" href="#app">Try a policy</a>
-              <a class="btn ghost" href={repo}>Read the source</a>
+              <a class="btn ghost" href="#call">See how a contract calls it</a>
+              <a class="btn ghost" href="#deployment">Testnet contract</a>
+              <a class="btn ghost" href={repo}>Source on GitHub</a>
+            </p>
+            <p class="deploy-line">
+              Public Testnet deployment: <a href="#deployment"><code>{shortContract}</code></a>
             </p>
           </div>
 
@@ -135,6 +188,79 @@ const proof = [
         <noscript><p class="notice">This page needs JavaScript to work a policy out.</p></noscript>
       </div>
 
+      <section id="call" class="reveal" aria-labelledby="call-heading">
+        <h2 id="call-heading">See exactly how a contract calls it</h2>
+        <p>
+          Three things, in this order. <span class="kind example">Example</span> The Rust is trimmed from{' '}
+          <a href="https://github.com/Sorogate/example-consumer/blob/main/src/lib.rs">the example gate</a>, a complete
+          contract that does exactly this against the public deployment, with tests. The TypeScript calls the same
+          contract and policy 13, which exists on Testnet.
+        </p>
+        <ol class="steps" aria-label="The three steps, one card each">
+          <li class="spot">
+            <span class="step-n">1</span>
+            <h3>Prove who is asking</h3>
+            <p>A policy answers for any address it is given, so it cannot tell who is calling. Make the subject sign first.</p>
+          </li>
+          <li class="spot">
+            <span class="step-n">2</span>
+            <h3>Ask the policy</h3>
+            <p>No answer is a no. If the policy cannot be reached, or answers with something that is not a decision, refuse.</p>
+          </li>
+          <li class="spot">
+            <span class="step-n">3</span>
+            <h3>Enforce the answer</h3>
+            <p>Stop on a denial and carry the reason back. Only then do the thing the policy guards.</p>
+          </li>
+        </ol>
+        <div class="call-grid">
+          <figure class="code">
+            <figcaption>
+              <span>From a Soroban contract <small>(Rust)</small></span>
+              <button type="button" class="quiet copy" data-target="code-rust">Copy</button>
+            </figcaption>
+            <pre id="code-rust" tabindex="0" aria-label="Rust code, a complete call of the policy contract"><code>{rustInterface}{'\n\n'}{rustCall}</code></pre>
+          </figure>
+          <figure class="code">
+            <figcaption>
+              <span>From an app <small>(TypeScript, read-only)</small></span>
+              <button type="button" class="quiet copy" data-target="code-ts">Copy</button>
+            </figcaption>
+            <pre id="code-ts" tabindex="0" aria-label="TypeScript code, a read-only call of the policy contract"><code>{typescriptCall}</code></pre>
+          </figure>
+        </div>
+        <p class="note">
+          The SDK is not published to npm yet: use it from the repository, as its{' '}
+          <a href={`${repo}/blob/main/packages/sdk/README.md#using-it-today`}>README</a> shows. Read the{' '}
+          <a href={`${repo}/blob/main/docs/INTEGRATING.md`}>integration guide</a> for what goes wrong when a step is skipped.
+        </p>
+      </section>
+
+      <section id="deployment" class="reveal" aria-labelledby="deployment-heading">
+        <h2 id="deployment-heading">The public Testnet deployment</h2>
+        <p>
+          <strong>This is a development deployment on Stellar Testnet, not a production deployment.</strong> Testnet is
+          reset from time to time, the contract has not been audited, and it has no administrator or upgrade path.
+        </p>
+        <dl class="facts">
+          <dt>Contract</dt>
+          <dd>
+            <a href={deployment.explorer}><code id="fact-contract">{deployment.contract.id}</code></a>
+            <button type="button" class="quiet copy" data-target="fact-contract">Copy</button>
+          </dd>
+          <dt>WASM hash</dt>
+          <dd>
+            <code id="fact-hash">{deployment.wasm.sha256}</code>
+            <button type="button" class="quiet copy" data-target="fact-hash">Copy</button>
+          </dd>
+          <dt>Deployed</dt>
+          <dd>{deployment.deployedAt.slice(0, 10)}</dd>
+        </dl>
+        <p>
+          How to check that it is the code in this repository, and how it is kept alive:{' '}
+          <a href={`${repo}/blob/main/docs/DEPLOYMENT.md`}>deployment notes</a>.
+        </p>
+      </section>
       <section class="reveal" aria-labelledby="proof-heading">
         <h2 id="proof-heading">Why the answer can be trusted</h2>
         <p>
@@ -156,69 +282,6 @@ const proof = [
           <a href={`${repo}/tree/main/docs/evidence`}>Read the recorded runs</a>. They say what each one does not show.
         </p>
       </section>
-
-      <section id="how" class="reveal" aria-labelledby="how-heading">
-        <h2 id="how-heading">How a contract uses a policy</h2>
-        <p>
-          Three things, in this order. On a phone, swipe sideways to move between them.{' '}
-          <a href="https://github.com/Sorogate/example-consumer">A complete gate</a> that does exactly this runs against the
-          public deployment, with tests.
-        </p>
-        <ol class="steps" aria-label="The three steps, one card each">
-          <li class="spot">
-            <span class="step-n">1</span>
-            <h3>Prove who is asking</h3>
-            <p>A policy answers for any address it is given, so it cannot tell who is calling. Make the subject sign first.</p>
-            <pre><code><span class="c">// the subject must authorize this call</span>
-subject.require_auth();</code></pre>
-          </li>
-          <li class="spot">
-            <span class="step-n">2</span>
-            <h3>Ask the policy</h3>
-            <p>No answer is a no. If the policy cannot be reached, or answers with something that is not a decision, refuse.</p>
-            <pre><code>let decision = match PolicyClient::new(&amp;env, &amp;policy)
-    .try_evaluate(&amp;policy_id, &amp;subject)
-&#123;
-    Ok(Ok(decision)) =&gt; decision,
-    _ =&gt; return Err(Error::PolicyUnavailable),
-&#125;;</code></pre>
-          </li>
-          <li class="spot">
-            <span class="step-n">3</span>
-            <h3>Enforce the answer</h3>
-            <p>Stop on a denial and carry the reason back. Only then do the thing the policy guards.</p>
-            <pre><code>if !decision.allowed &#123;
-    return Err(<span class="c">/* say why, from decision.reason */</span>);
-&#125;
-<span class="c">/* record it, then act */</span></code></pre>
-          </li>
-        </ol>
-        <p>
-          Read the <a href={`${repo}/blob/main/docs/INTEGRATING.md`}>integration guide</a> for what goes wrong when a step is
-          skipped.
-        </p>
-      </section>
-
-      <section class="reveal" aria-labelledby="deployment-heading">
-        <h2 id="deployment-heading">The public Testnet deployment</h2>
-        <p>
-          <strong>This is a development deployment on Stellar Testnet, not a production deployment.</strong> Testnet is
-          reset from time to time, the contract has not been audited, and it has no administrator or upgrade path.
-        </p>
-        <dl class="facts">
-          <dt>Contract</dt>
-          <dd><a href={deployment.explorer}><code>{deployment.contract.id}</code></a></dd>
-          <dt>WASM hash</dt>
-          <dd><code>{deployment.wasm.sha256}</code></dd>
-          <dt>Deployed</dt>
-          <dd>{deployment.deployedAt.slice(0, 10)}</dd>
-        </dl>
-        <p>
-          How to check that it is the code in this repository, and how it is kept alive:{' '}
-          <a href={`${repo}/blob/main/docs/DEPLOYMENT.md`}>deployment notes</a>.
-        </p>
-      </section>
-
       <section class="reveal" aria-labelledby="limits-heading">
         <h2 id="limits-heading">What this page cannot tell you</h2>
         <ul class="cards">
@@ -255,6 +318,20 @@ subject.require_auth();</code></pre>
 
       const app = document.getElementById('app');
       if (app !== null) mount(app, examples);
+
+      // Copy buttons: each copies the text of the element it names. Where copying is not allowed it says so.
+      document.querySelectorAll<HTMLButtonElement>('button.copy').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const text = document.getElementById(button.dataset['target'] ?? '')?.textContent ?? '';
+          try {
+            await navigator.clipboard.writeText(text);
+            button.textContent = 'Copied';
+          } catch {
+            button.textContent = 'Select it and copy';
+          }
+          setTimeout(() => (button.textContent = 'Copy'), 2200);
+        });
+      });
 
       const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

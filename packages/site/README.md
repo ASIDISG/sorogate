@@ -41,6 +41,11 @@ The look is deliberate, and it is kept simple enough to maintain: one stylesheet
   3:1 for marks and borders), in either theme. Change a colour there, not in a rule.
 - **Type** is [Inter](https://rsms.me/inter/), self-hosted from the `@fontsource-variable/inter` package, so the page asks no
   other site for anything. Inter is under the SIL Open Font License 1.1; its text is `public/inter-OFL.txt`.
+- **The order of the page follows a first visit.** A developer should be able to say, in turn: I understand what it does (the
+  first screen says what a policy is for before it says how it works), I can play with a policy (the playground), I can see
+  exactly how my contract would call it (the Rust and TypeScript below it, with the real Testnet address read from the
+  deployment record), and here is the repository and the contract (the deployment, with copy buttons). The proof strip comes
+  after those, because it is why to believe the answer, not how to use it.
 - **The first screen** is a dark hero with an illustration of a policy being worked out. It is labelled as an illustration, not
   a recorded run, because it is a drawing.
 - **The playground** is two columns on a wide screen, with the result staying in view while you edit, and one column on a
