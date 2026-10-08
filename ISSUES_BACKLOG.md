@@ -71,6 +71,7 @@ Add at least two contract-address subjects: one holding a balance on the test to
 
 ### 3. Cache the Rust build in CI
 **Size:** Trivial
+**Posted on GitHub:** #11
 
 **Description**
 CI takes about three to four minutes, mostly compiling Rust dependencies from scratch.
@@ -91,6 +92,7 @@ Cache the cargo registry and build output between runs, keyed on the lockfile an
 
 ### 4. Find out whether the archived-policy path can be tested
 **Size:** Medium
+**Posted on GitHub:** #12
 
 **Description**
 A policy nobody touches is archived when its lifetime runs out, and a transaction using it has to restore it first. This
