@@ -113,7 +113,28 @@ verify it, rated **Trivial**, **Medium** or **High** by scope and complexity:
 - **Medium**: a standard new feature or an involved fix: a new check in CI, a new recorded run.
 - **High**: a complex feature, a refactor, or research that may change a design decision.
 
-Comment on the issue before you start, so two people do not build the same thing.
+Open issues are on the [issues page](https://github.com/Sorogate/sorogate/issues); the ones marked `good first issue` are
+the smallest.
+
+## Picking up an issue
+
+Comment on the issue to say you would like it, and wait for the maintainer to assign it to you before you start. A comment
+alone does not reserve it. If an assigned issue has had no activity for 7 days, the maintainer may ask whether you are still
+working on it, and may unassign it after 7 more days without a reply. A pull request for an issue that is assigned to someone
+else is looked at after theirs.
+
+## Your first pull request
+
+The first time you open a pull request, GitHub holds its CI run until a maintainer approves it, so the checks show nothing for
+a while. That is a GitHub setting, not broken CI. The maintainer approves the run when they review. Run the daily loop above
+locally in the meantime.
+
+## AI-assisted contributions
+
+AI-assisted contributions are welcome, as is this project's own use of AI assistance. You are responsible for what you submit:
+you have run it, you understand it, and every claim in the description is true. In this project that includes any claim in the
+documentation: it must rest on a test or a recorded run (see "Evidence and claims"). Pull requests are reviewed the same way
+whoever or whatever wrote them.
 
 ## How maintainers work here
 
