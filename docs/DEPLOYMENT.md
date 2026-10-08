@@ -31,6 +31,11 @@ Label: **Live** means the fact was read from the network on the date shown. It w
   anything real.
 - **A bug cannot be fixed in place.** A fixed contract is a new deployment with new policy ids that consumers have to
   move to. This deployment would stay as it is.
+- **The example consumer pins this code.** [`Sorogate/example-consumer`](https://github.com/Sorogate/example-consumer) keeps the
+  WASM hash above in a file, runs its tests against exactly that code, and checks every week that the network still holds it.
+  There is **no formal interface version** yet: the assumption is the `evaluate(id, subject) -> Decision` interface in
+  [`INTEGRATING.md`](INTEGRATING.md) and the reason codes in [`SPEC.md`](../spec/SPEC.md). A replacement deployment would have a new
+  address and a new hash, and consumers would move to it by choice; this one would not change.
 - **Testnet resets.** When Testnet is reset, this contract and everything on it disappears. This file would then be
   out of date until the contract is deployed again and the record rewritten.
 

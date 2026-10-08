@@ -59,7 +59,9 @@ rules live in one place, an owner can change them without redeploying every cont
 - **Two example consumers.** [`contracts/gated-claim`](contracts/gated-claim) pays a fixed amount once to each qualifying address and can pin the
   policy version; it is a demonstration with no withdrawal and no administrator, so fund it only with a test asset.
   [`Sorogate/example-consumer`](https://github.com/Sorogate/example-consumer) is a separate, tiny repository with a "gate" that uses only the published
-  interface. It is an example, not a product, and so far nobody else has used it. [`contracts/mock-token`](contracts/mock-token) is a test fixture
+  interface: Sorogate is the reusable primitive, and this is an independent integration example, not an official or production
+  one. It does not import this repository's code; it declares the interface by hand and its tests run against the deployed
+  contract's code, pinned by hash. So far nobody outside this project has used it. [`contracts/mock-token`](contracts/mock-token) is a test fixture
   token that anyone can set any balance on.
 - **A public Testnet deployment**, [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md): address, code hash, date, who controls it (nobody), how to check
   that it is the code in this repository, and how to keep it alive.
@@ -68,7 +70,7 @@ rules live in one place, an owner can change them without redeploying every cont
   as real transactions); and the `NftBalance` condition was checked against a real OpenZeppelin SEP-50 collection
   (29 steps, contract and model agreeing on every comparison). Those collections and tokens were ones we deployed, not ones somebody else operates.
 - **Costs**, [`docs/COSTS.md`](docs/COSTS.md): what `evaluate`, `create` and a consumer's `claim` cost on Testnet over real tokens, and what
-  the numbers say about the limit of 8 conditions (they give no reason to change it).
+  the numbers say about the limit of 8 conditions (for the tokens measured, they give no reason to change it).
 - **The documents.** [`docs/README.md`](docs/README.md) indexes them by question; [`docs/EVIDENCE.md`](docs/EVIDENCE.md) says what the words used for
   evidence (Unit-tested, Recorded, Live, Simulated, Example) mean. The rules are in [`spec/SPEC.md`](spec/SPEC.md), what is and is not protected is
   in [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md), and how to use a policy from your own contract is in [`docs/INTEGRATING.md`](docs/INTEGRATING.md).
